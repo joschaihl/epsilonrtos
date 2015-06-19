@@ -1,0 +1,11 @@
+eclipse.preferences.version=1
+environment/project/de.innot.avreclipse.configuration.app.debug.1585894419/AVRTARGETMCU/delimiter=\:
+environment/project/de.innot.avreclipse.configuration.app.debug.1585894419/AVRTARGETMCU/operation=replace
+environment/project/de.innot.avreclipse.configuration.app.debug.1585894419/AVRTARGETMCU/value=attiny45
+environment/project/de.innot.avreclipse.configuration.app.debug.1585894419/append=true
+environment/project/de.innot.avreclipse.configuration.app.debug.1585894419/appendContributed=true
+environment/project/de.innot.avreclipse.configuration.app.release.1717831415/AVRTARGETMCU/delimiter=\:
+environment/project/de.innot.avreclipse.configuration.app.release.1717831415/AVRTARGETMCU/operation=replace
+environment/project/de.innot.avreclipse.configuration.app.release.1717831415/AVRTARGETMCU/value=attiny45
+environment/project/de.innot.avreclipse.configuration.app.release.1717831415/append=true
+environment/project/de.innot.avreclipse.configuration.app.release.1717831415/appendContributed=true

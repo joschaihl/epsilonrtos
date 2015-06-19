@@ -1,0 +1,1284 @@
+
+ertos.elf:     file format elf32-avr
+
+Sections:
+Idx Name          Size      VMA       LMA       File off  Algn
+  0 .text         000007be  00000000  00000000  00000094  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         000000a4  00800060  000007be  00000852  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .bss          00000012  00800104  00800104  000008f6  2**0
+                  ALLOC
+  3 .stab         00001008  00000000  00000000  000008f8  2**2
+                  CONTENTS, READONLY, DEBUGGING
+  4 .stabstr      00000e59  00000000  00000000  00001900  2**0
+                  CONTENTS, READONLY, DEBUGGING
+
+Disassembly of section .text:
+
+00000000 <__vectors>:
+   0:	12 c0       	rjmp	.+36     	; 0x26 <__ctors_end>
+   2:	2c c0       	rjmp	.+88     	; 0x5c <__bad_interrupt>
+   4:	2b c0       	rjmp	.+86     	; 0x5c <__bad_interrupt>
+   6:	2a c0       	rjmp	.+84     	; 0x5c <__bad_interrupt>
+   8:	29 c0       	rjmp	.+82     	; 0x5c <__bad_interrupt>
+   a:	28 c0       	rjmp	.+80     	; 0x5c <__bad_interrupt>
+   c:	27 c0       	rjmp	.+78     	; 0x5c <__bad_interrupt>
+   e:	26 c0       	rjmp	.+76     	; 0x5c <__bad_interrupt>
+  10:	25 c0       	rjmp	.+74     	; 0x5c <__bad_interrupt>
+  12:	25 c3       	rjmp	.+1610   	; 0x65e <__vector_9>
+  14:	23 c0       	rjmp	.+70     	; 0x5c <__bad_interrupt>
+  16:	22 c0       	rjmp	.+68     	; 0x5c <__bad_interrupt>
+  18:	21 c0       	rjmp	.+66     	; 0x5c <__bad_interrupt>
+  1a:	20 c0       	rjmp	.+64     	; 0x5c <__bad_interrupt>
+  1c:	1f c0       	rjmp	.+62     	; 0x5c <__bad_interrupt>
+  1e:	1e c0       	rjmp	.+60     	; 0x5c <__bad_interrupt>
+  20:	1d c0       	rjmp	.+58     	; 0x5c <__bad_interrupt>
+  22:	1c c0       	rjmp	.+56     	; 0x5c <__bad_interrupt>
+  24:	1b c0       	rjmp	.+54     	; 0x5c <__bad_interrupt>
+
+00000026 <__ctors_end>:
+  26:	11 24       	eor	r1, r1
+  28:	1f be       	out	0x3f, r1	; 63
+  2a:	cf e5       	ldi	r28, 0x5F	; 95
+  2c:	d4 e0       	ldi	r29, 0x04	; 4
+  2e:	de bf       	out	0x3e, r29	; 62
+  30:	cd bf       	out	0x3d, r28	; 61
+
+00000032 <__do_copy_data>:
+  32:	11 e0       	ldi	r17, 0x01	; 1
+  34:	a0 e6       	ldi	r26, 0x60	; 96
+  36:	b0 e0       	ldi	r27, 0x00	; 0
+  38:	ee eb       	ldi	r30, 0xBE	; 190
+  3a:	f7 e0       	ldi	r31, 0x07	; 7
+  3c:	02 c0       	rjmp	.+4      	; 0x42 <.do_copy_data_start>
+
+0000003e <.do_copy_data_loop>:
+  3e:	05 90       	lpm	r0, Z+
+  40:	0d 92       	st	X+, r0
+
+00000042 <.do_copy_data_start>:
+  42:	a4 30       	cpi	r26, 0x04	; 4
+  44:	b1 07       	cpc	r27, r17
+  46:	d9 f7       	brne	.-10     	; 0x3e <.do_copy_data_loop>
+
+00000048 <__do_clear_bss>:
+  48:	11 e0       	ldi	r17, 0x01	; 1
+  4a:	a4 e0       	ldi	r26, 0x04	; 4
+  4c:	b1 e0       	ldi	r27, 0x01	; 1
+  4e:	01 c0       	rjmp	.+2      	; 0x52 <.do_clear_bss_start>
+
+00000050 <.do_clear_bss_loop>:
+  50:	1d 92       	st	X+, r1
+
+00000052 <.do_clear_bss_start>:
+  52:	a6 31       	cpi	r26, 0x16	; 22
+  54:	b1 07       	cpc	r27, r17
+  56:	e1 f7       	brne	.-8      	; 0x50 <.do_clear_bss_loop>
+  58:	a0 d0       	rcall	.+320    	; 0x19a <main>
+  5a:	af c3       	rjmp	.+1886   	; 0x7ba <_exit>
+
+0000005c <__bad_interrupt>:
+  5c:	d1 cf       	rjmp	.-94     	; 0x0 <__vectors>
+
+0000005e <setup>:
+#define TASKEPIN PB4
+
+
+
+void setup(void)
+{
+  5e:	df 93       	push	r29
+  60:	cf 93       	push	r28
+  62:	cd b7       	in	r28, 0x3d	; 61
+  64:	de b7       	in	r29, 0x3e	; 62
+  sbi(DEFAULTDDR, TASKAPIN);
+  66:	a7 e3       	ldi	r26, 0x37	; 55
+  68:	b0 e0       	ldi	r27, 0x00	; 0
+  6a:	e7 e3       	ldi	r30, 0x37	; 55
+  6c:	f0 e0       	ldi	r31, 0x00	; 0
+  6e:	80 81       	ld	r24, Z
+  70:	81 60       	ori	r24, 0x01	; 1
+  72:	8c 93       	st	X, r24
+  sbi(DEFAULTDDR, TASKBPIN);
+  74:	a7 e3       	ldi	r26, 0x37	; 55
+  76:	b0 e0       	ldi	r27, 0x00	; 0
+  78:	e7 e3       	ldi	r30, 0x37	; 55
+  7a:	f0 e0       	ldi	r31, 0x00	; 0
+  7c:	80 81       	ld	r24, Z
+  7e:	82 60       	ori	r24, 0x02	; 2
+  80:	8c 93       	st	X, r24
+  sbi(DEFAULTDDR, TASKCPIN);
+  82:	a7 e3       	ldi	r26, 0x37	; 55
+  84:	b0 e0       	ldi	r27, 0x00	; 0
+  86:	e7 e3       	ldi	r30, 0x37	; 55
+  88:	f0 e0       	ldi	r31, 0x00	; 0
+  8a:	80 81       	ld	r24, Z
+  8c:	84 60       	ori	r24, 0x04	; 4
+  8e:	8c 93       	st	X, r24
+  sbi(DEFAULTDDR, TASKDPIN);
+  90:	a7 e3       	ldi	r26, 0x37	; 55
+  92:	b0 e0       	ldi	r27, 0x00	; 0
+  94:	e7 e3       	ldi	r30, 0x37	; 55
+  96:	f0 e0       	ldi	r31, 0x00	; 0
+  98:	80 81       	ld	r24, Z
+  9a:	88 60       	ori	r24, 0x08	; 8
+  9c:	8c 93       	st	X, r24
+  sbi(DEFAULTDDR, TASKEPIN);
+  9e:	a7 e3       	ldi	r26, 0x37	; 55
+  a0:	b0 e0       	ldi	r27, 0x00	; 0
+  a2:	e7 e3       	ldi	r30, 0x37	; 55
+  a4:	f0 e0       	ldi	r31, 0x00	; 0
+  a6:	80 81       	ld	r24, Z
+  a8:	80 61       	ori	r24, 0x10	; 16
+  aa:	8c 93       	st	X, r24
+}
+  ac:	cf 91       	pop	r28
+  ae:	df 91       	pop	r29
+  b0:	08 95       	ret
+
+000000b2 <task_A>:
+
+u32 a;
+TASK(A,32)
+{
+  b2:	df 93       	push	r29
+  b4:	cf 93       	push	r28
+  b6:	cd b7       	in	r28, 0x3d	; 61
+  b8:	de b7       	in	r29, 0x3e	; 62
+	for(a=0;a < 100000;a++)
+  ba:	10 92 0c 01 	sts	0x010C, r1
+  be:	10 92 0d 01 	sts	0x010D, r1
+  c2:	10 92 0e 01 	sts	0x010E, r1
+  c6:	10 92 0f 01 	sts	0x010F, r1
+  ca:	21 c0       	rjmp	.+66     	; 0x10e <task_A+0x5c>
+	{
+		sbi(DEFAULTPORT, TASKAPIN);
+  cc:	a8 e3       	ldi	r26, 0x38	; 56
+  ce:	b0 e0       	ldi	r27, 0x00	; 0
+  d0:	e8 e3       	ldi	r30, 0x38	; 56
+  d2:	f0 e0       	ldi	r31, 0x00	; 0
+  d4:	80 81       	ld	r24, Z
+  d6:	81 60       	ori	r24, 0x01	; 1
+  d8:	8c 93       	st	X, r24
+		cbi(DEFAULTPORT, TASKAPIN);
+  da:	a8 e3       	ldi	r26, 0x38	; 56
+  dc:	b0 e0       	ldi	r27, 0x00	; 0
+  de:	e8 e3       	ldi	r30, 0x38	; 56
+  e0:	f0 e0       	ldi	r31, 0x00	; 0
+  e2:	80 81       	ld	r24, Z
+  e4:	8e 7f       	andi	r24, 0xFE	; 254
+  e6:	8c 93       	st	X, r24
+}
+
+u32 a;
+TASK(A,32)
+{
+	for(a=0;a < 100000;a++)
+  e8:	80 91 0c 01 	lds	r24, 0x010C
+  ec:	90 91 0d 01 	lds	r25, 0x010D
+  f0:	a0 91 0e 01 	lds	r26, 0x010E
+  f4:	b0 91 0f 01 	lds	r27, 0x010F
+  f8:	01 96       	adiw	r24, 0x01	; 1
+  fa:	a1 1d       	adc	r26, r1
+  fc:	b1 1d       	adc	r27, r1
+  fe:	80 93 0c 01 	sts	0x010C, r24
+ 102:	90 93 0d 01 	sts	0x010D, r25
+ 106:	a0 93 0e 01 	sts	0x010E, r26
+ 10a:	b0 93 0f 01 	sts	0x010F, r27
+ 10e:	80 91 0c 01 	lds	r24, 0x010C
+ 112:	90 91 0d 01 	lds	r25, 0x010D
+ 116:	a0 91 0e 01 	lds	r26, 0x010E
+ 11a:	b0 91 0f 01 	lds	r27, 0x010F
+ 11e:	80 3a       	cpi	r24, 0xA0	; 160
+ 120:	26 e8       	ldi	r18, 0x86	; 134
+ 122:	92 07       	cpc	r25, r18
+ 124:	21 e0       	ldi	r18, 0x01	; 1
+ 126:	a2 07       	cpc	r26, r18
+ 128:	20 e0       	ldi	r18, 0x00	; 0
+ 12a:	b2 07       	cpc	r27, r18
+ 12c:	78 f2       	brcs	.-98     	; 0xcc <task_A+0x1a>
+	{
+		sbi(DEFAULTPORT, TASKAPIN);
+		cbi(DEFAULTPORT, TASKAPIN);
+  	}
+  	ENDTASK(A);
+ 12e:	83 e0       	ldi	r24, 0x03	; 3
+ 130:	80 93 af 00 	sts	0x00AF, r24
+ 134:	00 00       	nop
+ 136:	fe cf       	rjmp	.-4      	; 0x134 <task_A+0x82>
+
+00000138 <task_B>:
+}
+
+u08 b;
+TASK(B,32)
+{
+ 138:	df 93       	push	r29
+ 13a:	cf 93       	push	r28
+ 13c:	0f 92       	push	r0
+ 13e:	cd b7       	in	r28, 0x3d	; 61
+ 140:	de b7       	in	r29, 0x3e	; 62
+   u08 i;
+	for(b=0;b<2;b++)
+ 142:	10 92 0b 01 	sts	0x010B, r1
+ 146:	20 c0       	rjmp	.+64     	; 0x188 <task_B+0x50>
+	{
+	   for(i=0; i < 100; i++)
+ 148:	19 82       	std	Y+1, r1	; 0x01
+ 14a:	11 c0       	rjmp	.+34     	; 0x16e <task_B+0x36>
+	   {
+			sbi(DEFAULTPORT, TASKBPIN);
+ 14c:	a8 e3       	ldi	r26, 0x38	; 56
+ 14e:	b0 e0       	ldi	r27, 0x00	; 0
+ 150:	e8 e3       	ldi	r30, 0x38	; 56
+ 152:	f0 e0       	ldi	r31, 0x00	; 0
+ 154:	80 81       	ld	r24, Z
+ 156:	82 60       	ori	r24, 0x02	; 2
+ 158:	8c 93       	st	X, r24
+			cbi(DEFAULTPORT, TASKBPIN);
+ 15a:	a8 e3       	ldi	r26, 0x38	; 56
+ 15c:	b0 e0       	ldi	r27, 0x00	; 0
+ 15e:	e8 e3       	ldi	r30, 0x38	; 56
+ 160:	f0 e0       	ldi	r31, 0x00	; 0
+ 162:	80 81       	ld	r24, Z
+ 164:	8d 7f       	andi	r24, 0xFD	; 253
+ 166:	8c 93       	st	X, r24
+TASK(B,32)
+{
+   u08 i;
+	for(b=0;b<2;b++)
+	{
+	   for(i=0; i < 100; i++)
+ 168:	89 81       	ldd	r24, Y+1	; 0x01
+ 16a:	8f 5f       	subi	r24, 0xFF	; 255
+ 16c:	89 83       	std	Y+1, r24	; 0x01
+ 16e:	89 81       	ldd	r24, Y+1	; 0x01
+ 170:	84 36       	cpi	r24, 0x64	; 100
+ 172:	60 f3       	brcs	.-40     	; 0x14c <task_B+0x14>
+	   {
+			sbi(DEFAULTPORT, TASKBPIN);
+			cbi(DEFAULTPORT, TASKBPIN);
+		}
+		sleep(20000);
+ 174:	60 e2       	ldi	r22, 0x20	; 32
+ 176:	7e e4       	ldi	r23, 0x4E	; 78
+ 178:	80 e0       	ldi	r24, 0x00	; 0
+ 17a:	90 e0       	ldi	r25, 0x00	; 0
+ 17c:	bb d0       	rcall	.+374    	; 0x2f4 <sleep>
+
+u08 b;
+TASK(B,32)
+{
+   u08 i;
+	for(b=0;b<2;b++)
+ 17e:	80 91 0b 01 	lds	r24, 0x010B
+ 182:	8f 5f       	subi	r24, 0xFF	; 255
+ 184:	80 93 0b 01 	sts	0x010B, r24
+ 188:	80 91 0b 01 	lds	r24, 0x010B
+ 18c:	82 30       	cpi	r24, 0x02	; 2
+ 18e:	e0 f2       	brcs	.-72     	; 0x148 <task_B+0x10>
+			sbi(DEFAULTPORT, TASKBPIN);
+			cbi(DEFAULTPORT, TASKBPIN);
+		}
+		sleep(20000);
+  	}
+  	ENDTASK(B);
+ 190:	83 e0       	ldi	r24, 0x03	; 3
+ 192:	80 93 ff 00 	sts	0x00FF, r24
+ 196:	00 00       	nop
+ 198:	fe cf       	rjmp	.-4      	; 0x196 <task_B+0x5e>
+
+0000019a <main>:
+
+#define TASK_AMOUNT 2
+TASK *taskset[] = {&taskobj_A, &taskobj_B/*, &taskobj_C, &taskobj_D*/};
+
+int main(void)
+{
+ 19a:	df 93       	push	r29
+ 19c:	cf 93       	push	r28
+ 19e:	cd b7       	in	r28, 0x3d	; 61
+ 1a0:	de b7       	in	r29, 0x3e	; 62
+
+   INIT_RTOS();
+ 1a2:	ed e5       	ldi	r30, 0x5D	; 93
+ 1a4:	f0 e0       	ldi	r31, 0x00	; 0
+ 1a6:	8f e5       	ldi	r24, 0x5F	; 95
+ 1a8:	94 e0       	ldi	r25, 0x04	; 4
+ 1aa:	91 83       	std	Z+1, r25	; 0x01
+ 1ac:	80 83       	st	Z, r24
+ 1ae:	00 24       	eor	r0, r0
+ 1b0:	11 24       	eor	r1, r1
+ 1b2:	22 24       	eor	r2, r2
+ 1b4:	33 24       	eor	r3, r3
+ 1b6:	44 24       	eor	r4, r4
+ 1b8:	55 24       	eor	r5, r5
+ 1ba:	66 24       	eor	r6, r6
+ 1bc:	77 24       	eor	r7, r7
+ 1be:	88 24       	eor	r8, r8
+ 1c0:	99 24       	eor	r9, r9
+ 1c2:	aa 24       	eor	r10, r10
+ 1c4:	bb 24       	eor	r11, r11
+ 1c6:	cc 24       	eor	r12, r12
+ 1c8:	dd 24       	eor	r13, r13
+ 1ca:	ee 24       	eor	r14, r14
+ 1cc:	ff 24       	eor	r15, r15
+ 1ce:	00 27       	eor	r16, r16
+ 1d0:	11 27       	eor	r17, r17
+ 1d2:	22 27       	eor	r18, r18
+ 1d4:	33 27       	eor	r19, r19
+ 1d6:	44 27       	eor	r20, r20
+ 1d8:	55 27       	eor	r21, r21
+ 1da:	66 27       	eor	r22, r22
+ 1dc:	77 27       	eor	r23, r23
+ 1de:	88 27       	eor	r24, r24
+ 1e0:	99 27       	eor	r25, r25
+ 1e2:	aa 27       	eor	r26, r26
+ 1e4:	bb 27       	eor	r27, r27
+ 1e6:	cc 27       	eor	r28, r28
+ 1e8:	dd 27       	eor	r29, r29
+ 1ea:	ee 27       	eor	r30, r30
+ 1ec:	ff 27       	eor	r31, r31
+
+	setup();
+ 1ee:	37 df       	rcall	.-402    	; 0x5e <setup>
+   	sbi(DEFAULTPORT, TASKDPIN);
+ 1f0:	a8 e3       	ldi	r26, 0x38	; 56
+ 1f2:	b0 e0       	ldi	r27, 0x00	; 0
+ 1f4:	e8 e3       	ldi	r30, 0x38	; 56
+ 1f6:	f0 e0       	ldi	r31, 0x00	; 0
+ 1f8:	80 81       	ld	r24, Z
+ 1fa:	88 60       	ori	r24, 0x08	; 8
+ 1fc:	8c 93       	st	X, r24
+	cbi(DEFAULTPORT, TASKDPIN);
+ 1fe:	a8 e3       	ldi	r26, 0x38	; 56
+ 200:	b0 e0       	ldi	r27, 0x00	; 0
+ 202:	e8 e3       	ldi	r30, 0x38	; 56
+ 204:	f0 e0       	ldi	r31, 0x00	; 0
+ 206:	80 81       	ld	r24, Z
+ 208:	87 7f       	andi	r24, 0xF7	; 247
+ 20a:	8c 93       	st	X, r24
+
+	startRRScheduler(taskset, TASK_AMOUNT);
+ 20c:	80 e0       	ldi	r24, 0x00	; 0
+ 20e:	91 e0       	ldi	r25, 0x01	; 1
+ 210:	62 e0       	ldi	r22, 0x02	; 2
+ 212:	43 d1       	rcall	.+646    	; 0x49a <startRRScheduler>
+	
+	while(1)
+	{
+		sbi(DEFAULTPORT, TASKDPIN);
+ 214:	a8 e3       	ldi	r26, 0x38	; 56
+ 216:	b0 e0       	ldi	r27, 0x00	; 0
+ 218:	e8 e3       	ldi	r30, 0x38	; 56
+ 21a:	f0 e0       	ldi	r31, 0x00	; 0
+ 21c:	80 81       	ld	r24, Z
+ 21e:	88 60       	ori	r24, 0x08	; 8
+ 220:	8c 93       	st	X, r24
+		cbi(DEFAULTPORT, TASKDPIN);
+ 222:	a8 e3       	ldi	r26, 0x38	; 56
+ 224:	b0 e0       	ldi	r27, 0x00	; 0
+ 226:	e8 e3       	ldi	r30, 0x38	; 56
+ 228:	f0 e0       	ldi	r31, 0x00	; 0
+ 22a:	80 81       	ld	r24, Z
+ 22c:	87 7f       	andi	r24, 0xF7	; 247
+ 22e:	8c 93       	st	X, r24
+ 230:	f1 cf       	rjmp	.-30     	; 0x214 <main+0x7a>
+
+00000232 <initTask>:
+TIME currentTime = {0, 0, 0, 0, 0};
+
+SCHEDULER currentScheduler;
+
+void initTask(TASK *task)
+{
+ 232:	df 93       	push	r29
+ 234:	cf 93       	push	r28
+ 236:	00 d0       	rcall	.+0      	; 0x238 <initTask+0x6>
+ 238:	00 d0       	rcall	.+0      	; 0x23a <initTask+0x8>
+ 23a:	0f 92       	push	r0
+ 23c:	cd b7       	in	r28, 0x3d	; 61
+ 23e:	de b7       	in	r29, 0x3e	; 62
+ 240:	9d 83       	std	Y+5, r25	; 0x05
+ 242:	8c 83       	std	Y+4, r24	; 0x04
+   u08 i, pc_high, pc_low;
+	
+	if(task->taskState == TASK_UNINITIALIZED)
+ 244:	ec 81       	ldd	r30, Y+4	; 0x04
+ 246:	fd 81       	ldd	r31, Y+5	; 0x05
+ 248:	85 85       	ldd	r24, Z+13	; 0x0d
+ 24a:	88 23       	and	r24, r24
+ 24c:	09 f0       	breq	.+2      	; 0x250 <initTask+0x1e>
+ 24e:	4a c0       	rjmp	.+148    	; 0x2e4 <initTask+0xb2>
+	{
+		 // Set Stack Address
+       for(i = 0; i < (task->stackSize -2); i++)
+ 250:	1b 82       	std	Y+3, r1	; 0x03
+ 252:	0e c0       	rjmp	.+28     	; 0x270 <initTask+0x3e>
+       {
+          task->stack[i] = 0;
+ 254:	ec 81       	ldd	r30, Y+4	; 0x04
+ 256:	fd 81       	ldd	r31, Y+5	; 0x05
+ 258:	24 81       	ldd	r18, Z+4	; 0x04
+ 25a:	35 81       	ldd	r19, Z+5	; 0x05
+ 25c:	8b 81       	ldd	r24, Y+3	; 0x03
+ 25e:	88 2f       	mov	r24, r24
+ 260:	90 e0       	ldi	r25, 0x00	; 0
+ 262:	f9 01       	movw	r30, r18
+ 264:	e8 0f       	add	r30, r24
+ 266:	f9 1f       	adc	r31, r25
+ 268:	10 82       	st	Z, r1
+   u08 i, pc_high, pc_low;
+	
+	if(task->taskState == TASK_UNINITIALIZED)
+	{
+		 // Set Stack Address
+       for(i = 0; i < (task->stackSize -2); i++)
+ 26a:	8b 81       	ldd	r24, Y+3	; 0x03
+ 26c:	8f 5f       	subi	r24, 0xFF	; 255
+ 26e:	8b 83       	std	Y+3, r24	; 0x03
+ 270:	8b 81       	ldd	r24, Y+3	; 0x03
+ 272:	28 2f       	mov	r18, r24
+ 274:	30 e0       	ldi	r19, 0x00	; 0
+ 276:	ec 81       	ldd	r30, Y+4	; 0x04
+ 278:	fd 81       	ldd	r31, Y+5	; 0x05
+ 27a:	80 85       	ldd	r24, Z+8	; 0x08
+ 27c:	88 2f       	mov	r24, r24
+ 27e:	90 e0       	ldi	r25, 0x00	; 0
+ 280:	02 97       	sbiw	r24, 0x02	; 2
+ 282:	28 17       	cp	r18, r24
+ 284:	39 07       	cpc	r19, r25
+ 286:	34 f3       	brlt	.-52     	; 0x254 <initTask+0x22>
+       {
+          task->stack[i] = 0;
+       }
+       pc_high = (task->programmCounter >> 8);
+ 288:	ec 81       	ldd	r30, Y+4	; 0x04
+ 28a:	fd 81       	ldd	r31, Y+5	; 0x05
+ 28c:	82 81       	ldd	r24, Z+2	; 0x02
+ 28e:	93 81       	ldd	r25, Z+3	; 0x03
+ 290:	89 2f       	mov	r24, r25
+ 292:	99 27       	eor	r25, r25
+ 294:	8a 83       	std	Y+2, r24	; 0x02
+       pc_low =  0xff & task->programmCounter;
+ 296:	ec 81       	ldd	r30, Y+4	; 0x04
+ 298:	fd 81       	ldd	r31, Y+5	; 0x05
+ 29a:	82 81       	ldd	r24, Z+2	; 0x02
+ 29c:	93 81       	ldd	r25, Z+3	; 0x03
+ 29e:	89 83       	std	Y+1, r24	; 0x01
+       i++;
+ 2a0:	8b 81       	ldd	r24, Y+3	; 0x03
+ 2a2:	8f 5f       	subi	r24, 0xFF	; 255
+ 2a4:	8b 83       	std	Y+3, r24	; 0x03
+       task->stack[i] = pc_high;
+ 2a6:	ec 81       	ldd	r30, Y+4	; 0x04
+ 2a8:	fd 81       	ldd	r31, Y+5	; 0x05
+ 2aa:	24 81       	ldd	r18, Z+4	; 0x04
+ 2ac:	35 81       	ldd	r19, Z+5	; 0x05
+ 2ae:	8b 81       	ldd	r24, Y+3	; 0x03
+ 2b0:	88 2f       	mov	r24, r24
+ 2b2:	90 e0       	ldi	r25, 0x00	; 0
+ 2b4:	f9 01       	movw	r30, r18
+ 2b6:	e8 0f       	add	r30, r24
+ 2b8:	f9 1f       	adc	r31, r25
+ 2ba:	8a 81       	ldd	r24, Y+2	; 0x02
+ 2bc:	80 83       	st	Z, r24
+       i++;
+ 2be:	8b 81       	ldd	r24, Y+3	; 0x03
+ 2c0:	8f 5f       	subi	r24, 0xFF	; 255
+ 2c2:	8b 83       	std	Y+3, r24	; 0x03
+       task->stack[i] = pc_low;
+ 2c4:	ec 81       	ldd	r30, Y+4	; 0x04
+ 2c6:	fd 81       	ldd	r31, Y+5	; 0x05
+ 2c8:	24 81       	ldd	r18, Z+4	; 0x04
+ 2ca:	35 81       	ldd	r19, Z+5	; 0x05
+ 2cc:	8b 81       	ldd	r24, Y+3	; 0x03
+ 2ce:	88 2f       	mov	r24, r24
+ 2d0:	90 e0       	ldi	r25, 0x00	; 0
+ 2d2:	f9 01       	movw	r30, r18
+ 2d4:	e8 0f       	add	r30, r24
+ 2d6:	f9 1f       	adc	r31, r25
+ 2d8:	89 81       	ldd	r24, Y+1	; 0x01
+ 2da:	80 83       	st	Z, r24
+		 // Set Task Ready
+		 task->taskState = TASK_RUNNING;		
+ 2dc:	ec 81       	ldd	r30, Y+4	; 0x04
+ 2de:	fd 81       	ldd	r31, Y+5	; 0x05
+ 2e0:	81 e0       	ldi	r24, 0x01	; 1
+ 2e2:	85 87       	std	Z+13, r24	; 0x0d
+	}
+}
+ 2e4:	0f 90       	pop	r0
+ 2e6:	0f 90       	pop	r0
+ 2e8:	0f 90       	pop	r0
+ 2ea:	0f 90       	pop	r0
+ 2ec:	0f 90       	pop	r0
+ 2ee:	cf 91       	pop	r28
+ 2f0:	df 91       	pop	r29
+ 2f2:	08 95       	ret
+
+000002f4 <sleep>:
+
+void sleep(u32 pause_us)
+{
+ 2f4:	df 93       	push	r29
+ 2f6:	cf 93       	push	r28
+ 2f8:	cd b7       	in	r28, 0x3d	; 61
+ 2fa:	de b7       	in	r29, 0x3e	; 62
+ 2fc:	27 97       	sbiw	r28, 0x07	; 7
+ 2fe:	0f b6       	in	r0, 0x3f	; 63
+ 300:	f8 94       	cli
+ 302:	de bf       	out	0x3e, r29	; 62
+ 304:	0f be       	out	0x3f, r0	; 63
+ 306:	cd bf       	out	0x3d, r28	; 61
+ 308:	6c 83       	std	Y+4, r22	; 0x04
+ 30a:	7d 83       	std	Y+5, r23	; 0x05
+ 30c:	8e 83       	std	Y+6, r24	; 0x06
+ 30e:	9f 83       	std	Y+7, r25	; 0x07
+	TASK *task;
+	BOOL pause = FALSE;
+ 310:	19 82       	std	Y+1, r1	; 0x01
+	task = currentScheduler.tasks[currentScheduler.current_task];
+ 312:	20 91 10 01 	lds	r18, 0x0110
+ 316:	30 91 11 01 	lds	r19, 0x0111
+ 31a:	80 91 12 01 	lds	r24, 0x0112
+ 31e:	88 2f       	mov	r24, r24
+ 320:	90 e0       	ldi	r25, 0x00	; 0
+ 322:	88 0f       	add	r24, r24
+ 324:	99 1f       	adc	r25, r25
+ 326:	f9 01       	movw	r30, r18
+ 328:	e8 0f       	add	r30, r24
+ 32a:	f9 1f       	adc	r31, r25
+ 32c:	80 81       	ld	r24, Z
+ 32e:	91 81       	ldd	r25, Z+1	; 0x01
+ 330:	9b 83       	std	Y+3, r25	; 0x03
+ 332:	8a 83       	std	Y+2, r24	; 0x02
+	//if(task->taskState == TASK_RUNNING)
+	//{
+	  // cli();
+		task->pause_us = pause_us;
+ 334:	ea 81       	ldd	r30, Y+2	; 0x02
+ 336:	fb 81       	ldd	r31, Y+3	; 0x03
+ 338:	8c 81       	ldd	r24, Y+4	; 0x04
+ 33a:	9d 81       	ldd	r25, Y+5	; 0x05
+ 33c:	ae 81       	ldd	r26, Y+6	; 0x06
+ 33e:	bf 81       	ldd	r27, Y+7	; 0x07
+ 340:	81 87       	std	Z+9, r24	; 0x09
+ 342:	92 87       	std	Z+10, r25	; 0x0a
+ 344:	a3 87       	std	Z+11, r26	; 0x0b
+ 346:	b4 87       	std	Z+12, r27	; 0x0c
+		task->taskState = TASK_PAUSE;
+ 348:	ea 81       	ldd	r30, Y+2	; 0x02
+ 34a:	fb 81       	ldd	r31, Y+3	; 0x03
+ 34c:	82 e0       	ldi	r24, 0x02	; 2
+ 34e:	85 87       	std	Z+13, r24	; 0x0d
+	//	sei();
+		
+		do
+		{
+			pause = (currentScheduler.tasks[currentScheduler.current_task]->taskState == TASK_PAUSE);
+ 350:	20 91 10 01 	lds	r18, 0x0110
+ 354:	30 91 11 01 	lds	r19, 0x0111
+ 358:	80 91 12 01 	lds	r24, 0x0112
+ 35c:	88 2f       	mov	r24, r24
+ 35e:	90 e0       	ldi	r25, 0x00	; 0
+ 360:	88 0f       	add	r24, r24
+ 362:	99 1f       	adc	r25, r25
+ 364:	f9 01       	movw	r30, r18
+ 366:	e8 0f       	add	r30, r24
+ 368:	f9 1f       	adc	r31, r25
+ 36a:	01 90       	ld	r0, Z+
+ 36c:	f0 81       	ld	r31, Z
+ 36e:	e0 2d       	mov	r30, r0
+ 370:	85 85       	ldd	r24, Z+13	; 0x0d
+ 372:	19 82       	std	Y+1, r1	; 0x01
+ 374:	82 30       	cpi	r24, 0x02	; 2
+ 376:	11 f4       	brne	.+4      	; 0x37c <sleep+0x88>
+ 378:	81 e0       	ldi	r24, 0x01	; 1
+ 37a:	89 83       	std	Y+1, r24	; 0x01
+		} while(pause);
+ 37c:	89 81       	ldd	r24, Y+1	; 0x01
+ 37e:	88 23       	and	r24, r24
+ 380:	39 f7       	brne	.-50     	; 0x350 <sleep+0x5c>
+	//}
+}
+ 382:	27 96       	adiw	r28, 0x07	; 7
+ 384:	0f b6       	in	r0, 0x3f	; 63
+ 386:	f8 94       	cli
+ 388:	de bf       	out	0x3e, r29	; 62
+ 38a:	0f be       	out	0x3f, r0	; 63
+ 38c:	cd bf       	out	0x3d, r28	; 61
+ 38e:	cf 91       	pop	r28
+ 390:	df 91       	pop	r29
+ 392:	08 95       	ret
+
+00000394 <decrementPause>:
+
+void decrementPause(void)
+{
+ 394:	df 93       	push	r29
+ 396:	cf 93       	push	r28
+ 398:	00 d0       	rcall	.+0      	; 0x39a <decrementPause+0x6>
+ 39a:	0f 92       	push	r0
+ 39c:	cd b7       	in	r28, 0x3d	; 61
+ 39e:	de b7       	in	r29, 0x3e	; 62
+   u08 i;
+   TASK *task;
+	for(i = 0;	i < currentScheduler.tasks_length; i++)
+ 3a0:	1b 82       	std	Y+3, r1	; 0x03
+ 3a2:	3e c0       	rjmp	.+124    	; 0x420 <decrementPause+0x8c>
+	{
+		task = currentScheduler.tasks[i];
+ 3a4:	20 91 10 01 	lds	r18, 0x0110
+ 3a8:	30 91 11 01 	lds	r19, 0x0111
+ 3ac:	8b 81       	ldd	r24, Y+3	; 0x03
+ 3ae:	88 2f       	mov	r24, r24
+ 3b0:	90 e0       	ldi	r25, 0x00	; 0
+ 3b2:	88 0f       	add	r24, r24
+ 3b4:	99 1f       	adc	r25, r25
+ 3b6:	f9 01       	movw	r30, r18
+ 3b8:	e8 0f       	add	r30, r24
+ 3ba:	f9 1f       	adc	r31, r25
+ 3bc:	80 81       	ld	r24, Z
+ 3be:	91 81       	ldd	r25, Z+1	; 0x01
+ 3c0:	9a 83       	std	Y+2, r25	; 0x02
+ 3c2:	89 83       	std	Y+1, r24	; 0x01
+		if(task->taskState == TASK_PAUSE)
+ 3c4:	e9 81       	ldd	r30, Y+1	; 0x01
+ 3c6:	fa 81       	ldd	r31, Y+2	; 0x02
+ 3c8:	85 85       	ldd	r24, Z+13	; 0x0d
+ 3ca:	82 30       	cpi	r24, 0x02	; 2
+ 3cc:	31 f5       	brne	.+76     	; 0x41a <decrementPause+0x86>
+		{
+      	if(task->pause_us <= TIMER_DELAY_US)
+ 3ce:	e9 81       	ldd	r30, Y+1	; 0x01
+ 3d0:	fa 81       	ldd	r31, Y+2	; 0x02
+ 3d2:	81 85       	ldd	r24, Z+9	; 0x09
+ 3d4:	92 85       	ldd	r25, Z+10	; 0x0a
+ 3d6:	a3 85       	ldd	r26, Z+11	; 0x0b
+ 3d8:	b4 85       	ldd	r27, Z+12	; 0x0c
+ 3da:	8b 3f       	cpi	r24, 0xFB	; 251
+ 3dc:	91 05       	cpc	r25, r1
+ 3de:	a1 05       	cpc	r26, r1
+ 3e0:	b1 05       	cpc	r27, r1
+ 3e2:	58 f4       	brcc	.+22     	; 0x3fa <decrementPause+0x66>
+      	{
+      		task->pause_us = 0;
+ 3e4:	e9 81       	ldd	r30, Y+1	; 0x01
+ 3e6:	fa 81       	ldd	r31, Y+2	; 0x02
+ 3e8:	11 86       	std	Z+9, r1	; 0x09
+ 3ea:	12 86       	std	Z+10, r1	; 0x0a
+ 3ec:	13 86       	std	Z+11, r1	; 0x0b
+ 3ee:	14 86       	std	Z+12, r1	; 0x0c
+      		task->taskState = TASK_RUNNING;
+ 3f0:	e9 81       	ldd	r30, Y+1	; 0x01
+ 3f2:	fa 81       	ldd	r31, Y+2	; 0x02
+ 3f4:	81 e0       	ldi	r24, 0x01	; 1
+ 3f6:	85 87       	std	Z+13, r24	; 0x0d
+ 3f8:	10 c0       	rjmp	.+32     	; 0x41a <decrementPause+0x86>
+      	}
+      	else
+      	{
+      		task->pause_us -= TIMER_DELAY_US;
+ 3fa:	e9 81       	ldd	r30, Y+1	; 0x01
+ 3fc:	fa 81       	ldd	r31, Y+2	; 0x02
+ 3fe:	81 85       	ldd	r24, Z+9	; 0x09
+ 400:	92 85       	ldd	r25, Z+10	; 0x0a
+ 402:	a3 85       	ldd	r26, Z+11	; 0x0b
+ 404:	b4 85       	ldd	r27, Z+12	; 0x0c
+ 406:	8a 5f       	subi	r24, 0xFA	; 250
+ 408:	90 40       	sbci	r25, 0x00	; 0
+ 40a:	a0 40       	sbci	r26, 0x00	; 0
+ 40c:	b0 40       	sbci	r27, 0x00	; 0
+ 40e:	e9 81       	ldd	r30, Y+1	; 0x01
+ 410:	fa 81       	ldd	r31, Y+2	; 0x02
+ 412:	81 87       	std	Z+9, r24	; 0x09
+ 414:	92 87       	std	Z+10, r25	; 0x0a
+ 416:	a3 87       	std	Z+11, r26	; 0x0b
+ 418:	b4 87       	std	Z+12, r27	; 0x0c
+
+void decrementPause(void)
+{
+   u08 i;
+   TASK *task;
+	for(i = 0;	i < currentScheduler.tasks_length; i++)
+ 41a:	8b 81       	ldd	r24, Y+3	; 0x03
+ 41c:	8f 5f       	subi	r24, 0xFF	; 255
+ 41e:	8b 83       	std	Y+3, r24	; 0x03
+ 420:	90 91 13 01 	lds	r25, 0x0113
+ 424:	8b 81       	ldd	r24, Y+3	; 0x03
+ 426:	89 17       	cp	r24, r25
+ 428:	08 f4       	brcc	.+2      	; 0x42c <decrementPause+0x98>
+ 42a:	bc cf       	rjmp	.-136    	; 0x3a4 <decrementPause+0x10>
+      	{
+      		task->pause_us -= TIMER_DELAY_US;
+      	}
+      }
+	}
+}
+ 42c:	0f 90       	pop	r0
+ 42e:	0f 90       	pop	r0
+ 430:	0f 90       	pop	r0
+ 432:	cf 91       	pop	r28
+ 434:	df 91       	pop	r29
+ 436:	08 95       	ret
+
+00000438 <allTasksFinished>:
+
+BOOL allTasksFinished(void)
+{
+ 438:	df 93       	push	r29
+ 43a:	cf 93       	push	r28
+ 43c:	00 d0       	rcall	.+0      	; 0x43e <allTasksFinished+0x6>
+ 43e:	00 d0       	rcall	.+0      	; 0x440 <allTasksFinished+0x8>
+ 440:	cd b7       	in	r28, 0x3d	; 61
+ 442:	de b7       	in	r29, 0x3e	; 62
+   u08 i;
+   TASK *task;
+   BOOL result = TRUE;
+ 444:	8f ef       	ldi	r24, 0xFF	; 255
+ 446:	89 83       	std	Y+1, r24	; 0x01
+	for(i = 0;	i < currentScheduler.tasks_length; i++)
+ 448:	1c 82       	std	Y+4, r1	; 0x04
+ 44a:	1a c0       	rjmp	.+52     	; 0x480 <__stack+0x21>
+	{
+		task = currentScheduler.tasks[i];
+ 44c:	20 91 10 01 	lds	r18, 0x0110
+ 450:	30 91 11 01 	lds	r19, 0x0111
+ 454:	8c 81       	ldd	r24, Y+4	; 0x04
+ 456:	88 2f       	mov	r24, r24
+ 458:	90 e0       	ldi	r25, 0x00	; 0
+ 45a:	88 0f       	add	r24, r24
+ 45c:	99 1f       	adc	r25, r25
+ 45e:	f9 01       	movw	r30, r18
+ 460:	e8 0f       	add	r30, r24
+ 462:	f9 1f       	adc	r31, r25
+ 464:	80 81       	ld	r24, Z
+ 466:	91 81       	ldd	r25, Z+1	; 0x01
+ 468:	9b 83       	std	Y+3, r25	; 0x03
+ 46a:	8a 83       	std	Y+2, r24	; 0x02
+		if(task->taskState != TASK_FINISHED)
+ 46c:	ea 81       	ldd	r30, Y+2	; 0x02
+ 46e:	fb 81       	ldd	r31, Y+3	; 0x03
+ 470:	85 85       	ldd	r24, Z+13	; 0x0d
+ 472:	83 30       	cpi	r24, 0x03	; 3
+ 474:	11 f0       	breq	.+4      	; 0x47a <__stack+0x1b>
+		{
+			result = FALSE;
+ 476:	19 82       	std	Y+1, r1	; 0x01
+ 478:	08 c0       	rjmp	.+16     	; 0x48a <__stack+0x2b>
+BOOL allTasksFinished(void)
+{
+   u08 i;
+   TASK *task;
+   BOOL result = TRUE;
+	for(i = 0;	i < currentScheduler.tasks_length; i++)
+ 47a:	8c 81       	ldd	r24, Y+4	; 0x04
+ 47c:	8f 5f       	subi	r24, 0xFF	; 255
+ 47e:	8c 83       	std	Y+4, r24	; 0x04
+ 480:	90 91 13 01 	lds	r25, 0x0113
+ 484:	8c 81       	ldd	r24, Y+4	; 0x04
+ 486:	89 17       	cp	r24, r25
+ 488:	08 f3       	brcs	.-62     	; 0x44c <allTasksFinished+0x14>
+		{
+			result = FALSE;
+			break;
+		}
+	}
+	return (result);
+ 48a:	89 81       	ldd	r24, Y+1	; 0x01
+}
+ 48c:	0f 90       	pop	r0
+ 48e:	0f 90       	pop	r0
+ 490:	0f 90       	pop	r0
+ 492:	0f 90       	pop	r0
+ 494:	cf 91       	pop	r28
+ 496:	df 91       	pop	r29
+ 498:	08 95       	ret
+
+0000049a <startRRScheduler>:
+
+void startRRScheduler(TASK **tasks, u08 tasks_length)
+{
+ 49a:	df 93       	push	r29
+ 49c:	cf 93       	push	r28
+ 49e:	00 d0       	rcall	.+0      	; 0x4a0 <startRRScheduler+0x6>
+ 4a0:	00 d0       	rcall	.+0      	; 0x4a2 <startRRScheduler+0x8>
+ 4a2:	0f 92       	push	r0
+ 4a4:	cd b7       	in	r28, 0x3d	; 61
+ 4a6:	de b7       	in	r29, 0x3e	; 62
+ 4a8:	9c 83       	std	Y+4, r25	; 0x04
+ 4aa:	8b 83       	std	Y+3, r24	; 0x03
+ 4ac:	6d 83       	std	Y+5, r22	; 0x05
+	currentScheduler.stackPointer = SP + 7;
+ 4ae:	ed e5       	ldi	r30, 0x5D	; 93
+ 4b0:	f0 e0       	ldi	r31, 0x00	; 0
+ 4b2:	80 81       	ld	r24, Z
+ 4b4:	91 81       	ldd	r25, Z+1	; 0x01
+ 4b6:	07 96       	adiw	r24, 0x07	; 7
+ 4b8:	90 93 15 01 	sts	0x0115, r25
+ 4bc:	80 93 14 01 	sts	0x0114, r24
+   TASK *task;
+	currentScheduler.current_task = 0;
+ 4c0:	10 92 12 01 	sts	0x0112, r1
+	currentScheduler.tasks = tasks;
+ 4c4:	8b 81       	ldd	r24, Y+3	; 0x03
+ 4c6:	9c 81       	ldd	r25, Y+4	; 0x04
+ 4c8:	90 93 11 01 	sts	0x0111, r25
+ 4cc:	80 93 10 01 	sts	0x0110, r24
+	currentScheduler.tasks_length = tasks_length;
+ 4d0:	8d 81       	ldd	r24, Y+5	; 0x05
+ 4d2:	80 93 13 01 	sts	0x0113, r24
+
+	// Inititalize Tasks
+	for(currentScheduler.current_task = 0;
+ 4d6:	10 92 12 01 	sts	0x0112, r1
+ 4da:	19 c0       	rjmp	.+50     	; 0x50e <startRRScheduler+0x74>
+			currentScheduler.current_task < currentScheduler.tasks_length;
+			currentScheduler.current_task++)
+	{
+		task = currentScheduler.tasks[currentScheduler.current_task];
+ 4dc:	20 91 10 01 	lds	r18, 0x0110
+ 4e0:	30 91 11 01 	lds	r19, 0x0111
+ 4e4:	80 91 12 01 	lds	r24, 0x0112
+ 4e8:	88 2f       	mov	r24, r24
+ 4ea:	90 e0       	ldi	r25, 0x00	; 0
+ 4ec:	88 0f       	add	r24, r24
+ 4ee:	99 1f       	adc	r25, r25
+ 4f0:	f9 01       	movw	r30, r18
+ 4f2:	e8 0f       	add	r30, r24
+ 4f4:	f9 1f       	adc	r31, r25
+ 4f6:	80 81       	ld	r24, Z
+ 4f8:	91 81       	ldd	r25, Z+1	; 0x01
+ 4fa:	9a 83       	std	Y+2, r25	; 0x02
+ 4fc:	89 83       	std	Y+1, r24	; 0x01
+      initTask(task);
+ 4fe:	89 81       	ldd	r24, Y+1	; 0x01
+ 500:	9a 81       	ldd	r25, Y+2	; 0x02
+ 502:	97 de       	rcall	.-722    	; 0x232 <initTask>
+	currentScheduler.tasks_length = tasks_length;
+
+	// Inititalize Tasks
+	for(currentScheduler.current_task = 0;
+			currentScheduler.current_task < currentScheduler.tasks_length;
+			currentScheduler.current_task++)
+ 504:	80 91 12 01 	lds	r24, 0x0112
+ 508:	8f 5f       	subi	r24, 0xFF	; 255
+ 50a:	80 93 12 01 	sts	0x0112, r24
+	currentScheduler.tasks = tasks;
+	currentScheduler.tasks_length = tasks_length;
+
+	// Inititalize Tasks
+	for(currentScheduler.current_task = 0;
+			currentScheduler.current_task < currentScheduler.tasks_length;
+ 50e:	90 91 12 01 	lds	r25, 0x0112
+ 512:	80 91 13 01 	lds	r24, 0x0113
+ 516:	98 17       	cp	r25, r24
+ 518:	08 f3       	brcs	.-62     	; 0x4dc <startRRScheduler+0x42>
+			currentScheduler.current_task++)
+	{
+		task = currentScheduler.tasks[currentScheduler.current_task];
+      initTask(task);
+	}
+	currentScheduler.current_task = 0;
+ 51a:	10 92 12 01 	sts	0x0112, r1
+   task = currentScheduler.tasks[0];
+ 51e:	e0 91 10 01 	lds	r30, 0x0110
+ 522:	f0 91 11 01 	lds	r31, 0x0111
+ 526:	80 81       	ld	r24, Z
+ 528:	91 81       	ldd	r25, Z+1	; 0x01
+ 52a:	9a 83       	std	Y+2, r25	; 0x02
+ 52c:	89 83       	std	Y+1, r24	; 0x01
+	initTimer();
+ 52e:	e3 e5       	ldi	r30, 0x53	; 83
+ 530:	f0 e0       	ldi	r31, 0x00	; 0
+ 532:	82 e0       	ldi	r24, 0x02	; 2
+ 534:	80 83       	st	Z, r24
+ 536:	e9 e5       	ldi	r30, 0x59	; 89
+ 538:	f0 e0       	ldi	r31, 0x00	; 0
+ 53a:	81 e0       	ldi	r24, 0x01	; 1
+ 53c:	80 83       	st	Z, r24
+ 53e:	78 94       	sei
+
+	set_stackpointer(task->stackPointer + WORKING_REGISTERS);
+ 540:	ad e5       	ldi	r26, 0x5D	; 93
+ 542:	b0 e0       	ldi	r27, 0x00	; 0
+ 544:	e9 81       	ldd	r30, Y+1	; 0x01
+ 546:	fa 81       	ldd	r31, Y+2	; 0x02
+ 548:	86 81       	ldd	r24, Z+6	; 0x06
+ 54a:	97 81       	ldd	r25, Z+7	; 0x07
+ 54c:	80 96       	adiw	r24, 0x20	; 32
+ 54e:	11 96       	adiw	r26, 0x01	; 1
+ 550:	9c 93       	st	X, r25
+ 552:	8e 93       	st	-X, r24
+	task->taskFunction();
+ 554:	e9 81       	ldd	r30, Y+1	; 0x01
+ 556:	fa 81       	ldd	r31, Y+2	; 0x02
+ 558:	01 90       	ld	r0, Z+
+ 55a:	f0 81       	ld	r31, Z
+ 55c:	e0 2d       	mov	r30, r0
+ 55e:	09 95       	icall
+}
+ 560:	0f 90       	pop	r0
+ 562:	0f 90       	pop	r0
+ 564:	0f 90       	pop	r0
+ 566:	0f 90       	pop	r0
+ 568:	0f 90       	pop	r0
+ 56a:	cf 91       	pop	r28
+ 56c:	df 91       	pop	r29
+ 56e:	08 95       	ret
+
+00000570 <nextScheduleItem>:
+
+void nextScheduleItem(void)
+{
+ 570:	df 93       	push	r29
+ 572:	cf 93       	push	r28
+ 574:	cd b7       	in	r28, 0x3d	; 61
+ 576:	de b7       	in	r29, 0x3e	; 62
+	}
+	for(i=0; i < currentScheduler.current_task; i++)
+	{
+		task = currentScheduler.tasks[i];
+	}           */
+	if (currentScheduler.current_task < (currentScheduler.tasks_length -1))
+ 578:	80 91 12 01 	lds	r24, 0x0112
+ 57c:	28 2f       	mov	r18, r24
+ 57e:	30 e0       	ldi	r19, 0x00	; 0
+ 580:	80 91 13 01 	lds	r24, 0x0113
+ 584:	88 2f       	mov	r24, r24
+ 586:	90 e0       	ldi	r25, 0x00	; 0
+ 588:	01 97       	sbiw	r24, 0x01	; 1
+ 58a:	28 17       	cp	r18, r24
+ 58c:	39 07       	cpc	r19, r25
+ 58e:	34 f4       	brge	.+12     	; 0x59c <nextScheduleItem+0x2c>
+	{
+		currentScheduler.current_task++;
+ 590:	80 91 12 01 	lds	r24, 0x0112
+ 594:	8f 5f       	subi	r24, 0xFF	; 255
+ 596:	80 93 12 01 	sts	0x0112, r24
+ 59a:	02 c0       	rjmp	.+4      	; 0x5a0 <nextScheduleItem+0x30>
+	}
+	else
+	{
+		currentScheduler.current_task = 0;
+ 59c:	10 92 12 01 	sts	0x0112, r1
+	}
+	// (pop) reset task specific registers
+}
+ 5a0:	cf 91       	pop	r28
+ 5a2:	df 91       	pop	r29
+ 5a4:	08 95       	ret
+
+000005a6 <incrementTime>:
+
+void incrementTime(void)
+{
+ 5a6:	df 93       	push	r29
+ 5a8:	cf 93       	push	r28
+ 5aa:	cd b7       	in	r28, 0x3d	; 61
+ 5ac:	de b7       	in	r29, 0x3e	; 62
+   if((currentTime.us+TIMER_DELAY_US)==1000)
+ 5ae:	80 91 09 01 	lds	r24, 0x0109
+ 5b2:	90 91 0a 01 	lds	r25, 0x010A
+ 5b6:	22 e0       	ldi	r18, 0x02	; 2
+ 5b8:	8e 3e       	cpi	r24, 0xEE	; 238
+ 5ba:	92 07       	cpc	r25, r18
+ 5bc:	09 f0       	breq	.+2      	; 0x5c0 <incrementTime+0x1a>
+ 5be:	3e c0       	rjmp	.+124    	; 0x63c <incrementTime+0x96>
+   {
+   	if((currentTime.ms+1)==1000)
+ 5c0:	80 91 07 01 	lds	r24, 0x0107
+ 5c4:	90 91 08 01 	lds	r25, 0x0108
+ 5c8:	23 e0       	ldi	r18, 0x03	; 3
+ 5ca:	87 3e       	cpi	r24, 0xE7	; 231
+ 5cc:	92 07       	cpc	r25, r18
+ 5ce:	49 f5       	brne	.+82     	; 0x622 <incrementTime+0x7c>
+   	{
+   	   if((currentTime.seconds+1)==60)
+ 5d0:	80 91 06 01 	lds	r24, 0x0106
+ 5d4:	8b 33       	cpi	r24, 0x3B	; 59
+ 5d6:	d1 f4       	brne	.+52     	; 0x60c <incrementTime+0x66>
+   	   {
+   	   	if((currentTime.minutes+1)==60)
+ 5d8:	80 91 05 01 	lds	r24, 0x0105
+ 5dc:	8b 33       	cpi	r24, 0x3B	; 59
+ 5de:	59 f4       	brne	.+22     	; 0x5f6 <incrementTime+0x50>
+   	   	{
+   	   		currentTime.hours = (currentTime.hours+1) % 24;
+ 5e0:	80 91 04 01 	lds	r24, 0x0104
+ 5e4:	88 2f       	mov	r24, r24
+ 5e6:	90 e0       	ldi	r25, 0x00	; 0
+ 5e8:	01 96       	adiw	r24, 0x01	; 1
+ 5ea:	28 e1       	ldi	r18, 0x18	; 24
+ 5ec:	30 e0       	ldi	r19, 0x00	; 0
+ 5ee:	b9 01       	movw	r22, r18
+ 5f0:	d1 d0       	rcall	.+418    	; 0x794 <__divmodhi4>
+ 5f2:	80 93 04 01 	sts	0x0104, r24
+   	   	}
+   	   	currentTime.minutes = (currentTime.minutes+1) % 60;
+ 5f6:	80 91 05 01 	lds	r24, 0x0105
+ 5fa:	88 2f       	mov	r24, r24
+ 5fc:	90 e0       	ldi	r25, 0x00	; 0
+ 5fe:	01 96       	adiw	r24, 0x01	; 1
+ 600:	2c e3       	ldi	r18, 0x3C	; 60
+ 602:	30 e0       	ldi	r19, 0x00	; 0
+ 604:	b9 01       	movw	r22, r18
+ 606:	c6 d0       	rcall	.+396    	; 0x794 <__divmodhi4>
+ 608:	80 93 05 01 	sts	0x0105, r24
+   	   }
+   	   currentTime.seconds = (currentTime.seconds+1) % 60;
+ 60c:	80 91 06 01 	lds	r24, 0x0106
+ 610:	88 2f       	mov	r24, r24
+ 612:	90 e0       	ldi	r25, 0x00	; 0
+ 614:	01 96       	adiw	r24, 0x01	; 1
+ 616:	2c e3       	ldi	r18, 0x3C	; 60
+ 618:	30 e0       	ldi	r19, 0x00	; 0
+ 61a:	b9 01       	movw	r22, r18
+ 61c:	bb d0       	rcall	.+374    	; 0x794 <__divmodhi4>
+ 61e:	80 93 06 01 	sts	0x0106, r24
+   	}
+   	currentTime.ms = (currentTime.ms+1) % 1000;
+ 622:	80 91 07 01 	lds	r24, 0x0107
+ 626:	90 91 08 01 	lds	r25, 0x0108
+ 62a:	01 96       	adiw	r24, 0x01	; 1
+ 62c:	28 ee       	ldi	r18, 0xE8	; 232
+ 62e:	33 e0       	ldi	r19, 0x03	; 3
+ 630:	b9 01       	movw	r22, r18
+ 632:	9c d0       	rcall	.+312    	; 0x76c <__udivmodhi4>
+ 634:	90 93 08 01 	sts	0x0108, r25
+ 638:	80 93 07 01 	sts	0x0107, r24
+   }
+   currentTime.us = (currentTime.us+TIMER_DELAY_US) % 1000;
+ 63c:	80 91 09 01 	lds	r24, 0x0109
+ 640:	90 91 0a 01 	lds	r25, 0x010A
+ 644:	86 50       	subi	r24, 0x06	; 6
+ 646:	9f 4f       	sbci	r25, 0xFF	; 255
+ 648:	28 ee       	ldi	r18, 0xE8	; 232
+ 64a:	33 e0       	ldi	r19, 0x03	; 3
+ 64c:	b9 01       	movw	r22, r18
+ 64e:	8e d0       	rcall	.+284    	; 0x76c <__udivmodhi4>
+ 650:	90 93 0a 01 	sts	0x010A, r25
+ 654:	80 93 09 01 	sts	0x0109, r24
+}
+ 658:	cf 91       	pop	r28
+ 65a:	df 91       	pop	r29
+ 65c:	08 95       	ret
+
+0000065e <__vector_9>:
+
+SCHEDULER_TIMER()
+{  // Testen ob nicht alle Tasks beendet worden sind
+	// falls ja:
+	if(!allTasksFinished())
+ 65e:	ec de       	rcall	.-552    	; 0x438 <allTasksFinished>
+ 660:	88 23       	and	r24, r24
+ 662:	09 f0       	breq	.+2      	; 0x666 <__vector_9+0x8>
+ 664:	77 c0       	rjmp	.+238    	; 0x754 <__vector_9+0xf6>
+	{
+   	save_registers();
+ 666:	0f 92       	push	r0
+ 668:	1f 92       	push	r1
+ 66a:	2f 92       	push	r2
+ 66c:	3f 92       	push	r3
+ 66e:	4f 92       	push	r4
+ 670:	5f 92       	push	r5
+ 672:	6f 92       	push	r6
+ 674:	7f 92       	push	r7
+ 676:	8f 92       	push	r8
+ 678:	9f 92       	push	r9
+ 67a:	af 92       	push	r10
+ 67c:	bf 92       	push	r11
+ 67e:	cf 92       	push	r12
+ 680:	df 92       	push	r13
+ 682:	ef 92       	push	r14
+ 684:	ff 92       	push	r15
+ 686:	0f 93       	push	r16
+ 688:	1f 93       	push	r17
+ 68a:	2f 93       	push	r18
+ 68c:	3f 93       	push	r19
+ 68e:	4f 93       	push	r20
+ 690:	5f 93       	push	r21
+ 692:	6f 93       	push	r22
+ 694:	7f 93       	push	r23
+ 696:	8f 93       	push	r24
+ 698:	9f 93       	push	r25
+ 69a:	af 93       	push	r26
+ 69c:	bf 93       	push	r27
+ 69e:	cf 93       	push	r28
+ 6a0:	df 93       	push	r29
+ 6a2:	ef 93       	push	r30
+ 6a4:	ff 93       	push	r31
+		TASK *task;
+		task = currentScheduler.tasks[currentScheduler.current_task];
+ 6a6:	20 91 10 01 	lds	r18, 0x0110
+ 6aa:	30 91 11 01 	lds	r19, 0x0111
+ 6ae:	80 91 12 01 	lds	r24, 0x0112
+ 6b2:	88 2f       	mov	r24, r24
+ 6b4:	90 e0       	ldi	r25, 0x00	; 0
+ 6b6:	88 0f       	add	r24, r24
+ 6b8:	99 1f       	adc	r25, r25
+ 6ba:	f9 01       	movw	r30, r18
+ 6bc:	e8 0f       	add	r30, r24
+ 6be:	f9 1f       	adc	r31, r25
+ 6c0:	80 81       	ld	r24, Z
+ 6c2:	91 81       	ldd	r25, Z+1	; 0x01
+ 6c4:	9a 83       	std	Y+2, r25	; 0x02
+ 6c6:	89 83       	std	Y+1, r24	; 0x01
+
+	// Stackpointer vom letzten task sichern
+		task->stackPointer = get_stackpointer();
+ 6c8:	ed e5       	ldi	r30, 0x5D	; 93
+ 6ca:	f0 e0       	ldi	r31, 0x00	; 0
+ 6cc:	80 81       	ld	r24, Z
+ 6ce:	91 81       	ldd	r25, Z+1	; 0x01
+ 6d0:	e9 81       	ldd	r30, Y+1	; 0x01
+ 6d2:	fa 81       	ldd	r31, Y+2	; 0x02
+ 6d4:	97 83       	std	Z+7, r25	; 0x07
+ 6d6:	86 83       	std	Z+6, r24	; 0x06
+		incrementTime();
+ 6d8:	66 df       	rcall	.-308    	; 0x5a6 <incrementTime>
+		decrementPause();
+ 6da:	5c de       	rcall	.-840    	; 0x394 <decrementPause>
+
+	
+		nextScheduleItem();
+ 6dc:	49 df       	rcall	.-366    	; 0x570 <nextScheduleItem>
+  		task = currentScheduler.tasks[currentScheduler.current_task];
+ 6de:	20 91 10 01 	lds	r18, 0x0110
+ 6e2:	30 91 11 01 	lds	r19, 0x0111
+ 6e6:	80 91 12 01 	lds	r24, 0x0112
+ 6ea:	88 2f       	mov	r24, r24
+ 6ec:	90 e0       	ldi	r25, 0x00	; 0
+ 6ee:	88 0f       	add	r24, r24
+ 6f0:	99 1f       	adc	r25, r25
+ 6f2:	f9 01       	movw	r30, r18
+ 6f4:	e8 0f       	add	r30, r24
+ 6f6:	f9 1f       	adc	r31, r25
+ 6f8:	80 81       	ld	r24, Z
+ 6fa:	91 81       	ldd	r25, Z+1	; 0x01
+ 6fc:	9a 83       	std	Y+2, r25	; 0x02
+ 6fe:	89 83       	std	Y+1, r24	; 0x01
+		set_stackpointer(task->stackPointer);
+ 700:	ad e5       	ldi	r26, 0x5D	; 93
+ 702:	b0 e0       	ldi	r27, 0x00	; 0
+ 704:	e9 81       	ldd	r30, Y+1	; 0x01
+ 706:	fa 81       	ldd	r31, Y+2	; 0x02
+ 708:	86 81       	ldd	r24, Z+6	; 0x06
+ 70a:	97 81       	ldd	r25, Z+7	; 0x07
+ 70c:	11 96       	adiw	r26, 0x01	; 1
+ 70e:	9c 93       	st	X, r25
+ 710:	8e 93       	st	-X, r24
+		load_registers();
+ 712:	ff 91       	pop	r31
+ 714:	ef 91       	pop	r30
+ 716:	df 91       	pop	r29
+ 718:	cf 91       	pop	r28
+ 71a:	bf 91       	pop	r27
+ 71c:	af 91       	pop	r26
+ 71e:	9f 91       	pop	r25
+ 720:	8f 91       	pop	r24
+ 722:	7f 91       	pop	r23
+ 724:	6f 91       	pop	r22
+ 726:	5f 91       	pop	r21
+ 728:	4f 91       	pop	r20
+ 72a:	3f 91       	pop	r19
+ 72c:	2f 91       	pop	r18
+ 72e:	1f 91       	pop	r17
+ 730:	0f 91       	pop	r16
+ 732:	ff 90       	pop	r15
+ 734:	ef 90       	pop	r14
+ 736:	df 90       	pop	r13
+ 738:	cf 90       	pop	r12
+ 73a:	bf 90       	pop	r11
+ 73c:	af 90       	pop	r10
+ 73e:	9f 90       	pop	r9
+ 740:	8f 90       	pop	r8
+ 742:	7f 90       	pop	r7
+ 744:	6f 90       	pop	r6
+ 746:	5f 90       	pop	r5
+ 748:	4f 90       	pop	r4
+ 74a:	3f 90       	pop	r3
+ 74c:	2f 90       	pop	r2
+ 74e:	1f 90       	pop	r1
+ 750:	0f 90       	pop	r0
+ 752:	0b c0       	rjmp	.+22     	; 0x76a <__vector_9+0x10c>
+	}
+	else
+	{ /* Kein Task mehr da */
+	 	// Stackpointer setzen
+		set_stackpointer(currentScheduler.stackPointer);
+ 754:	ed e5       	ldi	r30, 0x5D	; 93
+ 756:	f0 e0       	ldi	r31, 0x00	; 0
+ 758:	80 91 14 01 	lds	r24, 0x0114
+ 75c:	90 91 15 01 	lds	r25, 0x0115
+ 760:	91 83       	std	Z+1, r25	; 0x01
+ 762:	80 83       	st	Z, r24
+		// Timer deaktivieren
+		disableTimer();
+ 764:	e9 e5       	ldi	r30, 0x59	; 89
+ 766:	f0 e0       	ldi	r31, 0x00	; 0
+ 768:	10 82       	st	Z, r1
+	}
+   return_interrupt();
+ 76a:	18 95       	reti
+
+0000076c <__udivmodhi4>:
+ 76c:	aa 1b       	sub	r26, r26
+ 76e:	bb 1b       	sub	r27, r27
+ 770:	51 e1       	ldi	r21, 0x11	; 17
+ 772:	07 c0       	rjmp	.+14     	; 0x782 <__udivmodhi4_ep>
+
+00000774 <__udivmodhi4_loop>:
+ 774:	aa 1f       	adc	r26, r26
+ 776:	bb 1f       	adc	r27, r27
+ 778:	a6 17       	cp	r26, r22
+ 77a:	b7 07       	cpc	r27, r23
+ 77c:	10 f0       	brcs	.+4      	; 0x782 <__udivmodhi4_ep>
+ 77e:	a6 1b       	sub	r26, r22
+ 780:	b7 0b       	sbc	r27, r23
+
+00000782 <__udivmodhi4_ep>:
+ 782:	88 1f       	adc	r24, r24
+ 784:	99 1f       	adc	r25, r25
+ 786:	5a 95       	dec	r21
+ 788:	a9 f7       	brne	.-22     	; 0x774 <__udivmodhi4_loop>
+ 78a:	80 95       	com	r24
+ 78c:	90 95       	com	r25
+ 78e:	bc 01       	movw	r22, r24
+ 790:	cd 01       	movw	r24, r26
+ 792:	08 95       	ret
+
+00000794 <__divmodhi4>:
+ 794:	97 fb       	bst	r25, 7
+ 796:	09 2e       	mov	r0, r25
+ 798:	07 26       	eor	r0, r23
+ 79a:	0a d0       	rcall	.+20     	; 0x7b0 <__divmodhi4_neg1>
+ 79c:	77 fd       	sbrc	r23, 7
+ 79e:	04 d0       	rcall	.+8      	; 0x7a8 <__divmodhi4_neg2>
+ 7a0:	e5 df       	rcall	.-54     	; 0x76c <__udivmodhi4>
+ 7a2:	06 d0       	rcall	.+12     	; 0x7b0 <__divmodhi4_neg1>
+ 7a4:	00 20       	and	r0, r0
+ 7a6:	1a f4       	brpl	.+6      	; 0x7ae <__divmodhi4_exit>
+
+000007a8 <__divmodhi4_neg2>:
+ 7a8:	70 95       	com	r23
+ 7aa:	61 95       	neg	r22
+ 7ac:	7f 4f       	sbci	r23, 0xFF	; 255
+
+000007ae <__divmodhi4_exit>:
+ 7ae:	08 95       	ret
+
+000007b0 <__divmodhi4_neg1>:
+ 7b0:	f6 f7       	brtc	.-4      	; 0x7ae <__divmodhi4_exit>
+ 7b2:	90 95       	com	r25
+ 7b4:	81 95       	neg	r24
+ 7b6:	9f 4f       	sbci	r25, 0xFF	; 255
+ 7b8:	08 95       	ret
+
+000007ba <_exit>:
+ 7ba:	f8 94       	cli
+
+000007bc <__stop_program>:
+ 7bc:	ff cf       	rjmp	.-2      	; 0x7bc <__stop_program>

@@ -1,0 +1,518 @@
+   1               		.file	"timetest.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   9               		.text
+  10               	.Ltext0:
+ 118               	.global	setup
+ 120               	setup:
+   1:timetest.c    **** #include "kernel.h"
+   2:timetest.c    **** 
+   3:timetest.c    **** #define DEFAULTPORT PORTB
+   4:timetest.c    **** #define DEFAULTDDR DDRB
+   5:timetest.c    **** #define TASKAPIN PB0
+   6:timetest.c    **** #define TASKBPIN PB1
+   7:timetest.c    **** #define TASKCPIN PB2
+   8:timetest.c    **** #define TASKDPIN PB3
+   9:timetest.c    **** #define TASKEPIN PB4
+  10:timetest.c    **** 
+  11:timetest.c    **** 
+  12:timetest.c    **** 
+  13:timetest.c    **** void setup(void)
+  14:timetest.c    **** {
+ 121               	:
+ 123               	.LM0:
+ 124 0000 DF93      	.LFBB1:
+ 125 0002 CF93      		push r29
+ 126 0004 CDB7      		push r28
+ 127 0006 DEB7      		in r28,__SP_L__
+ 128               		in r29,__SP_H__
+ 129               	/* prologue: function */
+  15:timetest.c    ****   sbi(DEFAULTDDR, TASKAPIN);
+ 130               	* prologue: function */
+ 131               	/* frame size = 0 */
+ 133 000a B0E0      	.LM1:
+ 134 000c E7E3      		ldi r26,lo8(55)
+ 135 000e F0E0      		ldi r27,hi8(55)
+ 136 0010 8081      		ldi r30,lo8(55)
+ 137 0012 8160      		ldi r31,hi8(55)
+ 138 0014 8C93      		ld r24,Z
+  16:timetest.c    ****   sbi(DEFAULTDDR, TASKBPIN);
+ 139               	 r31,hi8(55)
+ 140               		ld r24,Z
+ 141 0016 A7E3      		ori r24,lo8(1)
+ 142 0018 B0E0      		st X,r24
+ 144 001c F0E0      	.LM2:
+ 145 001e 8081      		ldi r26,lo8(55)
+ 146 0020 8260      		ldi r27,hi8(55)
+ 147 0022 8C93      		ldi r30,lo8(55)
+  17:timetest.c    ****   sbi(DEFAULTDDR, TASKCPIN);
+ 148               	i8(55)
+ 149               		ldi r30,lo8(55)
+ 150 0024 A7E3      		ldi r31,hi8(55)
+ 151 0026 B0E0      		ld r24,Z
+ 152 0028 E7E3      		ori r24,lo8(2)
+ 153 002a F0E0      		st X,r24
+ 155 002e 8460      	.LM3:
+ 156 0030 8C93      		ldi r26,lo8(55)
+  18:timetest.c    ****   sbi(DEFAULTDDR, TASKDPIN);
+ 157               	
+ 158               	.LM3:
+ 159 0032 A7E3      		ldi r26,lo8(55)
+ 160 0034 B0E0      		ldi r27,hi8(55)
+ 161 0036 E7E3      		ldi r30,lo8(55)
+ 162 0038 F0E0      		ldi r31,hi8(55)
+ 163 003a 8081      		ld r24,Z
+ 164 003c 8860      		ori r24,lo8(4)
+ 165 003e 8C93      		st X,r24
+  19:timetest.c    ****   sbi(DEFAULTDDR, TASKEPIN);
+ 166               		ori r24,lo8(4)
+ 167               		st X,r24
+ 169 0042 B0E0      	.LM4:
+ 170 0044 E7E3      		ldi r26,lo8(55)
+ 171 0046 F0E0      		ldi r27,hi8(55)
+ 172 0048 8081      		ldi r30,lo8(55)
+ 173 004a 8061      		ldi r31,hi8(55)
+ 174 004c 8C93      		ld r24,Z
+ 175               		ori r24,lo8(8)
+  20:timetest.c    **** }
+ 176               	 r24,Z
+ 177               		ori r24,lo8(8)
+ 178 004e CF91      		st X,r24
+ 180 0052 0895      	.LM5:
+ 181               		ldi r26,lo8(55)
+ 182               		ldi r27,hi8(55)
+ 183               		ldi r30,lo8(55)
+ 184               		ldi r31,hi8(55)
+ 185               		ld r24,Z
+ 186               		ori r24,lo8(16)
+ 187               		st X,r24
+ 188 0000 5354 4143 	/* epilogue start */
+ 188      4B00 
+ 190               	.LM6:
+ 191               		pop r28
+ 192               		pop r29
+ 193               		ret
+ 195 0044 0000      	.Lscope1:
+ 196 0046 0000      	.global	taskstack_A
+ 197 0048 0000      		.data
+ 200 004c 00        	taskstack_A:
+ 201 004d 00        		.string	"STACK"
+ 202 004e 00        		.skip 60,0
+ 203 004f 00        	.global	taskobj_A
+ 206               	taskobj_A:
+ 207               		.word	gs(task_A)
+ 208               		.word	gs(task_A)
+  21:timetest.c    **** 
+  22:timetest.c    **** u32 a;
+  23:timetest.c    **** TASK(A,32)
+  24:timetest.c    **** {
+ 209               	rd	gs(task_A)
+ 210               		.word	gs(task_A)
+ 211               		.word	taskstack_A
+ 212 0054 DF93      		.word	taskstack_A+32
+ 213 0056 CF93      		.byte	66
+ 214 0058 CDB7      		.byte	0
+ 215 005a DEB7      		.byte	0
+ 216               		.byte	0
+ 217               		.byte	0
+  25:timetest.c    **** 	for(a=0;a < 100000;a++)
+ 218               	te	0
+ 219               		.byte	0
+ 220 005c 1092 0000 		.byte	0
+ 221 0060 1092 0000 		.skip 1,0
+ 222 0064 1092 0000 		.text
+ 224 006c 00C0      	.global	task_A
+  26:timetest.c    **** 	{
+  27:timetest.c    **** 		sbi(DEFAULTPORT, TASKAPIN);
+ 226               	type	task_A, @function
+ 227               	task_A:
+ 229 0070 B0E0      	.LM7:
+ 230 0072 E8E3      	.LFBB2:
+ 231 0074 F0E0      		push r29
+ 232 0076 8081      		push r28
+ 233 0078 8160      		in r28,__SP_L__
+ 234 007a 8C93      		in r29,__SP_H__
+  28:timetest.c    **** 		cbi(DEFAULTPORT, TASKAPIN);
+ 235               	_L__
+ 236               		in r29,__SP_H__
+ 237 007c A8E3      	/* prologue: function */
+ 238 007e B0E0      	/* frame size = 0 */
+ 240 0082 F0E0      	.LM8:
+ 241 0084 8081      		sts a,__zero_reg__
+ 242 0086 8E7F      		sts (a)+1,__zero_reg__
+ 243 0088 8C93      		sts (a)+2,__zero_reg__
+ 244               		sts (a)+3,__zero_reg__
+ 245               		rjmp .L4
+ 246 008a 8091 0000 	.L5:
+ 248 0092 A091 0000 	.LM9:
+ 249 0096 B091 0000 		ldi r26,lo8(56)
+ 250 009a 0196      		ldi r27,hi8(56)
+ 251 009c A11D      		ldi r30,lo8(56)
+ 252 009e B11D      		ldi r31,hi8(56)
+ 253 00a0 8093 0000 		ld r24,Z
+ 254 00a4 9093 0000 		ori r24,lo8(1)
+ 255 00a8 A093 0000 		st X,r24
+ 257               	.LM10:
+ 258 00b0 8091 0000 		ldi r26,lo8(56)
+ 259 00b4 9091 0000 		ldi r27,hi8(56)
+ 260 00b8 A091 0000 		ldi r30,lo8(56)
+ 261 00bc B091 0000 		ldi r31,hi8(56)
+ 262 00c0 803A      		ld r24,Z
+ 263 00c2 26E8      		andi r24,lo8(-2)
+ 264 00c4 9207      		st X,r24
+ 266 00c8 A207      	.LM11:
+ 267 00ca 20E0      		lds r24,a
+ 268 00cc B207      		lds r25,(a)+1
+ 269 00ce 00F0      		lds r26,(a)+2
+  29:timetest.c    ****   	}
+  30:timetest.c    ****   	ENDTASK(A);
+ 270               		lds r25,(a)+1
+ 271               		lds r26,(a)+2
+ 272 00d0 83E0      		lds r27,(a)+3
+ 273 00d2 8093 0000 		adiw r24,1
+ 274               		adc r26,__zero_reg__
+ 275               		adc r27,__zero_reg__
+ 276               		sts a,r24
+ 277 00d6 0000      		sts (a)+1,r25
+ 278               		sts (a)+2,r26
+ 279               		sts (a)+3,r27
+ 280 00d8 00C0      	.L4:
+ 281               		lds r24,a
+ 282               		lds r25,(a)+1
+ 283               		lds r26,(a)+2
+ 284               		lds r27,(a)+3
+ 285               		cpi r24,lo8(100000)
+ 286               		ldi r18,hi8(100000)
+ 287               		cpc r25,r18
+ 288 0050 5354 4143 		ldi r18,hlo8(100000)
+ 288      4B00 
+ 289 0056 0000 0000 		cpc r26,r18
+ 289      0000 0000 
+ 289      0000 0000 
+ 289      0000 0000 
+ 289      0000 0000 
+ 290               		ldi r18,hhi8(100000)
+ 291               		cpc r27,r18
+ 292               		brlo .L5
+ 294 0092 0000      	.LM12:
+ 295 0094 0000      		ldi r24,lo8(3)
+ 296 0096 0000      		sts taskobj_A+13,r24
+ 297 0098 0000      	.L6:
+ 298 009a 42        	/* #APP */
+ 299 009b 00        	 ;  30 "timetest.c" 1
+ 300 009c 00        		nop
+ 301 009d 00        	 ;  0 "" 2
+ 302 009e 00        	/* #NOAPP */
+ 303 009f 00        		rjmp .L6
+ 305               	.Lscope2:
+ 306               	.global	taskstack_B
+ 307               		.data
+  31:timetest.c    **** }
+  32:timetest.c    **** 
+  33:timetest.c    **** u08 b;
+  34:timetest.c    **** TASK(B,32)
+  35:timetest.c    **** {
+ 311               	taskstack_B:
+ 312 00da DF93      		.string	"STACK"
+ 313 00dc CF93      		.skip 60,0
+ 314 00de 0F92      	.global	taskobj_B
+ 317               	taskobj_B:
+ 318               		.word	gs(task_B)
+  36:timetest.c    ****    u08 i;
+  37:timetest.c    **** 	for(b=0;b<2;b++)
+ 319               	_B:
+ 320               		.word	gs(task_B)
+ 321 00e4 1092 0000 		.word	gs(task_B)
+ 322 00e8 00C0      		.word	taskstack_B
+ 323               		.word	taskstack_B+32
+  38:timetest.c    **** 	{
+  39:timetest.c    **** 	   for(i=0; i < 100; i++)
+ 324               	ack_B
+ 325               		.word	taskstack_B+32
+ 326 00ea 1982      		.byte	66
+ 327 00ec 00C0      		.byte	0
+ 328               		.byte	0
+  40:timetest.c    **** 	   {
+  41:timetest.c    **** 			sbi(DEFAULTPORT, TASKBPIN);
+ 329               		.byte	66
+ 330               		.byte	0
+ 331 00ee A8E3      		.byte	0
+ 332 00f0 B0E0      		.byte	0
+ 333 00f2 E8E3      		.byte	0
+ 334 00f4 F0E0      		.skip 1,0
+ 335 00f6 8081      		.text
+ 337 00fa 8C93      	.global	task_B
+  42:timetest.c    **** 			cbi(DEFAULTPORT, TASKBPIN);
+ 338               	0,task_B
+ 339               	.global	task_B
+ 341 00fe B0E0      	task_B:
+ 343 0102 F0E0      	.LM13:
+ 344 0104 8081      	.LFBB3:
+ 345 0106 8D7F      		push r29
+ 346 0108 8C93      		push r28
+ 347               		push __tmp_reg__
+ 348               		in r28,__SP_L__
+ 349 010a 8981      		in r29,__SP_H__
+ 350 010c 8F5F      	/* prologue: function */
+ 351 010e 8983      	/* frame size = 1 */
+ 353 0110 8981      	.LM14:
+ 354 0112 8436      		sts b,__zero_reg__
+ 355 0114 00F0      		rjmp .L9
+  43:timetest.c    **** 		}
+  44:timetest.c    **** 		sleep(20000);
+ 356               	eg__
+ 357               		rjmp .L9
+ 358 0116 60E2      	.L12:
+ 360 011a 80E0      	.LM15:
+ 361 011c 90E0      		std Y+1,__zero_reg__
+ 362 011e 00D0      		rjmp .L10
+ 363               	.L11:
+ 365 0120 8091 0000 	.LM16:
+ 366 0124 8F5F      		ldi r26,lo8(56)
+ 367 0126 8093 0000 		ldi r27,hi8(56)
+ 368               		ldi r30,lo8(56)
+ 369 012a 8091 0000 		ldi r31,hi8(56)
+ 370 012e 8230      		ld r24,Z
+ 371 0130 00F0      		ori r24,lo8(2)
+  45:timetest.c    ****   	}
+  46:timetest.c    ****   	ENDTASK(B);
+ 372               	,Z
+ 373               		ori r24,lo8(2)
+ 374 0132 83E0      		st X,r24
+ 376               	.LM17:
+ 377               		ldi r26,lo8(56)
+ 378               		ldi r27,hi8(56)
+ 379 0138 0000      		ldi r30,lo8(56)
+ 380               		ldi r31,hi8(56)
+ 381               		ld r24,Z
+ 382 013a 00C0      		andi r24,lo8(-3)
+ 383               		st X,r24
+ 385               	.LM18:
+ 386               		ldd r24,Y+1
+ 387               		subi r24,lo8(-(1))
+ 388               		std Y+1,r24
+ 389               	.L10:
+ 390               		ldd r24,Y+1
+ 391               		cpi r24,lo8(100)
+ 392               		brlo .L11
+ 394 00a2 0000      	.LM19:
+ 395               		ldi r22,lo8(20000)
+ 396               		ldi r23,hi8(20000)
+ 397               		ldi r24,hlo8(20000)
+ 398               		ldi r25,hhi8(20000)
+ 399               		rcall sleep
+  47:timetest.c    **** }
+  48:timetest.c    **** 
+  49:timetest.c    **** 
+  50:timetest.c    **** //----- Begin Code ------------------------------------------------------------
+  51:timetest.c    **** 
+  52:timetest.c    **** #define TASK_AMOUNT 2
+  53:timetest.c    **** TASK *taskset[] = {&taskobj_A, &taskobj_B/*, &taskobj_C, &taskobj_D*/};
+  54:timetest.c    **** 
+  55:timetest.c    **** int main(void)
+  56:timetest.c    **** {
+ 400               	leep
+ 402               	.LM20:
+ 403 013c DF93      		lds r24,b
+ 404 013e CF93      		subi r24,lo8(-(1))
+ 405 0140 CDB7      		sts b,r24
+ 406 0142 DEB7      	.L9:
+ 407               		lds r24,b
+ 408               		cpi r24,lo8(2)
+  57:timetest.c    **** 
+  58:timetest.c    ****    INIT_RTOS();
+ 409               	s r24,b
+ 410               		cpi r24,lo8(2)
+ 411 0144 EDE5      		brlo .L12
+ 413 0148 8FE5      	.LM21:
+ 414 014a 94E0      		ldi r24,lo8(3)
+ 415 014c 9183      		sts taskobj_B+13,r24
+ 416 014e 8083      	.L13:
+ 417               	/* #APP */
+ 418               	 ;  46 "timetest.c" 1
+ 419 0150 0024      		nop
+ 420               	 ;  0 "" 2
+ 421               	/* #NOAPP */
+ 422 0152 1124      		rjmp .L13
+ 427               	.Lscope3:
+ 428 0156 3324      	.global	taskset
+ 429               		.data
+ 432               	taskset:
+ 433               		.word	taskobj_A
+ 434 015a 5524      		.word	taskobj_B
+ 435               		.text
+ 437 015c 6624      	.global	main
+ 439               	main:
+ 441               	.LM22:
+ 442               	.LFBB4:
+ 443 0160 8824      		push r29
+ 444               		push r28
+ 445               		in r28,__SP_L__
+ 446 0162 9924      		in r29,__SP_H__
+ 447               	/* prologue: function */
+ 448               	/* frame size = 0 */
+ 450               	.LM23:
+ 451               		ldi r30,lo8(93)
+ 452 0166 BB24      		ldi r31,hi8(93)
+ 453               		ldi r24,lo8(1119)
+ 454               		ldi r25,hi8(1119)
+ 455 0168 CC24      		std Z+1,r25
+ 456               		st Z,r24
+ 457               	/* #APP */
+ 458 016a DD24      	 ;  58 "timetest.c" 1
+ 459               		clr    r0
+ 460               	 ;  0 "" 2
+ 461 016c EE24      	 ;  58 "timetest.c" 1
+ 462               		clr    r1
+ 463               	 ;  0 "" 2
+ 464 016e FF24      	 ;  58 "timetest.c" 1
+ 465               		clr    r2
+ 466               	 ;  0 "" 2
+ 467 0170 0027      	 ;  58 "timetest.c" 1
+ 468               		clr    r3
+ 469               	 ;  0 "" 2
+ 470 0172 1127      	 ;  58 "timetest.c" 1
+ 471               		clr    r4
+ 472               	 ;  0 "" 2
+ 473 0174 2227      	 ;  58 "timetest.c" 1
+ 474               		clr    r5
+ 475               	 ;  0 "" 2
+ 476 0176 3327      	 ;  58 "timetest.c" 1
+ 477               		clr    r6
+ 478               	 ;  0 "" 2
+ 479 0178 4427      	 ;  58 "timetest.c" 1
+ 480               		clr    r7
+ 481               	 ;  0 "" 2
+ 482 017a 5527      	 ;  58 "timetest.c" 1
+ 483               		clr    r8
+ 484               	 ;  0 "" 2
+ 485 017c 6627      	 ;  58 "timetest.c" 1
+ 486               		clr    r9
+ 487               	 ;  0 "" 2
+ 488 017e 7727      	 ;  58 "timetest.c" 1
+ 489               		clr    r10
+ 490               	 ;  0 "" 2
+ 491 0180 8827      	 ;  58 "timetest.c" 1
+ 492               		clr    r11
+ 493               	 ;  0 "" 2
+ 494 0182 9927      	 ;  58 "timetest.c" 1
+ 495               		clr    r12
+ 496               	 ;  0 "" 2
+ 497 0184 AA27      	 ;  58 "timetest.c" 1
+ 498               		clr    r13
+ 499               	 ;  0 "" 2
+ 500 0186 BB27      	 ;  58 "timetest.c" 1
+ 501               		clr    r14
+ 502               	 ;  0 "" 2
+ 503 0188 CC27      	 ;  58 "timetest.c" 1
+ 504               		clr    r15
+ 505               	 ;  0 "" 2
+ 506 018a DD27      	 ;  58 "timetest.c" 1
+ 507               		clr    r16
+ 508               	 ;  0 "" 2
+ 509 018c EE27      	 ;  58 "timetest.c" 1
+ 510               		clr    r17
+ 511               	 ;  0 "" 2
+ 512 018e FF27      	 ;  58 "timetest.c" 1
+ 513               		clr    r18
+  59:timetest.c    **** 
+  60:timetest.c    **** 	setup();
+ 514               	 "timetest.c" 1
+ 515               		clr    r18
+ 516               	 ;  0 "" 2
+ 517 0190 00D0      	 ;  58 "timetest.c" 1
+  61:timetest.c    ****    	sbi(DEFAULTPORT, TASKDPIN);
+ 518               	 0 "" 2
+ 519               	 ;  58 "timetest.c" 1
+ 520 0192 A8E3      		clr    r19
+ 521 0194 B0E0      	 ;  0 "" 2
+ 522 0196 E8E3      	 ;  58 "timetest.c" 1
+ 523 0198 F0E0      		clr    r20
+ 524 019a 8081      	 ;  0 "" 2
+ 525 019c 8860      	 ;  58 "timetest.c" 1
+ 526 019e 8C93      		clr    r21
+  62:timetest.c    **** 	cbi(DEFAULTPORT, TASKDPIN);
+ 527               	imetest.c" 1
+ 528               		clr    r21
+ 529 01a0 A8E3      	 ;  0 "" 2
+ 530 01a2 B0E0      	 ;  58 "timetest.c" 1
+ 531 01a4 E8E3      		clr    r22
+ 532 01a6 F0E0      	 ;  0 "" 2
+ 533 01a8 8081      	 ;  58 "timetest.c" 1
+ 534 01aa 877F      		clr    r23
+ 535 01ac 8C93      	 ;  0 "" 2
+  63:timetest.c    **** 
+  64:timetest.c    **** 	startRRScheduler(taskset, TASK_AMOUNT);
+ 536               	1
+ 537               		clr    r23
+ 538 01ae 80E0      	 ;  0 "" 2
+ 539 01b0 90E0      	 ;  58 "timetest.c" 1
+ 540 01b2 62E0      		clr    r24
+ 541 01b4 00D0      	 ;  0 "" 2
+ 542               	 ;  58 "timetest.c" 1
+  65:timetest.c    **** 	
+  66:timetest.c    **** 	while(1)
+  67:timetest.c    **** 	{
+  68:timetest.c    **** 		sbi(DEFAULTPORT, TASKDPIN);
+ 543               	"" 2
+ 544               	 ;  58 "timetest.c" 1
+ 545 01b6 A8E3      		clr    r25
+ 546 01b8 B0E0      	 ;  0 "" 2
+ 547 01ba E8E3      	 ;  58 "timetest.c" 1
+ 548 01bc F0E0      		clr    r26
+ 549 01be 8081      	 ;  0 "" 2
+ 550 01c0 8860      	 ;  58 "timetest.c" 1
+ 551 01c2 8C93      		clr    r27
+  69:timetest.c    **** 		cbi(DEFAULTPORT, TASKDPIN);
+ 552               	imetest.c" 1
+ 553               		clr    r27
+ 554 01c4 A8E3      	 ;  0 "" 2
+ 555 01c6 B0E0      	 ;  58 "timetest.c" 1
+ 556 01c8 E8E3      		clr    r28
+ 557 01ca F0E0      	 ;  0 "" 2
+ 558 01cc 8081      	 ;  58 "timetest.c" 1
+ 559 01ce 877F      		clr    r29
+ 560 01d0 8C93      	 ;  0 "" 2
+ 561 01d2 00C0      	 ;  58 "timetest.c" 1
+ 562               		clr		r30
+ 563               	 ;  0 "" 2
+ 564               	 ;  58 "timetest.c" 1
+ 565               		clr		r31
+ 566               	 ;  0 "" 2
+ 568               	.LM24:
+ 569               	/* #NOAPP */
+ 570               		rcall setup
+ 572               	.LM25:
+ 573               		ldi r26,lo8(56)
+ 574               		ldi r27,hi8(56)
+ 575               		ldi r30,lo8(56)
+ 576               		ldi r31,hi8(56)
+DEFINED SYMBOLS
+                            *ABS*:00000000 timetest.c
+/tmp/user/501/ccCJf5Af.s:2      *ABS*:0000003f __SREG__
+/tmp/user/501/ccCJf5Af.s:3      *ABS*:0000003e __SP_H__
+/tmp/user/501/ccCJf5Af.s:4      *ABS*:0000003d __SP_L__
+/tmp/user/501/ccCJf5Af.s:5      *ABS*:00000034 __CCP__
+/tmp/user/501/ccCJf5Af.s:6      *ABS*:00000000 __tmp_reg__
+/tmp/user/501/ccCJf5Af.s:7      *ABS*:00000001 __zero_reg__
+/tmp/user/501/ccCJf5Af.s:120    .text:00000000 setup
+/tmp/user/501/ccCJf5Af.s:187    .data:00000000 taskstack_A
+/tmp/user/501/ccCJf5Af.s:193    .data:00000042 taskobj_A
+/tmp/user/501/ccCJf5Af.s:208    .text:00000054 task_A
+                            *COM*:00000004 a
+/tmp/user/501/ccCJf5Af.s:287    .data:00000050 taskstack_B
+/tmp/user/501/ccCJf5Af.s:293    .data:00000092 taskobj_B
+/tmp/user/501/ccCJf5Af.s:308    .text:000000da task_B
+                            *COM*:00000001 b
+/tmp/user/501/ccCJf5Af.s:392    .data:000000a0 taskset
+/tmp/user/501/ccCJf5Af.s:399    .text:0000013c main
+
+UNDEFINED SYMBOLS
+sleep
+startRRScheduler
+__do_copy_data
+__do_clear_bss

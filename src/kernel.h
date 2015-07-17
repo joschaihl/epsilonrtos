@@ -13,8 +13,8 @@
 
 typedef void (*TASK_FUNC)(void);
 
-typedef enum {TASK_UNINITIALIZED, TASK_RUNNING,
-	TASK_PAUSE, TASK_FINISHED} TASK_STATE;
+typedef enum {TASK_UNINITIALIZED = 0, TASK_RUNNING = 1,
+	TASK_PAUSE = 2, TASK_FINISHED = 3} TASK_STATE;
 
 typedef struct {
 	TASK_FUNC taskFunction;

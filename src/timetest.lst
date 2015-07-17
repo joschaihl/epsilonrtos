@@ -493,23 +493,23 @@
  576               		ldi r31,hi8(56)
 DEFINED SYMBOLS
                             *ABS*:00000000 timetest.c
-/tmp/user/501/ccCJf5Af.s:2      *ABS*:0000003f __SREG__
-/tmp/user/501/ccCJf5Af.s:3      *ABS*:0000003e __SP_H__
-/tmp/user/501/ccCJf5Af.s:4      *ABS*:0000003d __SP_L__
-/tmp/user/501/ccCJf5Af.s:5      *ABS*:00000034 __CCP__
-/tmp/user/501/ccCJf5Af.s:6      *ABS*:00000000 __tmp_reg__
-/tmp/user/501/ccCJf5Af.s:7      *ABS*:00000001 __zero_reg__
-/tmp/user/501/ccCJf5Af.s:120    .text:00000000 setup
-/tmp/user/501/ccCJf5Af.s:187    .data:00000000 taskstack_A
-/tmp/user/501/ccCJf5Af.s:193    .data:00000042 taskobj_A
-/tmp/user/501/ccCJf5Af.s:208    .text:00000054 task_A
+/tmp/user/501/ccRnlLVK.s:2      *ABS*:0000003f __SREG__
+/tmp/user/501/ccRnlLVK.s:3      *ABS*:0000003e __SP_H__
+/tmp/user/501/ccRnlLVK.s:4      *ABS*:0000003d __SP_L__
+/tmp/user/501/ccRnlLVK.s:5      *ABS*:00000034 __CCP__
+/tmp/user/501/ccRnlLVK.s:6      *ABS*:00000000 __tmp_reg__
+/tmp/user/501/ccRnlLVK.s:7      *ABS*:00000001 __zero_reg__
+/tmp/user/501/ccRnlLVK.s:120    .text:00000000 setup
+/tmp/user/501/ccRnlLVK.s:187    .data:00000000 taskstack_A
+/tmp/user/501/ccRnlLVK.s:193    .data:00000042 taskobj_A
+/tmp/user/501/ccRnlLVK.s:208    .text:00000054 task_A
                             *COM*:00000004 a
-/tmp/user/501/ccCJf5Af.s:287    .data:00000050 taskstack_B
-/tmp/user/501/ccCJf5Af.s:293    .data:00000092 taskobj_B
-/tmp/user/501/ccCJf5Af.s:308    .text:000000da task_B
+/tmp/user/501/ccRnlLVK.s:287    .data:00000050 taskstack_B
+/tmp/user/501/ccRnlLVK.s:293    .data:00000092 taskobj_B
+/tmp/user/501/ccRnlLVK.s:308    .text:000000da task_B
                             *COM*:00000001 b
-/tmp/user/501/ccCJf5Af.s:392    .data:000000a0 taskset
-/tmp/user/501/ccCJf5Af.s:399    .text:0000013c main
+/tmp/user/501/ccRnlLVK.s:392    .data:000000a0 taskset
+/tmp/user/501/ccRnlLVK.s:399    .text:0000013c main
 
 UNDEFINED SYMBOLS
 sleep

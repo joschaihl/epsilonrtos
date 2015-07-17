@@ -1,4 +1,4 @@
--O0 -gstabs -std=gnu99  -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums  -Wall -Wstrict-prototypes  -Wa,-adhlns=$(<:.c=.lst)  $(patsubst %,-I%,$(EXTRAINCDIRS))
--Wa,-adhlns=$(<:.S=.lst) -Wa,-gstabs
--lm -Wl,-Map=$(TARGET).map -Wl,--cref
-  
+ -std=gnu99 -O0 -gstabs -Wa,-adhlns=$(<:.c=.lst) -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums $(patsubst %,-I%,$(EXTRAINCDIRS)) -Wall -Wstrict-prototypes
+ -Wa,-adhlns=$(<:.S=.lst) -Wa,-gstabs
+   -lm -Wl,-Map=$(TARGET).map -Wl,--cref
+

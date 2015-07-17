@@ -39,7 +39,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "../System.h"
+#include "System.h"
 
 /* Stub: Initialize your hardware here */
 void System_Init(void)

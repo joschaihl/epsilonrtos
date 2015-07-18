@@ -82,29 +82,7 @@ void System_Safestate(void)
 	exit(0);
 }
 
-void uart_putc(char c)
-{
-	while (!(UCSRA & (1 << UDRE)))
-	{
-		/* wait until sending is possible */
-	}
-
-	UDR = c; /* Writes c to the serial port */
-}
 
 
-/* Stub: Transmit a string to the host/debugger/simulator */
-void System_WriteString(char * s)
-{
-	while(*s)
-	{
-		uart_putc(*s);
-		s++;
-	}
-}
 
-void System_WriteInt(int n)
-{
-	/* printf("%i", n); */
-}
 

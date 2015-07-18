@@ -213,7 +213,7 @@
  288               		pop r29
  289 00d6 6C83      		ret
   53:kernel.c      **** 	TASK *task;
-  54:kernel.c      **** 	BOOL pause = FALSE;
+  54:kernel.c      **** 	BOOL pause = 0;
  293               	,0,0,2
   55:kernel.c      **** 	task = currentScheduler.tasks[currentScheduler.current_task];
  296               	n	192,0,0,.LFBB1-.LFBB1
@@ -441,10 +441,10 @@
  507               		ldd r27,Z+12
   94:kernel.c      ****    u08 i;
   95:kernel.c      ****    TASK *task;
-  96:kernel.c      ****    BOOL result = TRUE;
+  96:kernel.c      ****    BOOL result = 1;
  508               	r26,Z+11
  509               		ldd r27,Z+12
- 510 0212 8FEF      		subi r24,lo8(-(-250))
+ 510 0212 81E0      		subi r24,lo8(-(-250))
  511 0214 8983      		sbci r25,hi8(-(-250))
   97:kernel.c      **** 	for(i = 0;	i < currentScheduler.tasks_length; i++)
  512               	250))
@@ -477,7 +477,7 @@
  537 023e 8585      		rjmp .L14
  538 0240 8330      	/* epilogue start */
  101:kernel.c      **** 		{
- 102:kernel.c      **** 			result = FALSE;
+ 102:kernel.c      **** 			result = 0;
  540               	,90,.LM30-.LFBB3
  541               	.LM30:
  542 0244 1982      		pop __tmp_reg__
@@ -507,7 +507,7 @@
  569               	/* prologue: function */
  570               	/* frame size = 4 */
  572               	.LM32:
- 573               		ldi r24,lo8(-1)
+ 573               		ldi r24,lo8(1)
  574               		std Y+1,r24
  576               	.LM33:
  577               		std Y+4,__zero_reg__
@@ -1153,22 +1153,22 @@
  1186               		ldd r25,Z+1
 DEFINED SYMBOLS
                             *ABS*:00000000 kernel.c
-/tmp/user/501/cceX0qYr.s:2      *ABS*:0000003f __SREG__
-/tmp/user/501/cceX0qYr.s:3      *ABS*:0000003e __SP_H__
-/tmp/user/501/cceX0qYr.s:4      *ABS*:0000003d __SP_L__
-/tmp/user/501/cceX0qYr.s:5      *ABS*:00000034 __CCP__
-/tmp/user/501/cceX0qYr.s:6      *ABS*:00000000 __tmp_reg__
-/tmp/user/501/cceX0qYr.s:7      *ABS*:00000001 __zero_reg__
-/tmp/user/501/cceX0qYr.s:124    .bss:00000000 currentTime
-/tmp/user/501/cceX0qYr.s:131    .text:00000000 initTask
-/tmp/user/501/cceX0qYr.s:273    .text:000000c2 sleep
+/tmp/user/501/ccW4wdeR.s:2      *ABS*:0000003f __SREG__
+/tmp/user/501/ccW4wdeR.s:3      *ABS*:0000003e __SP_H__
+/tmp/user/501/ccW4wdeR.s:4      *ABS*:0000003d __SP_L__
+/tmp/user/501/ccW4wdeR.s:5      *ABS*:00000034 __CCP__
+/tmp/user/501/ccW4wdeR.s:6      *ABS*:00000000 __tmp_reg__
+/tmp/user/501/ccW4wdeR.s:7      *ABS*:00000001 __zero_reg__
+/tmp/user/501/ccW4wdeR.s:124    .bss:00000000 currentTime
+/tmp/user/501/ccW4wdeR.s:131    .text:00000000 initTask
+/tmp/user/501/ccW4wdeR.s:273    .text:000000c2 sleep
                             *COM*:00000006 currentScheduler
-/tmp/user/501/cceX0qYr.s:379    .text:00000162 decrementPause
-/tmp/user/501/cceX0qYr.s:496    .text:00000206 allTasksFinished
-/tmp/user/501/cceX0qYr.s:581    .text:00000268 startRRScheduler
-/tmp/user/501/cceX0qYr.s:722    .text:0000033e nextScheduleItem
-/tmp/user/501/cceX0qYr.s:766    .text:00000374 incrementTime
-/tmp/user/501/cceX0qYr.s:874    .text:0000042c __vector_9
+/tmp/user/501/ccW4wdeR.s:379    .text:00000162 decrementPause
+/tmp/user/501/ccW4wdeR.s:496    .text:00000206 allTasksFinished
+/tmp/user/501/ccW4wdeR.s:581    .text:00000268 startRRScheduler
+/tmp/user/501/ccW4wdeR.s:722    .text:0000033e nextScheduleItem
+/tmp/user/501/ccW4wdeR.s:766    .text:00000374 incrementTime
+/tmp/user/501/ccW4wdeR.s:874    .text:0000042c __vector_9
 
 UNDEFINED SYMBOLS
 __divmodhi4

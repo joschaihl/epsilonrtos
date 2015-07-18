@@ -51,7 +51,7 @@ void initTask(TASK *task)
 void sleep(u32 pause_us)
 {
 	TASK *task;
-	BOOL pause = FALSE;
+	BOOL pause = 0;
 	task = currentScheduler.tasks[currentScheduler.current_task];
 	//if(task->taskState == TASK_RUNNING)
 	//{
@@ -93,13 +93,13 @@ BOOL allTasksFinished(void)
 {
    u08 i;
    TASK *task;
-   BOOL result = TRUE;
+   BOOL result = 1;
 	for(i = 0;	i < currentScheduler.tasks_length; i++)
 	{
 		task = currentScheduler.tasks[i];
 		if(task->taskState != TASK_FINISHED)
 		{
-			result = FALSE;
+			result = 0;
 			break;
 		}
 	}
@@ -205,6 +205,7 @@ SCHEDULER_TIMER()
 	}
    return_interrupt();
 }
+
 
 
 

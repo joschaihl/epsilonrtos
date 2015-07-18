@@ -22,12 +22,6 @@
 #ifndef AVRLIBTYPES_H
 #define AVRLIBTYPES_H
 
-#ifndef WIN32
-	// true/false defines
-	#define FALSE	0
-	#define TRUE	-1
-#endif
-
 // datatype definitions macros
 typedef unsigned char  u08;
 typedef   signed char  s08;
@@ -82,4 +76,5 @@ typedef   signed long	int64_t;
 #endif
 
 #endif
+
 

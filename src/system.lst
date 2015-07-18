@@ -1,0 +1,218 @@
+   1               		.file	"system.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   9               		.text
+  10               	.Ltext0:
+  86               		.data
+  87               	.LC0:
+  88 0000 496E 6974 		.string	"Init of hardware finished."
+  88      206F 6620 
+  88      6861 7264 
+  88      7761 7265 
+  88      2066 696E 
+  89               		.text
+  91               	.global	System_Init
+  93               	System_Init:
+   1:system.c      **** /*****************************************************************************
+   2:system.c      ****  *                                                                           *
+   3:system.c      ****  *  uCUnit - A unit testing framework for microcontrollers                   *
+   4:system.c      ****  *                                                                           *
+   5:system.c      ****  *  (C) 2007 - 2008 Sven Stefan Krauss                                       *
+   6:system.c      ****  *                  https://www.ucunit.org                                   *
+   7:system.c      ****  *                                                                           *
+   8:system.c      ****  *  File        : System.c                                                   *
+   9:system.c      ****  *  Description : System dependent functions used by uCUnit.                 *
+  10:system.c      ****  *                This file has to be customized for your hardware.         *
+  11:system.c      ****  *  Author      : Sven Stefan Krauss                                         *
+  12:system.c      ****  *  Contact     : www.ucunit.org                                             *
+  13:system.c      ****  *                                                                           *
+  14:system.c      ****  *****************************************************************************/
+  15:system.c      **** 
+  16:system.c      **** /*
+  17:system.c      ****  * This file is part of ucUnit.
+  18:system.c      ****  *
+  19:system.c      ****  * You can redistribute and/or modify it under the terms of the
+  20:system.c      ****  * Common Public License as published by IBM Corporation; either
+  21:system.c      ****  * version 1.0 of the License, or (at your option) any later version.
+  22:system.c      ****  *
+  23:system.c      ****  * uCUnit is distributed in the hope that it will be useful,
+  24:system.c      ****  * but WITHOUT ANY WARRANTY; without even the implied warranty of
+  25:system.c      ****  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  26:system.c      ****  * Common Public License for more details.
+  27:system.c      ****  *
+  28:system.c      ****  * You should have received a copy of the Common Public License
+  29:system.c      ****  * along with uCUnit.
+  30:system.c      ****  *
+  31:system.c      ****  * It may also be available at the following URL:
+  32:system.c      ****  *       http://www.opensource.org/licenses/cpl1.0.txt
+  33:system.c      ****  *
+  34:system.c      ****  * If you cannot obtain a copy of the License, please contact the
+  35:system.c      ****  * author.
+  36:system.c      ****  */
+  37:system.c      **** 
+  38:system.c      **** #include <avr/io.h>
+  39:system.c      **** 
+  40:system.c      **** #include <stdio.h>
+  41:system.c      **** #include <stdlib.h>
+  42:system.c      **** #include "System.h"
+  43:system.c      **** 
+  44:system.c      **** /* Stub: Initialize your hardware here */
+  45:system.c      **** void System_Init(void)
+  46:system.c      **** {
+  95               	.LM0:
+  96               	.LFBB1:
+  97 0000 DF93      		push r29
+  98 0002 CF93      		push r28
+  99 0004 CDB7      		in r28,__SP_L__
+ 100 0006 DEB7      		in r29,__SP_H__
+ 101               	/* prologue: function */
+ 102               	/* frame size = 0 */
+  47:system.c      **** 	printf("Init of hardware finished.\n");
+ 103               	* frame size = 0 */
+ 105 0008 80E0      	.LM1:
+ 106 000a 90E0      		ldi r24,lo8(.LC0)
+ 107 000c 00D0      		ldi r25,hi8(.LC0)
+ 108               		rcall puts
+  48:system.c      **** }
+ 109               	,hi8(.LC0)
+ 110               		rcall puts
+ 111 000e CF91      	/* epilogue start */
+ 113 0012 0895      	.LM2:
+ 114               		pop r28
+ 115               		pop r29
+ 116               		ret
+ 118 001b 5379 7374 	.Lscope1:
+ 118      656D 2073 
+ 118      6875 7464 
+ 118      6F77 6E2E 
+ 118      00
+ 119               		.data
+ 120               	.LC1:
+ 121               		.string	"System shutdown."
+ 122               		.text
+  49:system.c      **** 
+  50:system.c      **** /* Stub: Shutdown your hardware here */
+  51:system.c      **** void System_Shutdown(void)
+  52:system.c      **** {
+ 124               	stem_Shutdown
+ 125               	.global	System_Shutdown
+ 127 0014 DF93      	System_Shutdown:
+ 129 0018 CDB7      	.LM3:
+ 130 001a DEB7      	.LFBB2:
+ 131               		push r29
+ 132               		push r28
+  53:system.c      **** 
+  54:system.c      **** 	/* asm("\tSTOP"); */
+  55:system.c      **** 	printf("System shutdown.\n");
+ 133               		push r29
+ 134               		push r28
+ 135 001c 80E0      		in r28,__SP_L__
+ 136 001e 90E0      		in r29,__SP_H__
+ 137 0020 00D0      	/* prologue: function */
+  56:system.c      **** 	exit(0);
+ 138               	 prologue: function */
+ 139               	/* frame size = 0 */
+ 141 0024 90E0      	.LM4:
+ 142 0026 00D0      		ldi r24,lo8(.LC1)
+ 143               		ldi r25,hi8(.LC1)
+ 144               		rcall puts
+ 146               	.LM5:
+ 147 002c 5379 7374 		ldi r24,lo8(0)
+ 147      656D 2072 
+ 147      6573 6574 
+ 147      2E00 
+ 148               		ldi r25,hi8(0)
+ 149               		rcall exit
+ 151               	.Lscope2:
+ 152               		.data
+  57:system.c      **** }
+  58:system.c      **** 
+  59:system.c      **** /* Stub: Resets the system */
+  60:system.c      **** void System_Reset(void)
+  61:system.c      **** {
+ 153               	ope2:
+ 154               		.data
+ 155               	.LC2:
+ 156 0028 DF93      		.string	"System reset."
+ 157 002a CF93      		.text
+ 159 002e DEB7      	.global	System_Reset
+ 161               	System_Reset:
+  62:system.c      **** 	/* Stub: Reset the hardware */
+  63:system.c      **** 	/* asm("\tRESET"); */
+  64:system.c      **** 	printf("System reset.\n");
+ 162               	ction
+ 163               	System_Reset:
+ 165 0032 90E0      	.LM6:
+ 166 0034 00D0      	.LFBB3:
+  65:system.c      **** 	exit(0);
+ 167               	M6-.LFBB3
+ 168               	.LM6:
+ 169 0036 80E0      	.LFBB3:
+ 170 0038 90E0      		push r29
+ 171 003a 00D0      		push r28
+ 172               		in r28,__SP_L__
+ 173               		in r29,__SP_H__
+ 174               	/* prologue: function */
+ 175               	/* frame size = 0 */
+ 177               	.LM7:
+ 178               		ldi r24,lo8(.LC2)
+ 179               		ldi r25,hi8(.LC2)
+ 180               		rcall puts
+  66:system.c      **** }
+  67:system.c      **** 
+  68:system.c      **** /* Stub: Put system in a safe state */
+  69:system.c      **** void System_Safestate(void)
+  70:system.c      **** {
+ 182               	,.LM8-.LFBB3
+ 183               	.LM8:
+ 184               		ldi r24,lo8(0)
+ 185 003c DF93      		ldi r25,hi8(0)
+ 186 003e CF93      		rcall exit
+ 188 0042 DEB7      	.Lscope3:
+ 189               		.data
+ 190               	.LC3:
+  71:system.c      **** 	/* Disable all port pins */
+  72:system.c      **** 	/* PORTA = 0x0000; */
+  73:system.c      **** 	/* PORTB = 0x0000; */
+  74:system.c      **** 	/* PORTC = 0x0000; */
+  75:system.c      **** 
+  76:system.c      **** 	/* Disable interrupts */
+  77:system.c      **** 	/* DIE(); */
+  78:system.c      **** 
+  79:system.c      **** 	/* Put processor into idle state */
+  80:system.c      **** 	/* asm("\tIDLE"); */
+  81:system.c      **** 	printf("System safe state.\n");
+ 191               	ope3:
+ 192               		.data
+ 193 0044 80E0      	.LC3:
+ 194 0046 90E0      		.string	"System safe state."
+ 195 0048 00D0      		.text
+  82:system.c      **** 	exit(0);
+ 196               	em safe state."
+ 197               		.text
+ 199 004c 90E0      	.global	System_Safestate
+ 201               	System_Safestate:
+ 203               	.LM9:
+ 204               	.LFBB4:
+ 205               		push r29
+DEFINED SYMBOLS
+                            *ABS*:00000000 system.c
+/tmp/user/501/ccKe1K4W.s:2      *ABS*:0000003f __SREG__
+/tmp/user/501/ccKe1K4W.s:3      *ABS*:0000003e __SP_H__
+/tmp/user/501/ccKe1K4W.s:4      *ABS*:0000003d __SP_L__
+/tmp/user/501/ccKe1K4W.s:5      *ABS*:00000034 __CCP__
+/tmp/user/501/ccKe1K4W.s:6      *ABS*:00000000 __tmp_reg__
+/tmp/user/501/ccKe1K4W.s:7      *ABS*:00000001 __zero_reg__
+/tmp/user/501/ccKe1K4W.s:93     .text:00000000 System_Init
+/tmp/user/501/ccKe1K4W.s:123    .text:00000014 System_Shutdown
+/tmp/user/501/ccKe1K4W.s:152    .text:00000028 System_Reset
+/tmp/user/501/ccKe1K4W.s:181    .text:0000003c System_Safestate
+
+UNDEFINED SYMBOLS
+puts
+exit
+__do_copy_data

@@ -1,12 +1,54 @@
-set -e; avr-gcc -MM -mmcu=atmega8 -I. -std=gnu99 -O0 -gstabs -Wa,-adhlns=halavr.lst -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums  -Wall -Wstrict-prototypes halavr.c \
-	| sed 's,\(.*\)\.o[ :]*,\1.o \1.d : ,g' > halavr.d; \
-	[ -s halavr.d ] || rm -f halavr.d
+set -e; avr-gcc -MM -mmcu=atmega8 -I. -std=gnu99 -O0 -gstabs -Wa,-adhlns=usart.lst -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums  -Wall -Wstrict-prototypes usart.c \
+	| sed 's,\(.*\)\.o[ :]*,\1.o \1.d : ,g' > usart.d; \
+	[ -s usart.d ] || rm -f usart.d
+In file included from usart.c:10:
+c:/winavr/lib/gcc/../../avr/include/util/setbaud.h:113:4: error: #error "setbaud.h requires F_CPU to be defined"
+c:/winavr/lib/gcc/../../avr/include/util/setbaud.h:117:4: error: #error "setbaud.h requires BAUD to be defined"
+c:/winavr/lib/gcc/../../avr/include/util/setbaud.h:121:4: error: #error "F_CPU must be a constant value"
+c:/winavr/lib/gcc/../../avr/include/util/setbaud.h:125:4: error: #error "BAUD must be a constant value"
+c:/winavr/lib/gcc/../../avr/include/util/setbaud.h:197:11: error: division by zero in #if
+c:/winavr/lib/gcc/../../avr/include/util/setbaud.h:200:11: error: division by zero in #if
+set -e; avr-gcc -MM -mmcu=atmega8 -I. -std=gnu99 -O0 -gstabs -Wa,-adhlns=system.lst -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums  -Wall -Wstrict-prototypes system.c \
+	| sed 's,\(.*\)\.o[ :]*,\1.o \1.d : ,g' > system.d; \
+	[ -s system.d ] || rm -f system.d
 set -e; avr-gcc -MM -mmcu=atmega8 -I. -std=gnu99 -O0 -gstabs -Wa,-adhlns=kernel.lst -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums  -Wall -Wstrict-prototypes kernel.c \
 	| sed 's,\(.*\)\.o[ :]*,\1.o \1.d : ,g' > kernel.d; \
 	[ -s kernel.d ] || rm -f kernel.d
+In file included from kernel.h:11,
+                 from kernel.c:8:
+global.h:39:7: error: division by zero in #if
+global.h:40:4: error: #error Systematischer Fehler der Baudrate grösser 1% und damit zu hoch!
 set -e; avr-gcc -MM -mmcu=atmega8 -I. -std=gnu99 -O0 -gstabs -Wa,-adhlns=timetest.lst -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums  -Wall -Wstrict-prototypes timetest.c \
 	| sed 's,\(.*\)\.o[ :]*,\1.o \1.d : ,g' > timetest.d; \
 	[ -s timetest.d ] || rm -f timetest.d
+In file included from kernel.h:11,
+                 from timetest.c:4:
+global.h:39:7: error: division by zero in #if
+global.h:40:4: error: #error Systematischer Fehler der Baudrate grösser 1% und damit zu hoch!
+set -e; avr-gcc -MM -mmcu=atmega8 -I. -std=gnu99 -O0 -gstabs -Wa,-adhlns=usart.lst -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums  -Wall -Wstrict-prototypes usart.c \
+	| sed 's,\(.*\)\.o[ :]*,\1.o \1.d : ,g' > usart.d; \
+	[ -s usart.d ] || rm -f usart.d
+In file included from usart.c:10:
+c:/winavr/lib/gcc/../../avr/include/util/setbaud.h:113:4: error: #error "setbaud.h requires F_CPU to be defined"
+c:/winavr/lib/gcc/../../avr/include/util/setbaud.h:117:4: error: #error "setbaud.h requires BAUD to be defined"
+c:/winavr/lib/gcc/../../avr/include/util/setbaud.h:121:4: error: #error "F_CPU must be a constant value"
+c:/winavr/lib/gcc/../../avr/include/util/setbaud.h:125:4: error: #error "BAUD must be a constant value"
+c:/winavr/lib/gcc/../../avr/include/util/setbaud.h:197:11: error: division by zero in #if
+c:/winavr/lib/gcc/../../avr/include/util/setbaud.h:200:11: error: division by zero in #if
+set -e; avr-gcc -MM -mmcu=atmega8 -I. -std=gnu99 -O0 -gstabs -Wa,-adhlns=kernel.lst -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums  -Wall -Wstrict-prototypes kernel.c \
+	| sed 's,\(.*\)\.o[ :]*,\1.o \1.d : ,g' > kernel.d; \
+	[ -s kernel.d ] || rm -f kernel.d
+In file included from kernel.h:11,
+                 from kernel.c:8:
+global.h:39:7: error: division by zero in #if
+global.h:40:4: error: #error Systematischer Fehler der Baudrate grösser 1% und damit zu hoch!
+set -e; avr-gcc -MM -mmcu=atmega8 -I. -std=gnu99 -O0 -gstabs -Wa,-adhlns=timetest.lst -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums  -Wall -Wstrict-prototypes timetest.c \
+	| sed 's,\(.*\)\.o[ :]*,\1.o \1.d : ,g' > timetest.d; \
+	[ -s timetest.d ] || rm -f timetest.d
+In file included from kernel.h:11,
+                 from timetest.c:4:
+global.h:39:7: error: division by zero in #if
+global.h:40:4: error: #error Systematischer Fehler der Baudrate grösser 1% und damit zu hoch!
 
 -------- begin --------
 avr-gcc (WinAVR 20100110) 4.3.3
@@ -15,55 +57,21 @@ This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 
-Compiling: timetest.c
-avr-gcc -c -mmcu=atmega8 -I. -std=gnu99 -O0 -gstabs -Wa,-adhlns=timetest.lst -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums  -Wall -Wstrict-prototypes timetest.c -o timetest.o
+Compiling: system.c
+avr-gcc -c -mmcu=atmega8 -I. -std=gnu99 -O0 -gstabs -Wa,-adhlns=system.lst -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums  -Wall -Wstrict-prototypes system.c -o system.o
 
-Compiling: kernel.c
-avr-gcc -c -mmcu=atmega8 -I. -std=gnu99 -O0 -gstabs -Wa,-adhlns=kernel.lst -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums  -Wall -Wstrict-prototypes kernel.c -o kernel.o
-
-Compiling: halavr.c
-avr-gcc -c -mmcu=atmega8 -I. -std=gnu99 -O0 -gstabs -Wa,-adhlns=halavr.lst -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums  -Wall -Wstrict-prototypes halavr.c -o halavr.o
-
-Linking: ertos.elf
-avr-gcc -mmcu=atmega8 -I. -std=gnu99 -O0 -gstabs -Wa,-adhlns=timetest.o -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums  -Wall -Wstrict-prototypes timetest.o kernel.o halavr.o  --output ertos.elf -lm -Wl,-Map=ertos.map -Wl,--cref
-
-Creating load file for Flash: ertos.hex
-avr-objcopy -O ihex -R .eeprom ertos.elf ertos.hex
-
-Creating load file for EEPROM: ertos.eep
-avr-objcopy -j .eeprom --set-section-flags=.eeprom="alloc,load" \
-	--change-section-lma .eeprom=0 -O ihex ertos.elf ertos.eep
-c:\winavr\bin\avr-objcopy.exe: --change-section-lma .eeprom=0x00000000 never used
-
-Creating Extended Listing: ertos.lss
-avr-objdump -h -S ertos.elf > ertos.lss
-
-Creating Symbol Table: ertos.sym
-avr-nm -n ertos.elf > ertos.sym
-
-Converting to AVR COFF: ertos.cof
-avr-objcopy --debugging --change-section-address .data-0x800000 --change-section-address .bss-0x800000 --change-section-address .noinit-0x800000 --change-section-address .eeprom-0x810000 -O coff-ext-avr ertos.elf ertos.cof   # Extended COFF. Supported in VMLAB from rel. 3.10
-Discarding local symbol outside any compilation unit: .do_copy_data_start
-Discarding local symbol outside any compilation unit: .do_copy_data_loop
-Discarding local symbol outside any compilation unit: .do_clear_bss_start
-Discarding local symbol outside any compilation unit: .do_clear_bss_loop
-c:\winavr\bin\avr-objcopy.exe: --change-section-vma .eeprom+0xff7f0000 never used
-c:\winavr\bin\avr-objcopy.exe: --change-section-lma .eeprom+0xff7f0000 never used
-c:\winavr\bin\avr-objcopy.exe: --change-section-vma .noinit+0xff800000 never used
-c:\winavr\bin\avr-objcopy.exe: --change-section-lma .noinit+0xff800000 never used
-
-Size after:
-ertos.elf  :
-section    size      addr
-.text      1982         0
-.data       164   8388704
-.bss         18   8388868
-.stab      4104         0
-.stabstr   3673         0
-Total      9941
-
-
-
-Errors: none
--------- end --------
-
+Compiling: usart.c
+avr-gcc -c -mmcu=atmega8 -I. -std=gnu99 -O0 -gstabs -Wa,-adhlns=usart.lst -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums  -Wall -Wstrict-prototypes usart.c -o usart.o
+In file included from usart.c:10:
+c:/winavr/lib/gcc/../../avr/include/util/setbaud.h:113:4: error: #error "setbaud.h requires F_CPU to be defined"
+c:/winavr/lib/gcc/../../avr/include/util/setbaud.h:117:4: error: #error "setbaud.h requires BAUD to be defined"
+c:/winavr/lib/gcc/../../avr/include/util/setbaud.h:121:4: error: #error "F_CPU must be a constant value"
+c:/winavr/lib/gcc/../../avr/include/util/setbaud.h:125:4: error: #error "BAUD must be a constant value"
+c:/winavr/lib/gcc/../../avr/include/util/setbaud.h:197:11: error: division by zero in #if
+c:/winavr/lib/gcc/../../avr/include/util/setbaud.h:200:11: error: division by zero in #if
+usart.c: In function 'uart_init':
+usart.c:36: error: 'F_CPU' undeclared (first use in this function)
+usart.c:36: error: (Each undeclared identifier is reported only once
+usart.c:36: error: for each function it appears in.)
+usart.c:36: error: 'BAUD' undeclared (first use in this function)
+make: *** [usart.o] Error 1

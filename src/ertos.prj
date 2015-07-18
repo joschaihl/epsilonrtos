@@ -10,7 +10,7 @@
 .GCCPATH   "C:\WinAVR"
 .GCCMAKE   AUTO
 .TARGET    "ertos.hex"
-.SOURCE    "timetest.c" "global.h" "libtypes.h" "libdefs.h"  "kernel.c" "kernel.h" "halavr.h" "halavr.c" "uCUnit-v1.0.h"
+.SOURCE    "timetest.c" "global.h" "libtypes.h" "libdefs.h"  "kernel.c" "kernel.h" "halavr.h" "halavr.c" "System.h" "System.c" "ucunit.h" "uart.h" "uart.c"
 
 .TRACE              ; Activate micro trace
 
@@ -29,4 +29,6 @@
 ;R2 PD5 vss 100k
 
 .plot v(PB0) v(PB1) v(PB2) v(PB3) v(PB4)
+
+
 

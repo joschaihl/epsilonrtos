@@ -3,15 +3,15 @@ ertos.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         000007be  00000000  00000000  00000094  2**1
+  0 .text         000008f4  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         000000a4  00800060  000007be  00000852  2**0
+  1 .data         000000f2  00800060  000008f4  00000988  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .bss          00000012  00800104  00800104  000008f6  2**0
+  2 .bss          00000018  00800152  00800152  00000a7a  2**0
                   ALLOC
-  3 .stab         00001008  00000000  00000000  000008f8  2**2
+  3 .stab         00001368  00000000  00000000  00000a7c  2**2
                   CONTENTS, READONLY, DEBUGGING
-  4 .stabstr      00000e59  00000000  00000000  00001900  2**0
+  4 .stabstr      0000114b  00000000  00000000  00001de4  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -49,8 +49,8 @@ Disassembly of section .text:
   32:	11 e0       	ldi	r17, 0x01	; 1
   34:	a0 e6       	ldi	r26, 0x60	; 96
   36:	b0 e0       	ldi	r27, 0x00	; 0
-  38:	ee eb       	ldi	r30, 0xBE	; 190
-  3a:	f7 e0       	ldi	r31, 0x07	; 7
+  38:	e4 ef       	ldi	r30, 0xF4	; 244
+  3a:	f8 e0       	ldi	r31, 0x08	; 8
   3c:	02 c0       	rjmp	.+4      	; 0x42 <.do_copy_data_start>
 
 0000003e <.do_copy_data_loop>:
@@ -58,13 +58,13 @@ Disassembly of section .text:
   40:	0d 92       	st	X+, r0
 
 00000042 <.do_copy_data_start>:
-  42:	a4 30       	cpi	r26, 0x04	; 4
+  42:	a2 35       	cpi	r26, 0x52	; 82
   44:	b1 07       	cpc	r27, r17
   46:	d9 f7       	brne	.-10     	; 0x3e <.do_copy_data_loop>
 
 00000048 <__do_clear_bss>:
   48:	11 e0       	ldi	r17, 0x01	; 1
-  4a:	a4 e0       	ldi	r26, 0x04	; 4
+  4a:	a2 e5       	ldi	r26, 0x52	; 82
   4c:	b1 e0       	ldi	r27, 0x01	; 1
   4e:	01 c0       	rjmp	.+2      	; 0x52 <.do_clear_bss_start>
 
@@ -72,11 +72,11 @@ Disassembly of section .text:
   50:	1d 92       	st	X+, r1
 
 00000052 <.do_clear_bss_start>:
-  52:	a6 31       	cpi	r26, 0x16	; 22
+  52:	aa 36       	cpi	r26, 0x6A	; 106
   54:	b1 07       	cpc	r27, r17
   56:	e1 f7       	brne	.-8      	; 0x50 <.do_clear_bss_loop>
   58:	a0 d0       	rcall	.+320    	; 0x19a <main>
-  5a:	af c3       	rjmp	.+1886   	; 0x7ba <_exit>
+  5a:	4a c4       	rjmp	.+2196   	; 0x8f0 <_exit>
 
 0000005c <__bad_interrupt>:
   5c:	d1 cf       	rjmp	.-94     	; 0x0 <__vectors>
@@ -147,10 +147,10 @@ TASK(A,32)
   b6:	cd b7       	in	r28, 0x3d	; 61
   b8:	de b7       	in	r29, 0x3e	; 62
 	for(a=0;a < 100000;a++)
-  ba:	10 92 0c 01 	sts	0x010C, r1
-  be:	10 92 0d 01 	sts	0x010D, r1
-  c2:	10 92 0e 01 	sts	0x010E, r1
-  c6:	10 92 0f 01 	sts	0x010F, r1
+  ba:	10 92 5a 01 	sts	0x015A, r1
+  be:	10 92 5b 01 	sts	0x015B, r1
+  c2:	10 92 5c 01 	sts	0x015C, r1
+  c6:	10 92 5d 01 	sts	0x015D, r1
   ca:	21 c0       	rjmp	.+66     	; 0x10e <task_A+0x5c>
 	{
 		sbi(DEFAULTPORT, TASKAPIN);
@@ -175,21 +175,21 @@ u32 a;
 TASK(A,32)
 {
 	for(a=0;a < 100000;a++)
-  e8:	80 91 0c 01 	lds	r24, 0x010C
-  ec:	90 91 0d 01 	lds	r25, 0x010D
-  f0:	a0 91 0e 01 	lds	r26, 0x010E
-  f4:	b0 91 0f 01 	lds	r27, 0x010F
+  e8:	80 91 5a 01 	lds	r24, 0x015A
+  ec:	90 91 5b 01 	lds	r25, 0x015B
+  f0:	a0 91 5c 01 	lds	r26, 0x015C
+  f4:	b0 91 5d 01 	lds	r27, 0x015D
   f8:	01 96       	adiw	r24, 0x01	; 1
   fa:	a1 1d       	adc	r26, r1
   fc:	b1 1d       	adc	r27, r1
-  fe:	80 93 0c 01 	sts	0x010C, r24
- 102:	90 93 0d 01 	sts	0x010D, r25
- 106:	a0 93 0e 01 	sts	0x010E, r26
- 10a:	b0 93 0f 01 	sts	0x010F, r27
- 10e:	80 91 0c 01 	lds	r24, 0x010C
- 112:	90 91 0d 01 	lds	r25, 0x010D
- 116:	a0 91 0e 01 	lds	r26, 0x010E
- 11a:	b0 91 0f 01 	lds	r27, 0x010F
+  fe:	80 93 5a 01 	sts	0x015A, r24
+ 102:	90 93 5b 01 	sts	0x015B, r25
+ 106:	a0 93 5c 01 	sts	0x015C, r26
+ 10a:	b0 93 5d 01 	sts	0x015D, r27
+ 10e:	80 91 5a 01 	lds	r24, 0x015A
+ 112:	90 91 5b 01 	lds	r25, 0x015B
+ 116:	a0 91 5c 01 	lds	r26, 0x015C
+ 11a:	b0 91 5d 01 	lds	r27, 0x015D
  11e:	80 3a       	cpi	r24, 0xA0	; 160
  120:	26 e8       	ldi	r18, 0x86	; 134
  122:	92 07       	cpc	r25, r18
@@ -221,7 +221,7 @@ TASK(B,32)
  140:	de b7       	in	r29, 0x3e	; 62
    u08 i;
 	for(b=0;b<2;b++)
- 142:	10 92 0b 01 	sts	0x010B, r1
+ 142:	10 92 59 01 	sts	0x0159, r1
  146:	20 c0       	rjmp	.+64     	; 0x188 <task_B+0x50>
 	{
 	   for(i=0; i < 100; i++)
@@ -272,10 +272,10 @@ TASK(B,32)
 {
    u08 i;
 	for(b=0;b<2;b++)
- 17e:	80 91 0b 01 	lds	r24, 0x010B
+ 17e:	80 91 59 01 	lds	r24, 0x0159
  182:	8f 5f       	subi	r24, 0xFF	; 255
- 184:	80 93 0b 01 	sts	0x010B, r24
- 188:	80 91 0b 01 	lds	r24, 0x010B
+ 184:	80 93 59 01 	sts	0x0159, r24
+ 188:	80 91 59 01 	lds	r24, 0x0159
  18c:	82 30       	cpi	r24, 0x02	; 2
  18e:	e0 f2       	brcs	.-72     	; 0x148 <task_B+0x10>
 			sbi(DEFAULTPORT, TASKBPIN);
@@ -540,9 +540,9 @@ void sleep(u32 pause_us)
 	BOOL pause = FALSE;
  310:	19 82       	std	Y+1, r1	; 0x01
 	task = currentScheduler.tasks[currentScheduler.current_task];
- 312:	20 91 10 01 	lds	r18, 0x0110
- 316:	30 91 11 01 	lds	r19, 0x0111
- 31a:	80 91 12 01 	lds	r24, 0x0112
+ 312:	20 91 5e 01 	lds	r18, 0x015E
+ 316:	30 91 5f 01 	lds	r19, 0x015F
+ 31a:	80 91 60 01 	lds	r24, 0x0160
  31e:	88 2f       	mov	r24, r24
  320:	90 e0       	ldi	r25, 0x00	; 0
  322:	88 0f       	add	r24, r24
@@ -578,9 +578,9 @@ void sleep(u32 pause_us)
 		do
 		{
 			pause = (currentScheduler.tasks[currentScheduler.current_task]->taskState == TASK_PAUSE);
- 350:	20 91 10 01 	lds	r18, 0x0110
- 354:	30 91 11 01 	lds	r19, 0x0111
- 358:	80 91 12 01 	lds	r24, 0x0112
+ 350:	20 91 5e 01 	lds	r18, 0x015E
+ 354:	30 91 5f 01 	lds	r19, 0x015F
+ 358:	80 91 60 01 	lds	r24, 0x0160
  35c:	88 2f       	mov	r24, r24
  35e:	90 e0       	ldi	r25, 0x00	; 0
  360:	88 0f       	add	r24, r24
@@ -630,8 +630,8 @@ void decrementPause(void)
  3a2:	3e c0       	rjmp	.+124    	; 0x420 <decrementPause+0x8c>
 	{
 		task = currentScheduler.tasks[i];
- 3a4:	20 91 10 01 	lds	r18, 0x0110
- 3a8:	30 91 11 01 	lds	r19, 0x0111
+ 3a4:	20 91 5e 01 	lds	r18, 0x015E
+ 3a8:	30 91 5f 01 	lds	r19, 0x015F
  3ac:	8b 81       	ldd	r24, Y+3	; 0x03
  3ae:	88 2f       	mov	r24, r24
  3b0:	90 e0       	ldi	r25, 0x00	; 0
@@ -706,7 +706,7 @@ void decrementPause(void)
  41a:	8b 81       	ldd	r24, Y+3	; 0x03
  41c:	8f 5f       	subi	r24, 0xFF	; 255
  41e:	8b 83       	std	Y+3, r24	; 0x03
- 420:	90 91 13 01 	lds	r25, 0x0113
+ 420:	90 91 61 01 	lds	r25, 0x0161
  424:	8b 81       	ldd	r24, Y+3	; 0x03
  426:	89 17       	cp	r24, r25
  428:	08 f4       	brcc	.+2      	; 0x42c <decrementPause+0x98>
@@ -744,8 +744,8 @@ BOOL allTasksFinished(void)
  44a:	1a c0       	rjmp	.+52     	; 0x480 <__stack+0x21>
 	{
 		task = currentScheduler.tasks[i];
- 44c:	20 91 10 01 	lds	r18, 0x0110
- 450:	30 91 11 01 	lds	r19, 0x0111
+ 44c:	20 91 5e 01 	lds	r18, 0x015E
+ 450:	30 91 5f 01 	lds	r19, 0x015F
  454:	8c 81       	ldd	r24, Y+4	; 0x04
  456:	88 2f       	mov	r24, r24
  458:	90 e0       	ldi	r25, 0x00	; 0
@@ -777,7 +777,7 @@ BOOL allTasksFinished(void)
  47a:	8c 81       	ldd	r24, Y+4	; 0x04
  47c:	8f 5f       	subi	r24, 0xFF	; 255
  47e:	8c 83       	std	Y+4, r24	; 0x04
- 480:	90 91 13 01 	lds	r25, 0x0113
+ 480:	90 91 61 01 	lds	r25, 0x0161
  484:	8c 81       	ldd	r24, Y+4	; 0x04
  486:	89 17       	cp	r24, r25
  488:	08 f3       	brcs	.-62     	; 0x44c <allTasksFinished+0x14>
@@ -817,31 +817,31 @@ void startRRScheduler(TASK **tasks, u08 tasks_length)
  4b2:	80 81       	ld	r24, Z
  4b4:	91 81       	ldd	r25, Z+1	; 0x01
  4b6:	07 96       	adiw	r24, 0x07	; 7
- 4b8:	90 93 15 01 	sts	0x0115, r25
- 4bc:	80 93 14 01 	sts	0x0114, r24
+ 4b8:	90 93 63 01 	sts	0x0163, r25
+ 4bc:	80 93 62 01 	sts	0x0162, r24
    TASK *task;
 	currentScheduler.current_task = 0;
- 4c0:	10 92 12 01 	sts	0x0112, r1
+ 4c0:	10 92 60 01 	sts	0x0160, r1
 	currentScheduler.tasks = tasks;
  4c4:	8b 81       	ldd	r24, Y+3	; 0x03
  4c6:	9c 81       	ldd	r25, Y+4	; 0x04
- 4c8:	90 93 11 01 	sts	0x0111, r25
- 4cc:	80 93 10 01 	sts	0x0110, r24
+ 4c8:	90 93 5f 01 	sts	0x015F, r25
+ 4cc:	80 93 5e 01 	sts	0x015E, r24
 	currentScheduler.tasks_length = tasks_length;
  4d0:	8d 81       	ldd	r24, Y+5	; 0x05
- 4d2:	80 93 13 01 	sts	0x0113, r24
+ 4d2:	80 93 61 01 	sts	0x0161, r24
 
 	// Inititalize Tasks
 	for(currentScheduler.current_task = 0;
- 4d6:	10 92 12 01 	sts	0x0112, r1
+ 4d6:	10 92 60 01 	sts	0x0160, r1
  4da:	19 c0       	rjmp	.+50     	; 0x50e <startRRScheduler+0x74>
 			currentScheduler.current_task < currentScheduler.tasks_length;
 			currentScheduler.current_task++)
 	{
 		task = currentScheduler.tasks[currentScheduler.current_task];
- 4dc:	20 91 10 01 	lds	r18, 0x0110
- 4e0:	30 91 11 01 	lds	r19, 0x0111
- 4e4:	80 91 12 01 	lds	r24, 0x0112
+ 4dc:	20 91 5e 01 	lds	r18, 0x015E
+ 4e0:	30 91 5f 01 	lds	r19, 0x015F
+ 4e4:	80 91 60 01 	lds	r24, 0x0160
  4e8:	88 2f       	mov	r24, r24
  4ea:	90 e0       	ldi	r25, 0x00	; 0
  4ec:	88 0f       	add	r24, r24
@@ -863,17 +863,17 @@ void startRRScheduler(TASK **tasks, u08 tasks_length)
 	for(currentScheduler.current_task = 0;
 			currentScheduler.current_task < currentScheduler.tasks_length;
 			currentScheduler.current_task++)
- 504:	80 91 12 01 	lds	r24, 0x0112
+ 504:	80 91 60 01 	lds	r24, 0x0160
  508:	8f 5f       	subi	r24, 0xFF	; 255
- 50a:	80 93 12 01 	sts	0x0112, r24
+ 50a:	80 93 60 01 	sts	0x0160, r24
 	currentScheduler.tasks = tasks;
 	currentScheduler.tasks_length = tasks_length;
 
 	// Inititalize Tasks
 	for(currentScheduler.current_task = 0;
 			currentScheduler.current_task < currentScheduler.tasks_length;
- 50e:	90 91 12 01 	lds	r25, 0x0112
- 512:	80 91 13 01 	lds	r24, 0x0113
+ 50e:	90 91 60 01 	lds	r25, 0x0160
+ 512:	80 91 61 01 	lds	r24, 0x0161
  516:	98 17       	cp	r25, r24
  518:	08 f3       	brcs	.-62     	; 0x4dc <startRRScheduler+0x42>
 			currentScheduler.current_task++)
@@ -882,10 +882,10 @@ void startRRScheduler(TASK **tasks, u08 tasks_length)
       initTask(task);
 	}
 	currentScheduler.current_task = 0;
- 51a:	10 92 12 01 	sts	0x0112, r1
+ 51a:	10 92 60 01 	sts	0x0160, r1
    task = currentScheduler.tasks[0];
- 51e:	e0 91 10 01 	lds	r30, 0x0110
- 522:	f0 91 11 01 	lds	r31, 0x0111
+ 51e:	e0 91 5e 01 	lds	r30, 0x015E
+ 522:	f0 91 5f 01 	lds	r31, 0x015F
  526:	80 81       	ld	r24, Z
  528:	91 81       	ldd	r25, Z+1	; 0x01
  52a:	9a 83       	std	Y+2, r25	; 0x02
@@ -943,10 +943,10 @@ void nextScheduleItem(void)
 		task = currentScheduler.tasks[i];
 	}           */
 	if (currentScheduler.current_task < (currentScheduler.tasks_length -1))
- 578:	80 91 12 01 	lds	r24, 0x0112
+ 578:	80 91 60 01 	lds	r24, 0x0160
  57c:	28 2f       	mov	r18, r24
  57e:	30 e0       	ldi	r19, 0x00	; 0
- 580:	80 91 13 01 	lds	r24, 0x0113
+ 580:	80 91 61 01 	lds	r24, 0x0161
  584:	88 2f       	mov	r24, r24
  586:	90 e0       	ldi	r25, 0x00	; 0
  588:	01 97       	sbiw	r24, 0x01	; 1
@@ -955,15 +955,15 @@ void nextScheduleItem(void)
  58e:	34 f4       	brge	.+12     	; 0x59c <nextScheduleItem+0x2c>
 	{
 		currentScheduler.current_task++;
- 590:	80 91 12 01 	lds	r24, 0x0112
+ 590:	80 91 60 01 	lds	r24, 0x0160
  594:	8f 5f       	subi	r24, 0xFF	; 255
- 596:	80 93 12 01 	sts	0x0112, r24
+ 596:	80 93 60 01 	sts	0x0160, r24
  59a:	02 c0       	rjmp	.+4      	; 0x5a0 <nextScheduleItem+0x30>
 	}
 	else
 	{
 		currentScheduler.current_task = 0;
- 59c:	10 92 12 01 	sts	0x0112, r1
+ 59c:	10 92 60 01 	sts	0x0160, r1
 	}
 	// (pop) reset task specific registers
 }
@@ -980,8 +980,8 @@ void incrementTime(void)
  5aa:	cd b7       	in	r28, 0x3d	; 61
  5ac:	de b7       	in	r29, 0x3e	; 62
    if((currentTime.us+TIMER_DELAY_US)==1000)
- 5ae:	80 91 09 01 	lds	r24, 0x0109
- 5b2:	90 91 0a 01 	lds	r25, 0x010A
+ 5ae:	80 91 57 01 	lds	r24, 0x0157
+ 5b2:	90 91 58 01 	lds	r25, 0x0158
  5b6:	22 e0       	ldi	r18, 0x02	; 2
  5b8:	8e 3e       	cpi	r24, 0xEE	; 238
  5ba:	92 07       	cpc	r25, r18
@@ -989,78 +989,78 @@ void incrementTime(void)
  5be:	3e c0       	rjmp	.+124    	; 0x63c <incrementTime+0x96>
    {
    	if((currentTime.ms+1)==1000)
- 5c0:	80 91 07 01 	lds	r24, 0x0107
- 5c4:	90 91 08 01 	lds	r25, 0x0108
+ 5c0:	80 91 55 01 	lds	r24, 0x0155
+ 5c4:	90 91 56 01 	lds	r25, 0x0156
  5c8:	23 e0       	ldi	r18, 0x03	; 3
  5ca:	87 3e       	cpi	r24, 0xE7	; 231
  5cc:	92 07       	cpc	r25, r18
  5ce:	49 f5       	brne	.+82     	; 0x622 <incrementTime+0x7c>
    	{
    	   if((currentTime.seconds+1)==60)
- 5d0:	80 91 06 01 	lds	r24, 0x0106
+ 5d0:	80 91 54 01 	lds	r24, 0x0154
  5d4:	8b 33       	cpi	r24, 0x3B	; 59
  5d6:	d1 f4       	brne	.+52     	; 0x60c <incrementTime+0x66>
    	   {
    	   	if((currentTime.minutes+1)==60)
- 5d8:	80 91 05 01 	lds	r24, 0x0105
+ 5d8:	80 91 53 01 	lds	r24, 0x0153
  5dc:	8b 33       	cpi	r24, 0x3B	; 59
  5de:	59 f4       	brne	.+22     	; 0x5f6 <incrementTime+0x50>
    	   	{
    	   		currentTime.hours = (currentTime.hours+1) % 24;
- 5e0:	80 91 04 01 	lds	r24, 0x0104
+ 5e0:	80 91 52 01 	lds	r24, 0x0152
  5e4:	88 2f       	mov	r24, r24
  5e6:	90 e0       	ldi	r25, 0x00	; 0
  5e8:	01 96       	adiw	r24, 0x01	; 1
  5ea:	28 e1       	ldi	r18, 0x18	; 24
  5ec:	30 e0       	ldi	r19, 0x00	; 0
  5ee:	b9 01       	movw	r22, r18
- 5f0:	d1 d0       	rcall	.+418    	; 0x794 <__divmodhi4>
- 5f2:	80 93 04 01 	sts	0x0104, r24
+ 5f0:	37 d1       	rcall	.+622    	; 0x860 <__divmodhi4>
+ 5f2:	80 93 52 01 	sts	0x0152, r24
    	   	}
    	   	currentTime.minutes = (currentTime.minutes+1) % 60;
- 5f6:	80 91 05 01 	lds	r24, 0x0105
+ 5f6:	80 91 53 01 	lds	r24, 0x0153
  5fa:	88 2f       	mov	r24, r24
  5fc:	90 e0       	ldi	r25, 0x00	; 0
  5fe:	01 96       	adiw	r24, 0x01	; 1
  600:	2c e3       	ldi	r18, 0x3C	; 60
  602:	30 e0       	ldi	r19, 0x00	; 0
  604:	b9 01       	movw	r22, r18
- 606:	c6 d0       	rcall	.+396    	; 0x794 <__divmodhi4>
- 608:	80 93 05 01 	sts	0x0105, r24
+ 606:	2c d1       	rcall	.+600    	; 0x860 <__divmodhi4>
+ 608:	80 93 53 01 	sts	0x0153, r24
    	   }
    	   currentTime.seconds = (currentTime.seconds+1) % 60;
- 60c:	80 91 06 01 	lds	r24, 0x0106
+ 60c:	80 91 54 01 	lds	r24, 0x0154
  610:	88 2f       	mov	r24, r24
  612:	90 e0       	ldi	r25, 0x00	; 0
  614:	01 96       	adiw	r24, 0x01	; 1
  616:	2c e3       	ldi	r18, 0x3C	; 60
  618:	30 e0       	ldi	r19, 0x00	; 0
  61a:	b9 01       	movw	r22, r18
- 61c:	bb d0       	rcall	.+374    	; 0x794 <__divmodhi4>
- 61e:	80 93 06 01 	sts	0x0106, r24
+ 61c:	21 d1       	rcall	.+578    	; 0x860 <__divmodhi4>
+ 61e:	80 93 54 01 	sts	0x0154, r24
    	}
    	currentTime.ms = (currentTime.ms+1) % 1000;
- 622:	80 91 07 01 	lds	r24, 0x0107
- 626:	90 91 08 01 	lds	r25, 0x0108
+ 622:	80 91 55 01 	lds	r24, 0x0155
+ 626:	90 91 56 01 	lds	r25, 0x0156
  62a:	01 96       	adiw	r24, 0x01	; 1
  62c:	28 ee       	ldi	r18, 0xE8	; 232
  62e:	33 e0       	ldi	r19, 0x03	; 3
  630:	b9 01       	movw	r22, r18
- 632:	9c d0       	rcall	.+312    	; 0x76c <__udivmodhi4>
- 634:	90 93 08 01 	sts	0x0108, r25
- 638:	80 93 07 01 	sts	0x0107, r24
+ 632:	02 d1       	rcall	.+516    	; 0x838 <__udivmodhi4>
+ 634:	90 93 56 01 	sts	0x0156, r25
+ 638:	80 93 55 01 	sts	0x0155, r24
    }
    currentTime.us = (currentTime.us+TIMER_DELAY_US) % 1000;
- 63c:	80 91 09 01 	lds	r24, 0x0109
- 640:	90 91 0a 01 	lds	r25, 0x010A
+ 63c:	80 91 57 01 	lds	r24, 0x0157
+ 640:	90 91 58 01 	lds	r25, 0x0158
  644:	86 50       	subi	r24, 0x06	; 6
  646:	9f 4f       	sbci	r25, 0xFF	; 255
  648:	28 ee       	ldi	r18, 0xE8	; 232
  64a:	33 e0       	ldi	r19, 0x03	; 3
  64c:	b9 01       	movw	r22, r18
- 64e:	8e d0       	rcall	.+284    	; 0x76c <__udivmodhi4>
- 650:	90 93 0a 01 	sts	0x010A, r25
- 654:	80 93 09 01 	sts	0x0109, r24
+ 64e:	f4 d0       	rcall	.+488    	; 0x838 <__udivmodhi4>
+ 650:	90 93 58 01 	sts	0x0158, r25
+ 654:	80 93 57 01 	sts	0x0157, r24
 }
  658:	cf 91       	pop	r28
  65a:	df 91       	pop	r29
@@ -1112,9 +1112,9 @@ SCHEDULER_TIMER()
  6a4:	ff 93       	push	r31
 		TASK *task;
 		task = currentScheduler.tasks[currentScheduler.current_task];
- 6a6:	20 91 10 01 	lds	r18, 0x0110
- 6aa:	30 91 11 01 	lds	r19, 0x0111
- 6ae:	80 91 12 01 	lds	r24, 0x0112
+ 6a6:	20 91 5e 01 	lds	r18, 0x015E
+ 6aa:	30 91 5f 01 	lds	r19, 0x015F
+ 6ae:	80 91 60 01 	lds	r24, 0x0160
  6b2:	88 2f       	mov	r24, r24
  6b4:	90 e0       	ldi	r25, 0x00	; 0
  6b6:	88 0f       	add	r24, r24
@@ -1146,9 +1146,9 @@ SCHEDULER_TIMER()
 		nextScheduleItem();
  6dc:	49 df       	rcall	.-366    	; 0x570 <nextScheduleItem>
   		task = currentScheduler.tasks[currentScheduler.current_task];
- 6de:	20 91 10 01 	lds	r18, 0x0110
- 6e2:	30 91 11 01 	lds	r19, 0x0111
- 6e6:	80 91 12 01 	lds	r24, 0x0112
+ 6de:	20 91 5e 01 	lds	r18, 0x015E
+ 6e2:	30 91 5f 01 	lds	r19, 0x015F
+ 6e6:	80 91 60 01 	lds	r24, 0x0160
  6ea:	88 2f       	mov	r24, r24
  6ec:	90 e0       	ldi	r25, 0x00	; 0
  6ee:	88 0f       	add	r24, r24
@@ -1211,8 +1211,8 @@ SCHEDULER_TIMER()
 		set_stackpointer(currentScheduler.stackPointer);
  754:	ed e5       	ldi	r30, 0x5D	; 93
  756:	f0 e0       	ldi	r31, 0x00	; 0
- 758:	80 91 14 01 	lds	r24, 0x0114
- 75c:	90 91 15 01 	lds	r25, 0x0115
+ 758:	80 91 62 01 	lds	r24, 0x0162
+ 75c:	90 91 63 01 	lds	r25, 0x0163
  760:	91 83       	std	Z+1, r25	; 0x01
  762:	80 83       	st	Z, r24
 		// Timer deaktivieren
@@ -1224,61 +1224,299 @@ SCHEDULER_TIMER()
    return_interrupt();
  76a:	18 95       	reti
 
-0000076c <__udivmodhi4>:
- 76c:	aa 1b       	sub	r26, r26
- 76e:	bb 1b       	sub	r27, r27
- 770:	51 e1       	ldi	r21, 0x11	; 17
- 772:	07 c0       	rjmp	.+14     	; 0x782 <__udivmodhi4_ep>
+0000076c <System_Init>:
+#include <stdlib.h>
+#include "System.h"
 
-00000774 <__udivmodhi4_loop>:
- 774:	aa 1f       	adc	r26, r26
- 776:	bb 1f       	adc	r27, r27
- 778:	a6 17       	cp	r26, r22
- 77a:	b7 07       	cpc	r27, r23
- 77c:	10 f0       	brcs	.+4      	; 0x782 <__udivmodhi4_ep>
- 77e:	a6 1b       	sub	r26, r22
- 780:	b7 0b       	sbc	r27, r23
+/* Stub: Initialize your hardware here */
+void System_Init(void)
+{
+ 76c:	df 93       	push	r29
+ 76e:	cf 93       	push	r28
+ 770:	cd b7       	in	r28, 0x3d	; 61
+ 772:	de b7       	in	r29, 0x3e	; 62
+	printf("Init of hardware finished.\n");
+ 774:	84 e0       	ldi	r24, 0x04	; 4
+ 776:	91 e0       	ldi	r25, 0x01	; 1
+ 778:	86 d0       	rcall	.+268    	; 0x886 <puts>
+}
+ 77a:	cf 91       	pop	r28
+ 77c:	df 91       	pop	r29
+ 77e:	08 95       	ret
 
-00000782 <__udivmodhi4_ep>:
- 782:	88 1f       	adc	r24, r24
- 784:	99 1f       	adc	r25, r25
- 786:	5a 95       	dec	r21
- 788:	a9 f7       	brne	.-22     	; 0x774 <__udivmodhi4_loop>
- 78a:	80 95       	com	r24
- 78c:	90 95       	com	r25
- 78e:	bc 01       	movw	r22, r24
- 790:	cd 01       	movw	r24, r26
- 792:	08 95       	ret
+00000780 <System_Shutdown>:
 
-00000794 <__divmodhi4>:
- 794:	97 fb       	bst	r25, 7
- 796:	09 2e       	mov	r0, r25
- 798:	07 26       	eor	r0, r23
- 79a:	0a d0       	rcall	.+20     	; 0x7b0 <__divmodhi4_neg1>
- 79c:	77 fd       	sbrc	r23, 7
- 79e:	04 d0       	rcall	.+8      	; 0x7a8 <__divmodhi4_neg2>
- 7a0:	e5 df       	rcall	.-54     	; 0x76c <__udivmodhi4>
- 7a2:	06 d0       	rcall	.+12     	; 0x7b0 <__divmodhi4_neg1>
- 7a4:	00 20       	and	r0, r0
- 7a6:	1a f4       	brpl	.+6      	; 0x7ae <__divmodhi4_exit>
+/* Stub: Shutdown your hardware here */
+void System_Shutdown(void)
+{
+ 780:	df 93       	push	r29
+ 782:	cf 93       	push	r28
+ 784:	cd b7       	in	r28, 0x3d	; 61
+ 786:	de b7       	in	r29, 0x3e	; 62
 
-000007a8 <__divmodhi4_neg2>:
- 7a8:	70 95       	com	r23
- 7aa:	61 95       	neg	r22
- 7ac:	7f 4f       	sbci	r23, 0xFF	; 255
+	/* asm("\tSTOP"); */
+	printf("System shutdown.\n");
+ 788:	8f e1       	ldi	r24, 0x1F	; 31
+ 78a:	91 e0       	ldi	r25, 0x01	; 1
+ 78c:	7c d0       	rcall	.+248    	; 0x886 <puts>
+	exit(0);
+ 78e:	80 e0       	ldi	r24, 0x00	; 0
+ 790:	90 e0       	ldi	r25, 0x00	; 0
+ 792:	ae d0       	rcall	.+348    	; 0x8f0 <_exit>
 
-000007ae <__divmodhi4_exit>:
- 7ae:	08 95       	ret
+00000794 <System_Reset>:
+}
 
-000007b0 <__divmodhi4_neg1>:
- 7b0:	f6 f7       	brtc	.-4      	; 0x7ae <__divmodhi4_exit>
- 7b2:	90 95       	com	r25
- 7b4:	81 95       	neg	r24
- 7b6:	9f 4f       	sbci	r25, 0xFF	; 255
- 7b8:	08 95       	ret
+/* Stub: Resets the system */
+void System_Reset(void)
+{
+ 794:	df 93       	push	r29
+ 796:	cf 93       	push	r28
+ 798:	cd b7       	in	r28, 0x3d	; 61
+ 79a:	de b7       	in	r29, 0x3e	; 62
+	/* Stub: Reset the hardware */
+	/* asm("\tRESET"); */
+	printf("System reset.\n");
+ 79c:	80 e3       	ldi	r24, 0x30	; 48
+ 79e:	91 e0       	ldi	r25, 0x01	; 1
+ 7a0:	72 d0       	rcall	.+228    	; 0x886 <puts>
+	exit(0);
+ 7a2:	80 e0       	ldi	r24, 0x00	; 0
+ 7a4:	90 e0       	ldi	r25, 0x00	; 0
+ 7a6:	a4 d0       	rcall	.+328    	; 0x8f0 <_exit>
 
-000007ba <_exit>:
- 7ba:	f8 94       	cli
+000007a8 <System_Safestate>:
+}
 
-000007bc <__stop_program>:
- 7bc:	ff cf       	rjmp	.-2      	; 0x7bc <__stop_program>
+/* Stub: Put system in a safe state */
+void System_Safestate(void)
+{
+ 7a8:	df 93       	push	r29
+ 7aa:	cf 93       	push	r28
+ 7ac:	cd b7       	in	r28, 0x3d	; 61
+ 7ae:	de b7       	in	r29, 0x3e	; 62
+	/* Disable interrupts */
+	/* DIE(); */
+
+	/* Put processor into idle state */
+	/* asm("\tIDLE"); */
+	printf("System safe state.\n");
+ 7b0:	8e e3       	ldi	r24, 0x3E	; 62
+ 7b2:	91 e0       	ldi	r25, 0x01	; 1
+ 7b4:	68 d0       	rcall	.+208    	; 0x886 <puts>
+	exit(0);
+ 7b6:	80 e0       	ldi	r24, 0x00	; 0
+ 7b8:	90 e0       	ldi	r25, 0x00	; 0
+ 7ba:	9a d0       	rcall	.+308    	; 0x8f0 <_exit>
+
+000007bc <uart_putc>:
+}
+
+void uart_putc(char c)
+{
+ 7bc:	df 93       	push	r29
+ 7be:	cf 93       	push	r28
+ 7c0:	0f 92       	push	r0
+ 7c2:	cd b7       	in	r28, 0x3d	; 61
+ 7c4:	de b7       	in	r29, 0x3e	; 62
+ 7c6:	89 83       	std	Y+1, r24	; 0x01
+	while (!(UCSRA & (1 << UDRE)))
+ 7c8:	eb e2       	ldi	r30, 0x2B	; 43
+ 7ca:	f0 e0       	ldi	r31, 0x00	; 0
+ 7cc:	80 81       	ld	r24, Z
+ 7ce:	88 2f       	mov	r24, r24
+ 7d0:	90 e0       	ldi	r25, 0x00	; 0
+ 7d2:	80 72       	andi	r24, 0x20	; 32
+ 7d4:	90 70       	andi	r25, 0x00	; 0
+ 7d6:	00 97       	sbiw	r24, 0x00	; 0
+ 7d8:	b9 f3       	breq	.-18     	; 0x7c8 <uart_putc+0xc>
+	{
+		/* wait until sending is possible */
+	}
+
+	UDR = c; /* Writes c to the serial port */
+ 7da:	ec e2       	ldi	r30, 0x2C	; 44
+ 7dc:	f0 e0       	ldi	r31, 0x00	; 0
+ 7de:	89 81       	ldd	r24, Y+1	; 0x01
+ 7e0:	80 83       	st	Z, r24
+}
+ 7e2:	0f 90       	pop	r0
+ 7e4:	cf 91       	pop	r28
+ 7e6:	df 91       	pop	r29
+ 7e8:	08 95       	ret
+
+000007ea <System_WriteString>:
+
+
+/* Stub: Transmit a string to the host/debugger/simulator */
+void System_WriteString(char * s)
+{
+ 7ea:	df 93       	push	r29
+ 7ec:	cf 93       	push	r28
+ 7ee:	00 d0       	rcall	.+0      	; 0x7f0 <System_WriteString+0x6>
+ 7f0:	cd b7       	in	r28, 0x3d	; 61
+ 7f2:	de b7       	in	r29, 0x3e	; 62
+ 7f4:	9a 83       	std	Y+2, r25	; 0x02
+ 7f6:	89 83       	std	Y+1, r24	; 0x01
+ 7f8:	09 c0       	rjmp	.+18     	; 0x80c <System_WriteString+0x22>
+	while(*s)
+	{
+		uart_putc(*s);
+ 7fa:	e9 81       	ldd	r30, Y+1	; 0x01
+ 7fc:	fa 81       	ldd	r31, Y+2	; 0x02
+ 7fe:	80 81       	ld	r24, Z
+ 800:	dd df       	rcall	.-70     	; 0x7bc <uart_putc>
+		s++;
+ 802:	89 81       	ldd	r24, Y+1	; 0x01
+ 804:	9a 81       	ldd	r25, Y+2	; 0x02
+ 806:	01 96       	adiw	r24, 0x01	; 1
+ 808:	9a 83       	std	Y+2, r25	; 0x02
+ 80a:	89 83       	std	Y+1, r24	; 0x01
+
+
+/* Stub: Transmit a string to the host/debugger/simulator */
+void System_WriteString(char * s)
+{
+	while(*s)
+ 80c:	e9 81       	ldd	r30, Y+1	; 0x01
+ 80e:	fa 81       	ldd	r31, Y+2	; 0x02
+ 810:	80 81       	ld	r24, Z
+ 812:	88 23       	and	r24, r24
+ 814:	91 f7       	brne	.-28     	; 0x7fa <System_WriteString+0x10>
+	{
+		uart_putc(*s);
+		s++;
+	}
+}
+ 816:	0f 90       	pop	r0
+ 818:	0f 90       	pop	r0
+ 81a:	cf 91       	pop	r28
+ 81c:	df 91       	pop	r29
+ 81e:	08 95       	ret
+
+00000820 <System_WriteInt>:
+
+void System_WriteInt(int n)
+{
+ 820:	df 93       	push	r29
+ 822:	cf 93       	push	r28
+ 824:	00 d0       	rcall	.+0      	; 0x826 <System_WriteInt+0x6>
+ 826:	cd b7       	in	r28, 0x3d	; 61
+ 828:	de b7       	in	r29, 0x3e	; 62
+ 82a:	9a 83       	std	Y+2, r25	; 0x02
+ 82c:	89 83       	std	Y+1, r24	; 0x01
+	/* printf("%i", n); */
+}
+ 82e:	0f 90       	pop	r0
+ 830:	0f 90       	pop	r0
+ 832:	cf 91       	pop	r28
+ 834:	df 91       	pop	r29
+ 836:	08 95       	ret
+
+00000838 <__udivmodhi4>:
+ 838:	aa 1b       	sub	r26, r26
+ 83a:	bb 1b       	sub	r27, r27
+ 83c:	51 e1       	ldi	r21, 0x11	; 17
+ 83e:	07 c0       	rjmp	.+14     	; 0x84e <__udivmodhi4_ep>
+
+00000840 <__udivmodhi4_loop>:
+ 840:	aa 1f       	adc	r26, r26
+ 842:	bb 1f       	adc	r27, r27
+ 844:	a6 17       	cp	r26, r22
+ 846:	b7 07       	cpc	r27, r23
+ 848:	10 f0       	brcs	.+4      	; 0x84e <__udivmodhi4_ep>
+ 84a:	a6 1b       	sub	r26, r22
+ 84c:	b7 0b       	sbc	r27, r23
+
+0000084e <__udivmodhi4_ep>:
+ 84e:	88 1f       	adc	r24, r24
+ 850:	99 1f       	adc	r25, r25
+ 852:	5a 95       	dec	r21
+ 854:	a9 f7       	brne	.-22     	; 0x840 <__udivmodhi4_loop>
+ 856:	80 95       	com	r24
+ 858:	90 95       	com	r25
+ 85a:	bc 01       	movw	r22, r24
+ 85c:	cd 01       	movw	r24, r26
+ 85e:	08 95       	ret
+
+00000860 <__divmodhi4>:
+ 860:	97 fb       	bst	r25, 7
+ 862:	09 2e       	mov	r0, r25
+ 864:	07 26       	eor	r0, r23
+ 866:	0a d0       	rcall	.+20     	; 0x87c <__divmodhi4_neg1>
+ 868:	77 fd       	sbrc	r23, 7
+ 86a:	04 d0       	rcall	.+8      	; 0x874 <__divmodhi4_neg2>
+ 86c:	e5 df       	rcall	.-54     	; 0x838 <__udivmodhi4>
+ 86e:	06 d0       	rcall	.+12     	; 0x87c <__divmodhi4_neg1>
+ 870:	00 20       	and	r0, r0
+ 872:	1a f4       	brpl	.+6      	; 0x87a <__divmodhi4_exit>
+
+00000874 <__divmodhi4_neg2>:
+ 874:	70 95       	com	r23
+ 876:	61 95       	neg	r22
+ 878:	7f 4f       	sbci	r23, 0xFF	; 255
+
+0000087a <__divmodhi4_exit>:
+ 87a:	08 95       	ret
+
+0000087c <__divmodhi4_neg1>:
+ 87c:	f6 f7       	brtc	.-4      	; 0x87a <__divmodhi4_exit>
+ 87e:	90 95       	com	r25
+ 880:	81 95       	neg	r24
+ 882:	9f 4f       	sbci	r25, 0xFF	; 255
+ 884:	08 95       	ret
+
+00000886 <puts>:
+ 886:	0f 93       	push	r16
+ 888:	1f 93       	push	r17
+ 88a:	cf 93       	push	r28
+ 88c:	df 93       	push	r29
+ 88e:	8c 01       	movw	r16, r24
+ 890:	e0 91 66 01 	lds	r30, 0x0166
+ 894:	f0 91 67 01 	lds	r31, 0x0167
+ 898:	83 81       	ldd	r24, Z+3	; 0x03
+ 89a:	81 ff       	sbrs	r24, 1
+ 89c:	21 c0       	rjmp	.+66     	; 0x8e0 <puts+0x5a>
+ 89e:	c0 e0       	ldi	r28, 0x00	; 0
+ 8a0:	d0 e0       	ldi	r29, 0x00	; 0
+ 8a2:	0d c0       	rjmp	.+26     	; 0x8be <puts+0x38>
+ 8a4:	e0 91 66 01 	lds	r30, 0x0166
+ 8a8:	f0 91 67 01 	lds	r31, 0x0167
+ 8ac:	20 85       	ldd	r18, Z+8	; 0x08
+ 8ae:	31 85       	ldd	r19, Z+9	; 0x09
+ 8b0:	bf 01       	movw	r22, r30
+ 8b2:	f9 01       	movw	r30, r18
+ 8b4:	09 95       	icall
+ 8b6:	89 2b       	or	r24, r25
+ 8b8:	11 f0       	breq	.+4      	; 0x8be <puts+0x38>
+ 8ba:	cf ef       	ldi	r28, 0xFF	; 255
+ 8bc:	df ef       	ldi	r29, 0xFF	; 255
+ 8be:	f8 01       	movw	r30, r16
+ 8c0:	81 91       	ld	r24, Z+
+ 8c2:	8f 01       	movw	r16, r30
+ 8c4:	88 23       	and	r24, r24
+ 8c6:	71 f7       	brne	.-36     	; 0x8a4 <puts+0x1e>
+ 8c8:	e0 91 66 01 	lds	r30, 0x0166
+ 8cc:	f0 91 67 01 	lds	r31, 0x0167
+ 8d0:	20 85       	ldd	r18, Z+8	; 0x08
+ 8d2:	31 85       	ldd	r19, Z+9	; 0x09
+ 8d4:	8a e0       	ldi	r24, 0x0A	; 10
+ 8d6:	bf 01       	movw	r22, r30
+ 8d8:	f9 01       	movw	r30, r18
+ 8da:	09 95       	icall
+ 8dc:	89 2b       	or	r24, r25
+ 8de:	11 f0       	breq	.+4      	; 0x8e4 <puts+0x5e>
+ 8e0:	cf ef       	ldi	r28, 0xFF	; 255
+ 8e2:	df ef       	ldi	r29, 0xFF	; 255
+ 8e4:	ce 01       	movw	r24, r28
+ 8e6:	df 91       	pop	r29
+ 8e8:	cf 91       	pop	r28
+ 8ea:	1f 91       	pop	r17
+ 8ec:	0f 91       	pop	r16
+ 8ee:	08 95       	ret
+
+000008f0 <_exit>:
+ 8f0:	f8 94       	cli
+
+000008f2 <__stop_program>:
+ 8f2:	ff cf       	rjmp	.-2      	; 0x8f2 <__stop_program>

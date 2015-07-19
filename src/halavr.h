@@ -1,9 +1,16 @@
-/*
- * halavr.h
+/*************************************************************
+ *  @file halavr.h
+ *  @brief Konkrete AVR-Implementierung für die Hardware-Abstraktions-Schicht
+ *  	   für epsilonRTOS
+ *  @author Joscha Ihl vision.josh@gmail.com
+ *  @version 0.1
+ *  @date 27.04.2015
  *
- *  Created on: 27.04.2015
- *      Author: joscha
- */
+ *  Projekt     : EpsilonRTOS
+ *
+ *  This code is distributed under the GNU Public License
+ *  which can be found at http://www.gnu.org/licenses/gpl.txt
+ *************************************************************/
 
 #ifndef HALAVR_H_
 #define HALAVR_H_

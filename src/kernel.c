@@ -1,9 +1,16 @@
-/*
- * kernel.c
+/*************************************************************
+ *  @file kernel.c
+ *  @brief Betriebssystemkern
+ *  	   für epsilonRTOS
+ *  @author Joscha Ihl vision.josh@gmail.com
+ *  @version 0.1
  *
- *  Created on: 24.04.2015
- *      Author: joscha
- */
+ *  Projekt     : EpsilonRTOS
+ *  @date 27.04.2015
+ *
+ *  This code is distributed under the GNU Public License
+ *  which can be found at http://www.gnu.org/licenses/gpl.txt
+ *************************************************************/
 
 #include "kernel.h"
 

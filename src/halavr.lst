@@ -7,14 +7,14 @@
    7               	__zero_reg__ = 1
    9               		.text
   10               	.Ltext0:
-  93               	.Letext0:
+ 116               	.Letext0:
 DEFINED SYMBOLS
                             *ABS*:00000000 halavr.c
-/tmp/user/501/ccxRIMWW.s:2      *ABS*:0000003f __SREG__
-/tmp/user/501/ccxRIMWW.s:3      *ABS*:0000003e __SP_H__
-/tmp/user/501/ccxRIMWW.s:4      *ABS*:0000003d __SP_L__
-/tmp/user/501/ccxRIMWW.s:5      *ABS*:00000034 __CCP__
-/tmp/user/501/ccxRIMWW.s:6      *ABS*:00000000 __tmp_reg__
-/tmp/user/501/ccxRIMWW.s:7      *ABS*:00000001 __zero_reg__
+/tmp/user/501/ccomWm8z.s:2      *ABS*:0000003f __SREG__
+/tmp/user/501/ccomWm8z.s:3      *ABS*:0000003e __SP_H__
+/tmp/user/501/ccomWm8z.s:4      *ABS*:0000003d __SP_L__
+/tmp/user/501/ccomWm8z.s:5      *ABS*:00000034 __CCP__
+/tmp/user/501/ccomWm8z.s:6      *ABS*:00000000 __tmp_reg__
+/tmp/user/501/ccomWm8z.s:7      *ABS*:00000001 __zero_reg__
 
 NO UNDEFINED SYMBOLS

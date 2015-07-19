@@ -7,3763 +7,739 @@
    7               	__zero_reg__ = 1
    9               		.text
   10               	.Ltext0:
-  27               		.lcomm ucunit_checks_failed,2
-  28               		.lcomm ucunit_checks_passed,2
-  29               		.lcomm ucunit_testcases_failed,2
-  30               		.lcomm ucunit_testcases_passed,2
-  31               		.lcomm ucunit_testcases_failed_checks,2
-  32               		.lcomm ucunit_checklist_failed_checks,2
-  33               		.lcomm ucunit_action,2
-  34               		.lcomm ucunit_index,2
- 125               		.data
- 126               	.LC0:
- 127 0000 0A3D 3D3D 		.string	"\n======================================\n"
- 127      3D3D 3D3D 
- 127      3D3D 3D3D 
- 127      3D3D 3D3D 
- 127      3D3D 3D3D 
- 128               	.LC1:
- 129 0029 4445 4D4F 		.string	"DEMO:Simple Checks"
- 129      3A53 696D 
- 129      706C 6520 
- 129      4368 6563 
- 129      6B73 00
- 130               	.LC2:
- 131 003c 7469 6D65 		.string	"timetest.c"
- 131      7465 7374 
- 131      2E63 00
- 132               	.LC3:
- 133 0047 3A00      		.string	":"
- 134               	.LC4:
- 135 0049 3233 00   		.string	"23"
- 136               	.LC5:
- 137 004c 3A20 7061 		.string	": passed:"
- 137      7373 6564 
- 137      3A00 
- 138               	.LC6:
- 139 0056 4973 4571 		.string	"IsEqual"
- 139      7561 6C00 
- 140               	.LC7:
- 141 005e 2800      		.string	"("
- 142               	.LC8:
- 143 0060 302C 6100 		.string	"0,a"
- 144               	.LC9:
- 145 0064 290A 00   		.string	")\n"
- 146               	.LC10:
- 147 0067 3A20 6661 		.string	": failed:"
- 147      696C 6564 
- 147      3A00 
- 148               	.LC11:
- 149 0071 3234 00   		.string	"24"
- 150               	.LC12:
- 151 0074 302C 6200 		.string	"0,b"
- 152               	.LC13:
- 153 0078 3235 00   		.string	"25"
- 154               	.LC14:
- 155 007b 302C 6300 		.string	"0,c"
- 156               	.LC15:
- 157 007f 3237 00   		.string	"27"
- 158               	.LC16:
- 159 0082 302C 2831 		.string	"0,(1-1)"
- 159      2D31 2900 
- 160               	.LC17:
- 161 008a 3238 00   		.string	"28"
- 162               	.LC18:
- 163 008d 302C 282D 		.string	"0,(-1+1)"
- 163      312B 3129 
- 163      00
- 164               	.LC19:
- 165 0096 3239 00   		.string	"29"
- 166               	.LC20:
- 167 0099 2D31 2C28 		.string	"-1,(-2+1)"
- 167      2D32 2B31 
- 167      2900 
- 168               	.LC21:
- 169 00a3 3331 00   		.string	"31"
- 170               	.LC22:
- 171 00a6 4973 4E75 		.string	"IsNull"
- 171      6C6C 00
- 172               	.LC23:
- 173 00ad 7300      		.string	"s"
- 174               	.LC24:
- 175 00af 3D3D 3D3D 		.string	"======================================\n"
- 175      3D3D 3D3D 
- 175      3D3D 3D3D 
- 175      3D3D 3D3D 
- 175      3D3D 3D3D 
- 176               	.LC25:
- 177 00d7 5465 7374 		.string	"Testcase passed.\n"
- 177      6361 7365 
- 177      2070 6173 
- 177      7365 642E 
- 177      0A00 
- 178               	.LC26:
- 179 00e9 3332 00   		.string	"32"
- 180               	.LC27:
- 181 00ec 456E 6454 		.string	"EndTestcase"
- 181      6573 7463 
- 181      6173 6500 
- 182               	.LC28:
- 183 00f8 00        		.string	""
- 184               		.text
- 187               	Test_BasicChecksDemo:
-   1:timetest.c    **** #include "System.h"
-   2:timetest.c    **** #include "ucunit.h"
-   3:timetest.c    **** 
-   4:timetest.c    **** #include "kernel.h"
-   5:timetest.c    **** 
-   6:timetest.c    **** #define DEFAULTPORT PORTB
-   7:timetest.c    **** #define DEFAULTDDR DDRB
-   8:timetest.c    **** #define TASKAPIN PB0
-   9:timetest.c    **** #define TASKBPIN PB1
-  10:timetest.c    **** #define TASKCPIN PB2
-  11:timetest.c    **** #define TASKDPIN PB3
-  12:timetest.c    **** #define TASKEPIN PB4
+ 130               	.global	setup
+ 132               	setup:
+   1:timetest.c    **** #include "kernel.h"
+   2:timetest.c    **** #include "test.h"
+   3:timetest.c    **** #include <stdlib.h>
+   4:timetest.c    **** 
+   5:timetest.c    **** #define DEFAULTPORT PORTB
+   6:timetest.c    **** #define DEFAULTDDR DDRB
+   7:timetest.c    **** #define TASKAPIN PB0
+   8:timetest.c    **** #define TASKBPIN PB1
+   9:timetest.c    **** #define TASKCPIN PB2
+  10:timetest.c    **** #define TASKDPIN PB3
+  11:timetest.c    **** #define TASKEPIN PB4
+  12:timetest.c    **** 
   13:timetest.c    **** 
   14:timetest.c    **** 
-  15:timetest.c    **** static void Test_BasicChecksDemo(void)
+  15:timetest.c    **** void setup(void)
   16:timetest.c    **** {
- 188               	tion
- 189               	Test_BasicChecksDemo:
- 191 0000 DF93      	.LM0:
- 192 0002 CF93      	.LFBB1:
- 193 0004 CDB7      		push r29
- 194 0006 DEB7      		push r28
- 195 0008 2897      		in r28,__SP_L__
- 196 000a 0FB6      		in r29,__SP_H__
- 197 000c F894      		sbiw r28,8
- 198 000e DEBF      		in __tmp_reg__,__SREG__
- 199 0010 0FBE      		cli
- 200 0012 CDBF      		out __SP_H__,r29
- 201               		out __SREG__,__tmp_reg__
- 202               		out __SP_L__,r28
-  17:timetest.c    ****     char * s = NULL;
- 203               	 __SP_L__,r28
- 204               	/* prologue: function */
- 205 0014 1886      	/* frame size = 8 */
-  18:timetest.c    ****     int a = 0;
- 207               	n	68,0,17,.LM1-.LFBB1
- 208               	.LM1:
- 209 0018 1E82      		std Y+8,__zero_reg__
- 210 001a 1D82      		std Y+7,__zero_reg__
-  19:timetest.c    ****     int b = 0;
- 211               		std Y+7,__zero_reg__
- 213 001c 1C82      	.LM2:
- 214 001e 1B82      		std Y+6,__zero_reg__
-  20:timetest.c    ****     int c = 0;
- 215               	std Y+6,__zero_reg__
- 216               		std Y+5,__zero_reg__
- 218 0022 1982      	.LM3:
-  21:timetest.c    **** 
-  22:timetest.c    ****     UCUNIT_TestcaseBegin("DEMO:Simple Checks");
- 219               	,.LM3-.LFBB1
- 220               	.LM3:
- 221 0024 80E0      		std Y+4,__zero_reg__
- 222 0026 90E0      		std Y+3,__zero_reg__
- 224 002a 80E0      	.LM4:
- 225 002c 90E0      		std Y+2,__zero_reg__
- 226 002e 00D0      		std Y+1,__zero_reg__
- 228 0032 90E0      	.LM5:
- 229 0034 00D0      		ldi r24,lo8(.LC0)
- 230 0036 8091 0000 		ldi r25,hi8(.LC0)
- 231 003a 9091 0000 		rcall System_WriteString
- 232 003e 9093 0000 		ldi r24,lo8(.LC1)
- 233 0042 8093 0000 		ldi r25,hi8(.LC1)
-  23:timetest.c    ****     UCUNIT_CheckIsEqual( 0, a ); /* Pass*/
- 234               	(.LC1)
- 235               		rcall System_WriteString
- 236 0046 8D81      		ldi r24,lo8(.LC0)
- 237 0048 9E81      		ldi r25,hi8(.LC0)
- 238 004a 0097      		rcall System_WriteString
- 239 004c 01F4      		lds r24,ucunit_checks_failed
- 240 004e 80E0      		lds r25,(ucunit_checks_failed)+1
- 241 0050 90E0      		sts (ucunit_testcases_failed_checks)+1,r25
- 242 0052 00D0      		sts ucunit_testcases_failed_checks,r24
- 244 0056 90E0      	.LM6:
- 245 0058 00D0      		ldd r24,Y+5
- 246 005a 80E0      		ldd r25,Y+6
- 247 005c 90E0      		sbiw r24,0
- 248 005e 00D0      		brne .L2
- 249 0060 80E0      		ldi r24,lo8(.LC2)
- 250 0062 90E0      		ldi r25,hi8(.LC2)
- 251 0064 00D0      		rcall System_WriteString
- 252 0066 80E0      		ldi r24,lo8(.LC3)
- 253 0068 90E0      		ldi r25,hi8(.LC3)
- 254 006a 00D0      		rcall System_WriteString
- 255 006c 80E0      		ldi r24,lo8(.LC4)
- 256 006e 90E0      		ldi r25,hi8(.LC4)
- 257 0070 00D0      		rcall System_WriteString
- 258 0072 80E0      		ldi r24,lo8(.LC5)
- 259 0074 90E0      		ldi r25,hi8(.LC5)
- 260 0076 00D0      		rcall System_WriteString
- 261 0078 80E0      		ldi r24,lo8(.LC6)
- 262 007a 90E0      		ldi r25,hi8(.LC6)
- 263 007c 00D0      		rcall System_WriteString
- 264 007e 8091 0000 		ldi r24,lo8(.LC7)
- 265 0082 9091 0000 		ldi r25,hi8(.LC7)
- 266 0086 0196      		rcall System_WriteString
- 267 0088 9093 0000 		ldi r24,lo8(.LC8)
- 268 008c 8093 0000 		ldi r25,hi8(.LC8)
- 269 0090 00C0      		rcall System_WriteString
- 270               		ldi r24,lo8(.LC9)
- 271 0092 8091 0000 		ldi r25,hi8(.LC9)
- 272 0096 9091 0000 		rcall System_WriteString
- 273 009a 8230      		lds r24,ucunit_checks_passed
- 274 009c 9105      		lds r25,(ucunit_checks_passed)+1
- 275 009e 01F4      		adiw r24,1
- 276 00a0 00D0      		sts (ucunit_checks_passed)+1,r25
- 277               		sts ucunit_checks_passed,r24
- 278 00a2 80E0      		rjmp .L3
- 279 00a4 90E0      	.L2:
- 280 00a6 00D0      		lds r24,ucunit_action
- 281 00a8 80E0      		lds r25,(ucunit_action)+1
- 282 00aa 90E0      		cpi r24,2
- 283 00ac 00D0      		cpc r25,__zero_reg__
- 284 00ae 80E0      		brne .L4
- 285 00b0 90E0      		rcall System_Safestate
- 286 00b2 00D0      	.L4:
- 287 00b4 80E0      		ldi r24,lo8(.LC2)
- 288 00b6 90E0      		ldi r25,hi8(.LC2)
- 289 00b8 00D0      		rcall System_WriteString
- 290 00ba 80E0      		ldi r24,lo8(.LC3)
- 291 00bc 90E0      		ldi r25,hi8(.LC3)
- 292 00be 00D0      		rcall System_WriteString
- 293 00c0 80E0      		ldi r24,lo8(.LC4)
- 294 00c2 90E0      		ldi r25,hi8(.LC4)
- 295 00c4 00D0      		rcall System_WriteString
- 296 00c6 80E0      		ldi r24,lo8(.LC10)
- 297 00c8 90E0      		ldi r25,hi8(.LC10)
- 298 00ca 00D0      		rcall System_WriteString
- 299 00cc 80E0      		ldi r24,lo8(.LC6)
- 300 00ce 90E0      		ldi r25,hi8(.LC6)
- 301 00d0 00D0      		rcall System_WriteString
- 302 00d2 8091 0000 		ldi r24,lo8(.LC7)
- 303 00d6 9091 0000 		ldi r25,hi8(.LC7)
- 304 00da 0196      		rcall System_WriteString
- 305 00dc 9093 0000 		ldi r24,lo8(.LC8)
- 306 00e0 8093 0000 		ldi r25,hi8(.LC8)
- 307 00e4 8091 0000 		rcall System_WriteString
- 308 00e8 9091 0000 		ldi r24,lo8(.LC9)
- 309 00ec 0196      		ldi r25,hi8(.LC9)
- 310 00ee 9093 0000 		rcall System_WriteString
- 311 00f2 8093 0000 		lds r24,ucunit_checks_failed
- 312               		lds r25,(ucunit_checks_failed)+1
-  24:timetest.c    ****     UCUNIT_CheckIsEqual( 0, b ); /* Pass */
- 313               	ecks_failed)+1
- 314               		adiw r24,1
- 315 00f6 8B81      		sts (ucunit_checks_failed)+1,r25
- 316 00f8 9C81      		sts ucunit_checks_failed,r24
- 317 00fa 0097      		lds r24,ucunit_checklist_failed_checks
- 318 00fc 01F4      		lds r25,(ucunit_checklist_failed_checks)+1
- 319 00fe 80E0      		adiw r24,1
- 320 0100 90E0      		sts (ucunit_checklist_failed_checks)+1,r25
- 321 0102 00D0      		sts ucunit_checklist_failed_checks,r24
- 322 0104 80E0      	.L3:
- 324 0108 00D0      	.LM7:
- 325 010a 80E0      		ldd r24,Y+3
- 326 010c 90E0      		ldd r25,Y+4
- 327 010e 00D0      		sbiw r24,0
- 328 0110 80E0      		brne .L5
- 329 0112 90E0      		ldi r24,lo8(.LC2)
- 330 0114 00D0      		ldi r25,hi8(.LC2)
- 331 0116 80E0      		rcall System_WriteString
- 332 0118 90E0      		ldi r24,lo8(.LC3)
- 333 011a 00D0      		ldi r25,hi8(.LC3)
- 334 011c 80E0      		rcall System_WriteString
- 335 011e 90E0      		ldi r24,lo8(.LC11)
- 336 0120 00D0      		ldi r25,hi8(.LC11)
- 337 0122 80E0      		rcall System_WriteString
- 338 0124 90E0      		ldi r24,lo8(.LC5)
- 339 0126 00D0      		ldi r25,hi8(.LC5)
- 340 0128 80E0      		rcall System_WriteString
- 341 012a 90E0      		ldi r24,lo8(.LC6)
- 342 012c 00D0      		ldi r25,hi8(.LC6)
- 343 012e 8091 0000 		rcall System_WriteString
- 344 0132 9091 0000 		ldi r24,lo8(.LC7)
- 345 0136 0196      		ldi r25,hi8(.LC7)
- 346 0138 9093 0000 		rcall System_WriteString
- 347 013c 8093 0000 		ldi r24,lo8(.LC12)
- 348 0140 00C0      		ldi r25,hi8(.LC12)
- 349               		rcall System_WriteString
- 350 0142 8091 0000 		ldi r24,lo8(.LC9)
- 351 0146 9091 0000 		ldi r25,hi8(.LC9)
- 352 014a 8230      		rcall System_WriteString
- 353 014c 9105      		lds r24,ucunit_checks_passed
- 354 014e 01F4      		lds r25,(ucunit_checks_passed)+1
- 355 0150 00D0      		adiw r24,1
- 356               		sts (ucunit_checks_passed)+1,r25
- 357 0152 80E0      		sts ucunit_checks_passed,r24
- 358 0154 90E0      		rjmp .L6
- 359 0156 00D0      	.L5:
- 360 0158 80E0      		lds r24,ucunit_action
- 361 015a 90E0      		lds r25,(ucunit_action)+1
- 362 015c 00D0      		cpi r24,2
- 363 015e 80E0      		cpc r25,__zero_reg__
- 364 0160 90E0      		brne .L7
- 365 0162 00D0      		rcall System_Safestate
- 366 0164 80E0      	.L7:
- 367 0166 90E0      		ldi r24,lo8(.LC2)
- 368 0168 00D0      		ldi r25,hi8(.LC2)
- 369 016a 80E0      		rcall System_WriteString
- 370 016c 90E0      		ldi r24,lo8(.LC3)
- 371 016e 00D0      		ldi r25,hi8(.LC3)
- 372 0170 80E0      		rcall System_WriteString
- 373 0172 90E0      		ldi r24,lo8(.LC11)
- 374 0174 00D0      		ldi r25,hi8(.LC11)
- 375 0176 80E0      		rcall System_WriteString
- 376 0178 90E0      		ldi r24,lo8(.LC10)
- 377 017a 00D0      		ldi r25,hi8(.LC10)
- 378 017c 80E0      		rcall System_WriteString
- 379 017e 90E0      		ldi r24,lo8(.LC6)
- 380 0180 00D0      		ldi r25,hi8(.LC6)
- 381 0182 8091 0000 		rcall System_WriteString
- 382 0186 9091 0000 		ldi r24,lo8(.LC7)
- 383 018a 0196      		ldi r25,hi8(.LC7)
- 384 018c 9093 0000 		rcall System_WriteString
- 385 0190 8093 0000 		ldi r24,lo8(.LC12)
- 386 0194 8091 0000 		ldi r25,hi8(.LC12)
- 387 0198 9091 0000 		rcall System_WriteString
- 388 019c 0196      		ldi r24,lo8(.LC9)
- 389 019e 9093 0000 		ldi r25,hi8(.LC9)
- 390 01a2 8093 0000 		rcall System_WriteString
- 391               		lds r24,ucunit_checks_failed
-  25:timetest.c    ****     UCUNIT_CheckIsEqual( 0, c ); /* Pass */
- 392               	hecks_failed
- 393               		lds r25,(ucunit_checks_failed)+1
- 394 01a6 8981      		adiw r24,1
- 395 01a8 9A81      		sts (ucunit_checks_failed)+1,r25
- 396 01aa 0097      		sts ucunit_checks_failed,r24
- 397 01ac 01F4      		lds r24,ucunit_checklist_failed_checks
- 398 01ae 80E0      		lds r25,(ucunit_checklist_failed_checks)+1
- 399 01b0 90E0      		adiw r24,1
- 400 01b2 00D0      		sts (ucunit_checklist_failed_checks)+1,r25
- 401 01b4 80E0      		sts ucunit_checklist_failed_checks,r24
- 402 01b6 90E0      	.L6:
- 404 01ba 80E0      	.LM8:
- 405 01bc 90E0      		ldd r24,Y+1
- 406 01be 00D0      		ldd r25,Y+2
- 407 01c0 80E0      		sbiw r24,0
- 408 01c2 90E0      		brne .L8
- 409 01c4 00D0      		ldi r24,lo8(.LC2)
- 410 01c6 80E0      		ldi r25,hi8(.LC2)
- 411 01c8 90E0      		rcall System_WriteString
- 412 01ca 00D0      		ldi r24,lo8(.LC3)
- 413 01cc 80E0      		ldi r25,hi8(.LC3)
- 414 01ce 90E0      		rcall System_WriteString
- 415 01d0 00D0      		ldi r24,lo8(.LC13)
- 416 01d2 80E0      		ldi r25,hi8(.LC13)
- 417 01d4 90E0      		rcall System_WriteString
- 418 01d6 00D0      		ldi r24,lo8(.LC5)
- 419 01d8 80E0      		ldi r25,hi8(.LC5)
- 420 01da 90E0      		rcall System_WriteString
- 421 01dc 00D0      		ldi r24,lo8(.LC6)
- 422 01de 8091 0000 		ldi r25,hi8(.LC6)
- 423 01e2 9091 0000 		rcall System_WriteString
- 424 01e6 0196      		ldi r24,lo8(.LC7)
- 425 01e8 9093 0000 		ldi r25,hi8(.LC7)
- 426 01ec 8093 0000 		rcall System_WriteString
- 427 01f0 00C0      		ldi r24,lo8(.LC14)
- 428               		ldi r25,hi8(.LC14)
- 429 01f2 8091 0000 		rcall System_WriteString
- 430 01f6 9091 0000 		ldi r24,lo8(.LC9)
- 431 01fa 8230      		ldi r25,hi8(.LC9)
- 432 01fc 9105      		rcall System_WriteString
- 433 01fe 01F4      		lds r24,ucunit_checks_passed
- 434 0200 00D0      		lds r25,(ucunit_checks_passed)+1
- 435               		adiw r24,1
- 436 0202 80E0      		sts (ucunit_checks_passed)+1,r25
- 437 0204 90E0      		sts ucunit_checks_passed,r24
- 438 0206 00D0      		rjmp .L9
- 439 0208 80E0      	.L8:
- 440 020a 90E0      		lds r24,ucunit_action
- 441 020c 00D0      		lds r25,(ucunit_action)+1
- 442 020e 80E0      		cpi r24,2
- 443 0210 90E0      		cpc r25,__zero_reg__
- 444 0212 00D0      		brne .L10
- 445 0214 80E0      		rcall System_Safestate
- 446 0216 90E0      	.L10:
- 447 0218 00D0      		ldi r24,lo8(.LC2)
- 448 021a 80E0      		ldi r25,hi8(.LC2)
- 449 021c 90E0      		rcall System_WriteString
- 450 021e 00D0      		ldi r24,lo8(.LC3)
- 451 0220 80E0      		ldi r25,hi8(.LC3)
- 452 0222 90E0      		rcall System_WriteString
- 453 0224 00D0      		ldi r24,lo8(.LC13)
- 454 0226 80E0      		ldi r25,hi8(.LC13)
- 455 0228 90E0      		rcall System_WriteString
- 456 022a 00D0      		ldi r24,lo8(.LC10)
- 457 022c 80E0      		ldi r25,hi8(.LC10)
- 458 022e 90E0      		rcall System_WriteString
- 459 0230 00D0      		ldi r24,lo8(.LC6)
- 460 0232 8091 0000 		ldi r25,hi8(.LC6)
- 461 0236 9091 0000 		rcall System_WriteString
- 462 023a 0196      		ldi r24,lo8(.LC7)
- 463 023c 9093 0000 		ldi r25,hi8(.LC7)
- 464 0240 8093 0000 		rcall System_WriteString
- 465 0244 8091 0000 		ldi r24,lo8(.LC14)
- 466 0248 9091 0000 		ldi r25,hi8(.LC14)
- 467 024c 0196      		rcall System_WriteString
- 468 024e 9093 0000 		ldi r24,lo8(.LC9)
- 469 0252 8093 0000 		ldi r25,hi8(.LC9)
- 470               		rcall System_WriteString
-  26:timetest.c    **** 
-  27:timetest.c    ****     UCUNIT_CheckIsEqual( 0, (1-1) ); /* Pass */
- 471               	riteString
- 472               		lds r24,ucunit_checks_failed
- 473 0256 80E0      		lds r25,(ucunit_checks_failed)+1
- 474 0258 90E0      		adiw r24,1
- 475 025a 00D0      		sts (ucunit_checks_failed)+1,r25
- 476 025c 80E0      		sts ucunit_checks_failed,r24
- 477 025e 90E0      		lds r24,ucunit_checklist_failed_checks
- 478 0260 00D0      		lds r25,(ucunit_checklist_failed_checks)+1
- 479 0262 80E0      		adiw r24,1
- 480 0264 90E0      		sts (ucunit_checklist_failed_checks)+1,r25
- 481 0266 00D0      		sts ucunit_checklist_failed_checks,r24
- 482 0268 80E0      	.L9:
- 484 026c 00D0      	.LM9:
- 485 026e 80E0      		ldi r24,lo8(.LC2)
- 486 0270 90E0      		ldi r25,hi8(.LC2)
- 487 0272 00D0      		rcall System_WriteString
- 488 0274 80E0      		ldi r24,lo8(.LC3)
- 489 0276 90E0      		ldi r25,hi8(.LC3)
- 490 0278 00D0      		rcall System_WriteString
- 491 027a 80E0      		ldi r24,lo8(.LC15)
- 492 027c 90E0      		ldi r25,hi8(.LC15)
- 493 027e 00D0      		rcall System_WriteString
- 494 0280 80E0      		ldi r24,lo8(.LC5)
- 495 0282 90E0      		ldi r25,hi8(.LC5)
- 496 0284 00D0      		rcall System_WriteString
- 497 0286 8091 0000 		ldi r24,lo8(.LC6)
- 498 028a 9091 0000 		ldi r25,hi8(.LC6)
- 499 028e 0196      		rcall System_WriteString
- 500 0290 9093 0000 		ldi r24,lo8(.LC7)
- 501 0294 8093 0000 		ldi r25,hi8(.LC7)
-  28:timetest.c    ****     UCUNIT_CheckIsEqual( 0, (-1+1) ); /* Pass */
- 502               	,hi8(.LC7)
- 503               		rcall System_WriteString
- 504 0298 80E0      		ldi r24,lo8(.LC16)
- 505 029a 90E0      		ldi r25,hi8(.LC16)
- 506 029c 00D0      		rcall System_WriteString
- 507 029e 80E0      		ldi r24,lo8(.LC9)
- 508 02a0 90E0      		ldi r25,hi8(.LC9)
- 509 02a2 00D0      		rcall System_WriteString
- 510 02a4 80E0      		lds r24,ucunit_checks_passed
- 511 02a6 90E0      		lds r25,(ucunit_checks_passed)+1
- 512 02a8 00D0      		adiw r24,1
- 513 02aa 80E0      		sts (ucunit_checks_passed)+1,r25
- 514 02ac 90E0      		sts ucunit_checks_passed,r24
- 516 02b0 80E0      	.LM10:
- 517 02b2 90E0      		ldi r24,lo8(.LC2)
- 518 02b4 00D0      		ldi r25,hi8(.LC2)
- 519 02b6 80E0      		rcall System_WriteString
- 520 02b8 90E0      		ldi r24,lo8(.LC3)
- 521 02ba 00D0      		ldi r25,hi8(.LC3)
- 522 02bc 80E0      		rcall System_WriteString
- 523 02be 90E0      		ldi r24,lo8(.LC17)
- 524 02c0 00D0      		ldi r25,hi8(.LC17)
- 525 02c2 80E0      		rcall System_WriteString
- 526 02c4 90E0      		ldi r24,lo8(.LC5)
- 527 02c6 00D0      		ldi r25,hi8(.LC5)
- 528 02c8 8091 0000 		rcall System_WriteString
- 529 02cc 9091 0000 		ldi r24,lo8(.LC6)
- 530 02d0 0196      		ldi r25,hi8(.LC6)
- 531 02d2 9093 0000 		rcall System_WriteString
- 532 02d6 8093 0000 		ldi r24,lo8(.LC7)
-  29:timetest.c    ****     UCUNIT_CheckIsEqual( -1, (-2+1) ); /* Pass */
- 533               	24,lo8(.LC7)
- 534               		ldi r25,hi8(.LC7)
- 535 02da 80E0      		rcall System_WriteString
- 536 02dc 90E0      		ldi r24,lo8(.LC18)
- 537 02de 00D0      		ldi r25,hi8(.LC18)
- 538 02e0 80E0      		rcall System_WriteString
- 539 02e2 90E0      		ldi r24,lo8(.LC9)
- 540 02e4 00D0      		ldi r25,hi8(.LC9)
- 541 02e6 80E0      		rcall System_WriteString
- 542 02e8 90E0      		lds r24,ucunit_checks_passed
- 543 02ea 00D0      		lds r25,(ucunit_checks_passed)+1
- 544 02ec 80E0      		adiw r24,1
- 545 02ee 90E0      		sts (ucunit_checks_passed)+1,r25
- 546 02f0 00D0      		sts ucunit_checks_passed,r24
- 548 02f4 90E0      	.LM11:
- 549 02f6 00D0      		ldi r24,lo8(.LC2)
- 550 02f8 80E0      		ldi r25,hi8(.LC2)
- 551 02fa 90E0      		rcall System_WriteString
- 552 02fc 00D0      		ldi r24,lo8(.LC3)
- 553 02fe 80E0      		ldi r25,hi8(.LC3)
- 554 0300 90E0      		rcall System_WriteString
- 555 0302 00D0      		ldi r24,lo8(.LC19)
- 556 0304 80E0      		ldi r25,hi8(.LC19)
- 557 0306 90E0      		rcall System_WriteString
- 558 0308 00D0      		ldi r24,lo8(.LC5)
- 559 030a 8091 0000 		ldi r25,hi8(.LC5)
- 560 030e 9091 0000 		rcall System_WriteString
- 561 0312 0196      		ldi r24,lo8(.LC6)
- 562 0314 9093 0000 		ldi r25,hi8(.LC6)
- 563 0318 8093 0000 		rcall System_WriteString
-  30:timetest.c    **** 
-  31:timetest.c    ****     UCUNIT_CheckIsNull(s); /* Pass */
- 564               	m_WriteString
- 565               		ldi r24,lo8(.LC7)
- 566 031c 8F81      		ldi r25,hi8(.LC7)
- 567 031e 9885      		rcall System_WriteString
- 568 0320 0097      		ldi r24,lo8(.LC20)
- 569 0322 01F4      		ldi r25,hi8(.LC20)
- 570 0324 80E0      		rcall System_WriteString
- 571 0326 90E0      		ldi r24,lo8(.LC9)
- 572 0328 00D0      		ldi r25,hi8(.LC9)
- 573 032a 80E0      		rcall System_WriteString
- 574 032c 90E0      		lds r24,ucunit_checks_passed
- 575 032e 00D0      		lds r25,(ucunit_checks_passed)+1
- 576 0330 80E0      		adiw r24,1
- 577 0332 90E0      		sts (ucunit_checks_passed)+1,r25
- 578 0334 00D0      		sts ucunit_checks_passed,r24
- 580 0338 90E0      	.LM12:
- 581 033a 00D0      		ldd r24,Y+7
- 582 033c 80E0      		ldd r25,Y+8
- 583 033e 90E0      		sbiw r24,0
- 584 0340 00D0      		brne .L11
- 585 0342 80E0      		ldi r24,lo8(.LC2)
- 586 0344 90E0      		ldi r25,hi8(.LC2)
- 587 0346 00D0      		rcall System_WriteString
- 588 0348 80E0      		ldi r24,lo8(.LC3)
- 589 034a 90E0      		ldi r25,hi8(.LC3)
- 590 034c 00D0      		rcall System_WriteString
- 591 034e 80E0      		ldi r24,lo8(.LC21)
- 592 0350 90E0      		ldi r25,hi8(.LC21)
- 593 0352 00D0      		rcall System_WriteString
- 594 0354 8091 0000 		ldi r24,lo8(.LC5)
- 595 0358 9091 0000 		ldi r25,hi8(.LC5)
- 596 035c 0196      		rcall System_WriteString
- 597 035e 9093 0000 		ldi r24,lo8(.LC22)
- 598 0362 8093 0000 		ldi r25,hi8(.LC22)
- 599 0366 00C0      		rcall System_WriteString
- 600               		ldi r24,lo8(.LC7)
- 601 0368 8091 0000 		ldi r25,hi8(.LC7)
- 602 036c 9091 0000 		rcall System_WriteString
- 603 0370 8230      		ldi r24,lo8(.LC23)
- 604 0372 9105      		ldi r25,hi8(.LC23)
- 605 0374 01F4      		rcall System_WriteString
- 606 0376 00D0      		ldi r24,lo8(.LC9)
- 607               		ldi r25,hi8(.LC9)
- 608 0378 80E0      		rcall System_WriteString
- 609 037a 90E0      		lds r24,ucunit_checks_passed
- 610 037c 00D0      		lds r25,(ucunit_checks_passed)+1
- 611 037e 80E0      		adiw r24,1
- 612 0380 90E0      		sts (ucunit_checks_passed)+1,r25
- 613 0382 00D0      		sts ucunit_checks_passed,r24
- 614 0384 80E0      		rjmp .L12
- 615 0386 90E0      	.L11:
- 616 0388 00D0      		lds r24,ucunit_action
- 617 038a 80E0      		lds r25,(ucunit_action)+1
- 618 038c 90E0      		cpi r24,2
- 619 038e 00D0      		cpc r25,__zero_reg__
- 620 0390 80E0      		brne .L13
- 621 0392 90E0      		rcall System_Safestate
- 622 0394 00D0      	.L13:
- 623 0396 80E0      		ldi r24,lo8(.LC2)
- 624 0398 90E0      		ldi r25,hi8(.LC2)
- 625 039a 00D0      		rcall System_WriteString
- 626 039c 80E0      		ldi r24,lo8(.LC3)
- 627 039e 90E0      		ldi r25,hi8(.LC3)
- 628 03a0 00D0      		rcall System_WriteString
- 629 03a2 80E0      		ldi r24,lo8(.LC21)
- 630 03a4 90E0      		ldi r25,hi8(.LC21)
- 631 03a6 00D0      		rcall System_WriteString
- 632 03a8 8091 0000 		ldi r24,lo8(.LC10)
- 633 03ac 9091 0000 		ldi r25,hi8(.LC10)
- 634 03b0 0196      		rcall System_WriteString
- 635 03b2 9093 0000 		ldi r24,lo8(.LC22)
- 636 03b6 8093 0000 		ldi r25,hi8(.LC22)
- 637 03ba 8091 0000 		rcall System_WriteString
- 638 03be 9091 0000 		ldi r24,lo8(.LC7)
- 639 03c2 0196      		ldi r25,hi8(.LC7)
- 640 03c4 9093 0000 		rcall System_WriteString
- 641 03c8 8093 0000 		ldi r24,lo8(.LC23)
- 642               		ldi r25,hi8(.LC23)
-  32:timetest.c    ****     UCUNIT_TestcaseEnd();
- 643               	5,hi8(.LC23)
- 644               		rcall System_WriteString
- 645 03cc 80E0      		ldi r24,lo8(.LC9)
- 646 03ce 90E0      		ldi r25,hi8(.LC9)
- 647 03d0 00D0      		rcall System_WriteString
- 648 03d2 2091 0000 		lds r24,ucunit_checks_failed
- 649 03d6 3091 0000 		lds r25,(ucunit_checks_failed)+1
- 650 03da 8091 0000 		adiw r24,1
- 651 03de 9091 0000 		sts (ucunit_checks_failed)+1,r25
- 652 03e2 2817      		sts ucunit_checks_failed,r24
- 653 03e4 3907      		lds r24,ucunit_checklist_failed_checks
- 654 03e6 01F4      		lds r25,(ucunit_checklist_failed_checks)+1
- 655 03e8 80E0      		adiw r24,1
- 656 03ea 90E0      		sts (ucunit_checklist_failed_checks)+1,r25
- 657 03ec 00D0      		sts ucunit_checklist_failed_checks,r24
- 658 03ee 8091 0000 	.L12:
- 660 03f6 0196      	.LM13:
- 661 03f8 9093 0000 		ldi r24,lo8(.LC24)
- 662 03fc 8093 0000 		ldi r25,hi8(.LC24)
- 663 0400 00C0      		rcall System_WriteString
- 664               		lds r18,ucunit_testcases_failed_checks
- 665 0402 80E0      		lds r19,(ucunit_testcases_failed_checks)+1
- 666 0404 90E0      		lds r24,ucunit_checks_failed
- 667 0406 00D0      		lds r25,(ucunit_checks_failed)+1
- 668 0408 80E0      		cp r18,r24
- 669 040a 90E0      		cpc r19,r25
- 670 040c 00D0      		brne .L14
- 671 040e 80E0      		ldi r24,lo8(.LC25)
- 672 0410 90E0      		ldi r25,hi8(.LC25)
- 673 0412 00D0      		rcall System_WriteString
- 674 0414 80E0      		lds r24,ucunit_testcases_passed
- 675 0416 90E0      		lds r25,(ucunit_testcases_passed)+1
- 676 0418 00D0      		adiw r24,1
- 677 041a 80E0      		sts (ucunit_testcases_passed)+1,r25
- 678 041c 90E0      		sts ucunit_testcases_passed,r24
- 679 041e 00D0      		rjmp .L15
- 680 0420 80E0      	.L14:
- 681 0422 90E0      		ldi r24,lo8(.LC2)
- 682 0424 00D0      		ldi r25,hi8(.LC2)
- 683 0426 80E0      		rcall System_WriteString
- 684 0428 90E0      		ldi r24,lo8(.LC3)
- 685 042a 00D0      		ldi r25,hi8(.LC3)
- 686 042c 80E0      		rcall System_WriteString
- 687 042e 90E0      		ldi r24,lo8(.LC26)
- 688 0430 00D0      		ldi r25,hi8(.LC26)
- 689 0432 8091 0000 		rcall System_WriteString
- 690 0436 9091 0000 		ldi r24,lo8(.LC10)
- 691 043a 0196      		ldi r25,hi8(.LC10)
- 692 043c 9093 0000 		rcall System_WriteString
- 693 0440 8093 0000 		ldi r24,lo8(.LC27)
- 694               		ldi r25,hi8(.LC27)
- 695 0444 80E0      		rcall System_WriteString
- 696 0446 90E0      		ldi r24,lo8(.LC7)
- 697 0448 00D0      		ldi r25,hi8(.LC7)
- 698               		rcall System_WriteString
-  33:timetest.c    **** }
- 699               	String
- 700               		ldi r24,lo8(.LC28)
- 701 044a 2896      		ldi r25,hi8(.LC28)
- 702 044c 0FB6      		rcall System_WriteString
- 703 044e F894      		ldi r24,lo8(.LC9)
- 704 0450 DEBF      		ldi r25,hi8(.LC9)
- 705 0452 0FBE      		rcall System_WriteString
- 706 0454 CDBF      		lds r24,ucunit_testcases_failed
- 707 0456 CF91      		lds r25,(ucunit_testcases_failed)+1
- 708 0458 DF91      		adiw r24,1
- 709 045a 0895      		sts (ucunit_testcases_failed)+1,r25
- 710               		sts ucunit_testcases_failed,r24
- 711               	.L15:
- 712               		ldi r24,lo8(.LC24)
- 713               		ldi r25,hi8(.LC24)
- 714               		rcall System_WriteString
- 715               	/* epilogue start */
- 717               	.LM14:
- 718               		adiw r28,8
- 719               		in __tmp_reg__,__SREG__
- 720 00f9 4445 4D4F 		cli
- 720      3A43 6865 
- 720      636B 696E 
- 720      6720 706F 
- 720      696E 7465 
- 721               		out __SP_H__,r29
- 722 0110 3431 00   		out __SREG__,__tmp_reg__
- 723               		out __SP_L__,r28
- 724 0113 3436 00   		pop r28
- 725               		pop r29
- 726 0116 4973 4E6F 		ret
- 726      744E 756C 
- 726      6C00 
- 734 0148 3531 00   	.Lscope1:
- 735               		.data
- 736 014b 3532 00   	.LC29:
- 737               		.string	"DEMO:Checking pointers"
- 738 014e 5374 7269 	.LC30:
- 738      6E67 2073 
- 738      7461 7274 
- 738      7320 6E6F 
- 738      7420 7769 
- 739               		.string	"41"
- 740 0169 3534 00   	.LC31:
- 741               		.string	"46"
- 742               	.LC32:
- 743               		.string	"IsNotNull"
- 744               	.LC33:
-  34:timetest.c    **** 
-  35:timetest.c    **** static void Test_PointersDemo(void)
-  36:timetest.c    **** {
- 745               	.LC33:
- 746               		.string	"47"
- 747               	.LC34:
- 748 045c DF93      		.string	"No end-of-string found"
- 749 045e CF93      	.LC35:
- 750 0460 00D0      		.string	"Hello World!\n"
- 751 0462 CDB7      	.LC36:
- 752 0464 DEB7      		.string	"51"
- 753               	.LC37:
- 754               		.string	"52"
-  37:timetest.c    ****     char * s = NULL;
- 755               	C37:
- 756               		.string	"52"
- 757 0466 1A82      	.LC38:
- 758 0468 1982      		.string	"String starts not with 'H'"
-  38:timetest.c    **** 
-  39:timetest.c    ****     UCUNIT_TestcaseBegin("DEMO:Checking pointers");
- 759               	g starts not with 'H'"
- 760               	.LC39:
- 761 046a 80E0      		.string	"54"
- 762 046c 90E0      		.text
- 765 0472 90E0      	Test_PointersDemo:
- 767 0476 80E0      	.LM15:
- 768 0478 90E0      	.LFBB2:
- 769 047a 00D0      		push r29
- 770 047c 8091 0000 		push r28
- 771 0480 9091 0000 		rcall .
- 772 0484 9093 0000 		in r28,__SP_L__
- 773 0488 8093 0000 		in r29,__SP_H__
-  40:timetest.c    **** 
-  41:timetest.c    ****     UCUNIT_CheckIsNull(s); /* Pass */
- 774               	9,__SP_H__
- 775               	/* prologue: function */
- 776 048c 8981      	/* frame size = 2 */
- 778 0490 0097      	.LM16:
- 779 0492 01F4      		std Y+2,__zero_reg__
- 780 0494 80E0      		std Y+1,__zero_reg__
- 782 0498 00D0      	.LM17:
- 783 049a 80E0      		ldi r24,lo8(.LC0)
- 784 049c 90E0      		ldi r25,hi8(.LC0)
- 785 049e 00D0      		rcall System_WriteString
- 786 04a0 80E0      		ldi r24,lo8(.LC29)
- 787 04a2 90E0      		ldi r25,hi8(.LC29)
- 788 04a4 00D0      		rcall System_WriteString
- 789 04a6 80E0      		ldi r24,lo8(.LC0)
- 790 04a8 90E0      		ldi r25,hi8(.LC0)
- 791 04aa 00D0      		rcall System_WriteString
- 792 04ac 80E0      		lds r24,ucunit_checks_failed
- 793 04ae 90E0      		lds r25,(ucunit_checks_failed)+1
- 794 04b0 00D0      		sts (ucunit_testcases_failed_checks)+1,r25
- 795 04b2 80E0      		sts ucunit_testcases_failed_checks,r24
- 797 04b6 00D0      	.LM18:
- 798 04b8 80E0      		ldd r24,Y+1
- 799 04ba 90E0      		ldd r25,Y+2
- 800 04bc 00D0      		sbiw r24,0
- 801 04be 80E0      		brne .L18
- 802 04c0 90E0      		ldi r24,lo8(.LC2)
- 803 04c2 00D0      		ldi r25,hi8(.LC2)
- 804 04c4 8091 0000 		rcall System_WriteString
- 805 04c8 9091 0000 		ldi r24,lo8(.LC3)
- 806 04cc 0196      		ldi r25,hi8(.LC3)
- 807 04ce 9093 0000 		rcall System_WriteString
- 808 04d2 8093 0000 		ldi r24,lo8(.LC30)
- 809 04d6 00C0      		ldi r25,hi8(.LC30)
- 810               		rcall System_WriteString
- 811 04d8 8091 0000 		ldi r24,lo8(.LC5)
- 812 04dc 9091 0000 		ldi r25,hi8(.LC5)
- 813 04e0 8230      		rcall System_WriteString
- 814 04e2 9105      		ldi r24,lo8(.LC22)
- 815 04e4 01F4      		ldi r25,hi8(.LC22)
- 816 04e6 00D0      		rcall System_WriteString
- 817               		ldi r24,lo8(.LC7)
- 818 04e8 80E0      		ldi r25,hi8(.LC7)
- 819 04ea 90E0      		rcall System_WriteString
- 820 04ec 00D0      		ldi r24,lo8(.LC23)
- 821 04ee 80E0      		ldi r25,hi8(.LC23)
- 822 04f0 90E0      		rcall System_WriteString
- 823 04f2 00D0      		ldi r24,lo8(.LC9)
- 824 04f4 80E0      		ldi r25,hi8(.LC9)
- 825 04f6 90E0      		rcall System_WriteString
- 826 04f8 00D0      		lds r24,ucunit_checks_passed
- 827 04fa 80E0      		lds r25,(ucunit_checks_passed)+1
- 828 04fc 90E0      		adiw r24,1
- 829 04fe 00D0      		sts (ucunit_checks_passed)+1,r25
- 830 0500 80E0      		sts ucunit_checks_passed,r24
- 831 0502 90E0      		rjmp .L19
- 832 0504 00D0      	.L18:
- 833 0506 80E0      		lds r24,ucunit_action
- 834 0508 90E0      		lds r25,(ucunit_action)+1
- 835 050a 00D0      		cpi r24,2
- 836 050c 80E0      		cpc r25,__zero_reg__
- 837 050e 90E0      		brne .L20
- 838 0510 00D0      		rcall System_Safestate
- 839 0512 80E0      	.L20:
- 840 0514 90E0      		ldi r24,lo8(.LC2)
- 841 0516 00D0      		ldi r25,hi8(.LC2)
- 842 0518 8091 0000 		rcall System_WriteString
- 843 051c 9091 0000 		ldi r24,lo8(.LC3)
- 844 0520 0196      		ldi r25,hi8(.LC3)
- 845 0522 9093 0000 		rcall System_WriteString
- 846 0526 8093 0000 		ldi r24,lo8(.LC30)
- 847 052a 8091 0000 		ldi r25,hi8(.LC30)
- 848 052e 9091 0000 		rcall System_WriteString
- 849 0532 0196      		ldi r24,lo8(.LC10)
- 850 0534 9093 0000 		ldi r25,hi8(.LC10)
- 851 0538 8093 0000 		rcall System_WriteString
- 852               		ldi r24,lo8(.LC22)
-  42:timetest.c    **** 
-  43:timetest.c    ****     /* Empty string has a 0 byte/word as end of string */
-  44:timetest.c    ****     s = "";
- 853               	r24,lo8(.LC22)
- 854               		ldi r25,hi8(.LC22)
- 855 053c 80E0      		rcall System_WriteString
- 856 053e 90E0      		ldi r24,lo8(.LC7)
- 857 0540 9A83      		ldi r25,hi8(.LC7)
- 858 0542 8983      		rcall System_WriteString
-  45:timetest.c    **** 
-  46:timetest.c    ****     UCUNIT_CheckIsNotNull(s); /* Pass */
- 859               	m_WriteString
- 860               		ldi r24,lo8(.LC23)
- 861 0544 8981      		ldi r25,hi8(.LC23)
- 862 0546 9A81      		rcall System_WriteString
- 863 0548 0097      		ldi r24,lo8(.LC9)
- 864 054a 01F0      		ldi r25,hi8(.LC9)
- 865 054c 80E0      		rcall System_WriteString
- 866 054e 90E0      		lds r24,ucunit_checks_failed
- 867 0550 00D0      		lds r25,(ucunit_checks_failed)+1
- 868 0552 80E0      		adiw r24,1
- 869 0554 90E0      		sts (ucunit_checks_failed)+1,r25
- 870 0556 00D0      		sts ucunit_checks_failed,r24
- 871 0558 80E0      		lds r24,ucunit_checklist_failed_checks
- 872 055a 90E0      		lds r25,(ucunit_checklist_failed_checks)+1
- 873 055c 00D0      		adiw r24,1
- 874 055e 80E0      		sts (ucunit_checklist_failed_checks)+1,r25
- 875 0560 90E0      		sts ucunit_checklist_failed_checks,r24
- 876 0562 00D0      	.L19:
- 878 0566 90E0      	.LM19:
- 879 0568 00D0      		ldi r24,lo8(.LC28)
- 880 056a 80E0      		ldi r25,hi8(.LC28)
- 881 056c 90E0      		std Y+2,r25
- 882 056e 00D0      		std Y+1,r24
- 884 0572 90E0      	.LM20:
- 885 0574 00D0      		ldd r24,Y+1
- 886 0576 80E0      		ldd r25,Y+2
- 887 0578 90E0      		sbiw r24,0
- 888 057a 00D0      		breq .L21
- 889 057c 8091 0000 		ldi r24,lo8(.LC2)
- 890 0580 9091 0000 		ldi r25,hi8(.LC2)
- 891 0584 0196      		rcall System_WriteString
- 892 0586 9093 0000 		ldi r24,lo8(.LC3)
- 893 058a 8093 0000 		ldi r25,hi8(.LC3)
- 894 058e 00C0      		rcall System_WriteString
- 895               		ldi r24,lo8(.LC31)
- 896 0590 8091 0000 		ldi r25,hi8(.LC31)
- 897 0594 9091 0000 		rcall System_WriteString
- 898 0598 8230      		ldi r24,lo8(.LC5)
- 899 059a 9105      		ldi r25,hi8(.LC5)
- 900 059c 01F4      		rcall System_WriteString
- 901 059e 00D0      		ldi r24,lo8(.LC32)
- 902               		ldi r25,hi8(.LC32)
- 903 05a0 80E0      		rcall System_WriteString
- 904 05a2 90E0      		ldi r24,lo8(.LC7)
- 905 05a4 00D0      		ldi r25,hi8(.LC7)
- 906 05a6 80E0      		rcall System_WriteString
- 907 05a8 90E0      		ldi r24,lo8(.LC23)
- 908 05aa 00D0      		ldi r25,hi8(.LC23)
- 909 05ac 80E0      		rcall System_WriteString
- 910 05ae 90E0      		ldi r24,lo8(.LC9)
- 911 05b0 00D0      		ldi r25,hi8(.LC9)
- 912 05b2 80E0      		rcall System_WriteString
- 913 05b4 90E0      		lds r24,ucunit_checks_passed
- 914 05b6 00D0      		lds r25,(ucunit_checks_passed)+1
- 915 05b8 80E0      		adiw r24,1
- 916 05ba 90E0      		sts (ucunit_checks_passed)+1,r25
- 917 05bc 00D0      		sts ucunit_checks_passed,r24
- 918 05be 80E0      		rjmp .L22
- 919 05c0 90E0      	.L21:
- 920 05c2 00D0      		lds r24,ucunit_action
- 921 05c4 80E0      		lds r25,(ucunit_action)+1
- 922 05c6 90E0      		cpi r24,2
- 923 05c8 00D0      		cpc r25,__zero_reg__
- 924 05ca 80E0      		brne .L23
- 925 05cc 90E0      		rcall System_Safestate
- 926 05ce 00D0      	.L23:
- 927 05d0 8091 0000 		ldi r24,lo8(.LC2)
- 928 05d4 9091 0000 		ldi r25,hi8(.LC2)
- 929 05d8 0196      		rcall System_WriteString
- 930 05da 9093 0000 		ldi r24,lo8(.LC3)
- 931 05de 8093 0000 		ldi r25,hi8(.LC3)
- 932 05e2 8091 0000 		rcall System_WriteString
- 933 05e6 9091 0000 		ldi r24,lo8(.LC31)
- 934 05ea 0196      		ldi r25,hi8(.LC31)
- 935 05ec 9093 0000 		rcall System_WriteString
- 936 05f0 8093 0000 		ldi r24,lo8(.LC10)
- 937               		ldi r25,hi8(.LC10)
-  47:timetest.c    ****     UCUNIT_Check( (*s)=='\00' , "No end-of-string found","s" ); /* Pass */
- 938               	r25,hi8(.LC10)
- 939               		rcall System_WriteString
- 940 05f4 E981      		ldi r24,lo8(.LC32)
- 941 05f6 FA81      		ldi r25,hi8(.LC32)
- 942 05f8 8081      		rcall System_WriteString
- 943 05fa 8823      		ldi r24,lo8(.LC7)
- 944 05fc 01F4      		ldi r25,hi8(.LC7)
- 945 05fe 80E0      		rcall System_WriteString
- 946 0600 90E0      		ldi r24,lo8(.LC23)
- 947 0602 00D0      		ldi r25,hi8(.LC23)
- 948 0604 80E0      		rcall System_WriteString
- 949 0606 90E0      		ldi r24,lo8(.LC9)
- 950 0608 00D0      		ldi r25,hi8(.LC9)
- 951 060a 80E0      		rcall System_WriteString
- 952 060c 90E0      		lds r24,ucunit_checks_failed
- 953 060e 00D0      		lds r25,(ucunit_checks_failed)+1
- 954 0610 80E0      		adiw r24,1
- 955 0612 90E0      		sts (ucunit_checks_failed)+1,r25
- 956 0614 00D0      		sts ucunit_checks_failed,r24
- 957 0616 80E0      		lds r24,ucunit_checklist_failed_checks
- 958 0618 90E0      		lds r25,(ucunit_checklist_failed_checks)+1
- 959 061a 00D0      		adiw r24,1
- 960 061c 80E0      		sts (ucunit_checklist_failed_checks)+1,r25
- 961 061e 90E0      		sts ucunit_checklist_failed_checks,r24
- 962 0620 00D0      	.L22:
- 964 0624 90E0      	.LM21:
- 965 0626 00D0      		ldd r30,Y+1
- 966 0628 80E0      		ldd r31,Y+2
- 967 062a 90E0      		ld r24,Z
- 968 062c 00D0      		tst r24
- 969 062e 8091 0000 		brne .L24
- 970 0632 9091 0000 		ldi r24,lo8(.LC2)
- 971 0636 0196      		ldi r25,hi8(.LC2)
- 972 0638 9093 0000 		rcall System_WriteString
- 973 063c 8093 0000 		ldi r24,lo8(.LC3)
- 974 0640 00C0      		ldi r25,hi8(.LC3)
- 975               		rcall System_WriteString
- 976 0642 8091 0000 		ldi r24,lo8(.LC33)
- 977 0646 9091 0000 		ldi r25,hi8(.LC33)
- 978 064a 8230      		rcall System_WriteString
- 979 064c 9105      		ldi r24,lo8(.LC5)
- 980 064e 01F4      		ldi r25,hi8(.LC5)
- 981 0650 00D0      		rcall System_WriteString
- 982               		ldi r24,lo8(.LC34)
- 983 0652 80E0      		ldi r25,hi8(.LC34)
- 984 0654 90E0      		rcall System_WriteString
- 985 0656 00D0      		ldi r24,lo8(.LC7)
- 986 0658 80E0      		ldi r25,hi8(.LC7)
- 987 065a 90E0      		rcall System_WriteString
- 988 065c 00D0      		ldi r24,lo8(.LC23)
- 989 065e 80E0      		ldi r25,hi8(.LC23)
- 990 0660 90E0      		rcall System_WriteString
- 991 0662 00D0      		ldi r24,lo8(.LC9)
- 992 0664 80E0      		ldi r25,hi8(.LC9)
- 993 0666 90E0      		rcall System_WriteString
- 994 0668 00D0      		lds r24,ucunit_checks_passed
- 995 066a 80E0      		lds r25,(ucunit_checks_passed)+1
- 996 066c 90E0      		adiw r24,1
- 997 066e 00D0      		sts (ucunit_checks_passed)+1,r25
- 998 0670 80E0      		sts ucunit_checks_passed,r24
- 999 0672 90E0      		rjmp .L25
- 1000 0674 00D0      	.L24:
- 1001 0676 80E0      		lds r24,ucunit_action
- 1002 0678 90E0      		lds r25,(ucunit_action)+1
- 1003 067a 00D0      		cpi r24,2
- 1004 067c 80E0      		cpc r25,__zero_reg__
- 1005 067e 90E0      		brne .L26
- 1006 0680 00D0      		rcall System_Safestate
- 1007 0682 8091 0000 	.L26:
- 1008 0686 9091 0000 		ldi r24,lo8(.LC2)
- 1009 068a 0196      		ldi r25,hi8(.LC2)
- 1010 068c 9093 0000 		rcall System_WriteString
- 1011 0690 8093 0000 		ldi r24,lo8(.LC3)
- 1012 0694 8091 0000 		ldi r25,hi8(.LC3)
- 1013 0698 9091 0000 		rcall System_WriteString
- 1014 069c 0196      		ldi r24,lo8(.LC33)
- 1015 069e 9093 0000 		ldi r25,hi8(.LC33)
- 1016 06a2 8093 0000 		rcall System_WriteString
- 1017               		ldi r24,lo8(.LC10)
-  48:timetest.c    **** 
-  49:timetest.c    ****     /* Check if first character of string "Hello World!\n" is a 'H' */
-  50:timetest.c    ****     s = "Hello World!\n";
- 1018               	24,lo8(.LC10)
- 1019               		ldi r25,hi8(.LC10)
- 1020 06a6 80E0      		rcall System_WriteString
- 1021 06a8 90E0      		ldi r24,lo8(.LC34)
- 1022 06aa 9A83      		ldi r25,hi8(.LC34)
- 1023 06ac 8983      		rcall System_WriteString
-  51:timetest.c    ****     UCUNIT_CheckIsNotNull(s); /* Pass */
- 1024               	em_WriteString
- 1025               		ldi r24,lo8(.LC7)
- 1026 06ae 8981      		ldi r25,hi8(.LC7)
- 1027 06b0 9A81      		rcall System_WriteString
- 1028 06b2 0097      		ldi r24,lo8(.LC23)
- 1029 06b4 01F0      		ldi r25,hi8(.LC23)
- 1030 06b6 80E0      		rcall System_WriteString
- 1031 06b8 90E0      		ldi r24,lo8(.LC9)
- 1032 06ba 00D0      		ldi r25,hi8(.LC9)
- 1033 06bc 80E0      		rcall System_WriteString
- 1034 06be 90E0      		lds r24,ucunit_checks_failed
- 1035 06c0 00D0      		lds r25,(ucunit_checks_failed)+1
- 1036 06c2 80E0      		adiw r24,1
- 1037 06c4 90E0      		sts (ucunit_checks_failed)+1,r25
- 1038 06c6 00D0      		sts ucunit_checks_failed,r24
- 1039 06c8 80E0      		lds r24,ucunit_checklist_failed_checks
- 1040 06ca 90E0      		lds r25,(ucunit_checklist_failed_checks)+1
- 1041 06cc 00D0      		adiw r24,1
- 1042 06ce 80E0      		sts (ucunit_checklist_failed_checks)+1,r25
- 1043 06d0 90E0      		sts ucunit_checklist_failed_checks,r24
- 1044 06d2 00D0      	.L25:
- 1046 06d6 90E0      	.LM22:
- 1047 06d8 00D0      		ldi r24,lo8(.LC35)
- 1048 06da 80E0      		ldi r25,hi8(.LC35)
- 1049 06dc 90E0      		std Y+2,r25
- 1050 06de 00D0      		std Y+1,r24
- 1052 06e2 90E0      	.LM23:
- 1053 06e4 00D0      		ldd r24,Y+1
- 1054 06e6 8091 0000 		ldd r25,Y+2
- 1055 06ea 9091 0000 		sbiw r24,0
- 1056 06ee 0196      		breq .L27
- 1057 06f0 9093 0000 		ldi r24,lo8(.LC2)
- 1058 06f4 8093 0000 		ldi r25,hi8(.LC2)
- 1059 06f8 00C0      		rcall System_WriteString
- 1060               		ldi r24,lo8(.LC3)
- 1061 06fa 8091 0000 		ldi r25,hi8(.LC3)
- 1062 06fe 9091 0000 		rcall System_WriteString
- 1063 0702 8230      		ldi r24,lo8(.LC36)
- 1064 0704 9105      		ldi r25,hi8(.LC36)
- 1065 0706 01F4      		rcall System_WriteString
- 1066 0708 00D0      		ldi r24,lo8(.LC5)
- 1067               		ldi r25,hi8(.LC5)
- 1068 070a 80E0      		rcall System_WriteString
- 1069 070c 90E0      		ldi r24,lo8(.LC32)
- 1070 070e 00D0      		ldi r25,hi8(.LC32)
- 1071 0710 80E0      		rcall System_WriteString
- 1072 0712 90E0      		ldi r24,lo8(.LC7)
- 1073 0714 00D0      		ldi r25,hi8(.LC7)
- 1074 0716 80E0      		rcall System_WriteString
- 1075 0718 90E0      		ldi r24,lo8(.LC23)
- 1076 071a 00D0      		ldi r25,hi8(.LC23)
- 1077 071c 80E0      		rcall System_WriteString
- 1078 071e 90E0      		ldi r24,lo8(.LC9)
- 1079 0720 00D0      		ldi r25,hi8(.LC9)
- 1080 0722 80E0      		rcall System_WriteString
- 1081 0724 90E0      		lds r24,ucunit_checks_passed
- 1082 0726 00D0      		lds r25,(ucunit_checks_passed)+1
- 1083 0728 80E0      		adiw r24,1
- 1084 072a 90E0      		sts (ucunit_checks_passed)+1,r25
- 1085 072c 00D0      		sts ucunit_checks_passed,r24
- 1086 072e 80E0      		rjmp .L28
- 1087 0730 90E0      	.L27:
- 1088 0732 00D0      		lds r24,ucunit_action
- 1089 0734 80E0      		lds r25,(ucunit_action)+1
- 1090 0736 90E0      		cpi r24,2
- 1091 0738 00D0      		cpc r25,__zero_reg__
- 1092 073a 8091 0000 		brne .L29
- 1093 073e 9091 0000 		rcall System_Safestate
- 1094 0742 0196      	.L29:
- 1095 0744 9093 0000 		ldi r24,lo8(.LC2)
- 1096 0748 8093 0000 		ldi r25,hi8(.LC2)
- 1097 074c 8091 0000 		rcall System_WriteString
- 1098 0750 9091 0000 		ldi r24,lo8(.LC3)
- 1099 0754 0196      		ldi r25,hi8(.LC3)
- 1100 0756 9093 0000 		rcall System_WriteString
- 1101 075a 8093 0000 		ldi r24,lo8(.LC36)
- 1102               		ldi r25,hi8(.LC36)
-  52:timetest.c    ****     UCUNIT_Check( (*s)=='H' , "String starts not with 'H'","s" ); /* Pass */
- 1103               	 r25,hi8(.LC36)
- 1104               		rcall System_WriteString
- 1105 075e E981      		ldi r24,lo8(.LC10)
- 1106 0760 FA81      		ldi r25,hi8(.LC10)
- 1107 0762 8081      		rcall System_WriteString
- 1108 0764 8834      		ldi r24,lo8(.LC32)
- 1109 0766 01F4      		ldi r25,hi8(.LC32)
- 1110 0768 80E0      		rcall System_WriteString
- 1111 076a 90E0      		ldi r24,lo8(.LC7)
- 1112 076c 00D0      		ldi r25,hi8(.LC7)
- 1113 076e 80E0      		rcall System_WriteString
- 1114 0770 90E0      		ldi r24,lo8(.LC23)
- 1115 0772 00D0      		ldi r25,hi8(.LC23)
- 1116 0774 80E0      		rcall System_WriteString
- 1117 0776 90E0      		ldi r24,lo8(.LC9)
- 1118 0778 00D0      		ldi r25,hi8(.LC9)
- 1119 077a 80E0      		rcall System_WriteString
- 1120 077c 90E0      		lds r24,ucunit_checks_failed
- 1121 077e 00D0      		lds r25,(ucunit_checks_failed)+1
- 1122 0780 80E0      		adiw r24,1
- 1123 0782 90E0      		sts (ucunit_checks_failed)+1,r25
- 1124 0784 00D0      		sts ucunit_checks_failed,r24
- 1125 0786 80E0      		lds r24,ucunit_checklist_failed_checks
- 1126 0788 90E0      		lds r25,(ucunit_checklist_failed_checks)+1
- 1127 078a 00D0      		adiw r24,1
- 1128 078c 80E0      		sts (ucunit_checklist_failed_checks)+1,r25
- 1129 078e 90E0      		sts ucunit_checklist_failed_checks,r24
- 1130 0790 00D0      	.L28:
- 1132 0794 90E0      	.LM24:
- 1133 0796 00D0      		ldd r30,Y+1
- 1134 0798 8091 0000 		ldd r31,Y+2
- 1135 079c 9091 0000 		ld r24,Z
- 1136 07a0 0196      		cpi r24,lo8(72)
- 1137 07a2 9093 0000 		brne .L30
- 1138 07a6 8093 0000 		ldi r24,lo8(.LC2)
- 1139 07aa 00C0      		ldi r25,hi8(.LC2)
- 1140               		rcall System_WriteString
- 1141 07ac 8091 0000 		ldi r24,lo8(.LC3)
- 1142 07b0 9091 0000 		ldi r25,hi8(.LC3)
- 1143 07b4 8230      		rcall System_WriteString
- 1144 07b6 9105      		ldi r24,lo8(.LC37)
- 1145 07b8 01F4      		ldi r25,hi8(.LC37)
- 1146 07ba 00D0      		rcall System_WriteString
- 1147               		ldi r24,lo8(.LC5)
- 1148 07bc 80E0      		ldi r25,hi8(.LC5)
- 1149 07be 90E0      		rcall System_WriteString
- 1150 07c0 00D0      		ldi r24,lo8(.LC38)
- 1151 07c2 80E0      		ldi r25,hi8(.LC38)
- 1152 07c4 90E0      		rcall System_WriteString
- 1153 07c6 00D0      		ldi r24,lo8(.LC7)
- 1154 07c8 80E0      		ldi r25,hi8(.LC7)
- 1155 07ca 90E0      		rcall System_WriteString
- 1156 07cc 00D0      		ldi r24,lo8(.LC23)
- 1157 07ce 80E0      		ldi r25,hi8(.LC23)
- 1158 07d0 90E0      		rcall System_WriteString
- 1159 07d2 00D0      		ldi r24,lo8(.LC9)
- 1160 07d4 80E0      		ldi r25,hi8(.LC9)
- 1161 07d6 90E0      		rcall System_WriteString
- 1162 07d8 00D0      		lds r24,ucunit_checks_passed
- 1163 07da 80E0      		lds r25,(ucunit_checks_passed)+1
- 1164 07dc 90E0      		adiw r24,1
- 1165 07de 00D0      		sts (ucunit_checks_passed)+1,r25
- 1166 07e0 80E0      		sts ucunit_checks_passed,r24
- 1167 07e2 90E0      		rjmp .L31
- 1168 07e4 00D0      	.L30:
- 1169 07e6 80E0      		lds r24,ucunit_action
- 1170 07e8 90E0      		lds r25,(ucunit_action)+1
- 1171 07ea 00D0      		cpi r24,2
- 1172 07ec 8091 0000 		cpc r25,__zero_reg__
- 1173 07f0 9091 0000 		brne .L32
- 1174 07f4 0196      		rcall System_Safestate
- 1175 07f6 9093 0000 	.L32:
- 1176 07fa 8093 0000 		ldi r24,lo8(.LC2)
- 1177 07fe 8091 0000 		ldi r25,hi8(.LC2)
- 1178 0802 9091 0000 		rcall System_WriteString
- 1179 0806 0196      		ldi r24,lo8(.LC3)
- 1180 0808 9093 0000 		ldi r25,hi8(.LC3)
- 1181 080c 8093 0000 		rcall System_WriteString
- 1182               		ldi r24,lo8(.LC37)
-  53:timetest.c    **** 
-  54:timetest.c    ****     UCUNIT_TestcaseEnd(); /* Pass */
- 1183               	4,lo8(.LC37)
- 1184               		ldi r25,hi8(.LC37)
- 1185 0810 80E0      		rcall System_WriteString
- 1186 0812 90E0      		ldi r24,lo8(.LC10)
- 1187 0814 00D0      		ldi r25,hi8(.LC10)
- 1188 0816 2091 0000 		rcall System_WriteString
- 1189 081a 3091 0000 		ldi r24,lo8(.LC38)
- 1190 081e 8091 0000 		ldi r25,hi8(.LC38)
- 1191 0822 9091 0000 		rcall System_WriteString
- 1192 0826 2817      		ldi r24,lo8(.LC7)
- 1193 0828 3907      		ldi r25,hi8(.LC7)
- 1194 082a 01F4      		rcall System_WriteString
- 1195 082c 80E0      		ldi r24,lo8(.LC23)
- 1196 082e 90E0      		ldi r25,hi8(.LC23)
- 1197 0830 00D0      		rcall System_WriteString
- 1198 0832 8091 0000 		ldi r24,lo8(.LC9)
- 1199 0836 9091 0000 		ldi r25,hi8(.LC9)
- 1200 083a 0196      		rcall System_WriteString
- 1201 083c 9093 0000 		lds r24,ucunit_checks_failed
- 1202 0840 8093 0000 		lds r25,(ucunit_checks_failed)+1
- 1203 0844 00C0      		adiw r24,1
- 1204               		sts (ucunit_checks_failed)+1,r25
- 1205 0846 80E0      		sts ucunit_checks_failed,r24
- 1206 0848 90E0      		lds r24,ucunit_checklist_failed_checks
- 1207 084a 00D0      		lds r25,(ucunit_checklist_failed_checks)+1
- 1208 084c 80E0      		adiw r24,1
- 1209 084e 90E0      		sts (ucunit_checklist_failed_checks)+1,r25
- 1210 0850 00D0      		sts ucunit_checklist_failed_checks,r24
- 1211 0852 80E0      	.L31:
- 1213 0856 00D0      	.LM25:
- 1214 0858 80E0      		ldi r24,lo8(.LC24)
- 1215 085a 90E0      		ldi r25,hi8(.LC24)
- 1216 085c 00D0      		rcall System_WriteString
- 1217 085e 80E0      		lds r18,ucunit_testcases_failed_checks
- 1218 0860 90E0      		lds r19,(ucunit_testcases_failed_checks)+1
- 1219 0862 00D0      		lds r24,ucunit_checks_failed
- 1220 0864 80E0      		lds r25,(ucunit_checks_failed)+1
- 1221 0866 90E0      		cp r18,r24
- 1222 0868 00D0      		cpc r19,r25
- 1223 086a 80E0      		brne .L33
- 1224 086c 90E0      		ldi r24,lo8(.LC25)
- 1225 086e 00D0      		ldi r25,hi8(.LC25)
- 1226 0870 80E0      		rcall System_WriteString
- 1227 0872 90E0      		lds r24,ucunit_testcases_passed
- 1228 0874 00D0      		lds r25,(ucunit_testcases_passed)+1
- 1229 0876 8091 0000 		adiw r24,1
- 1230 087a 9091 0000 		sts (ucunit_testcases_passed)+1,r25
- 1231 087e 0196      		sts ucunit_testcases_passed,r24
- 1232 0880 9093 0000 		rjmp .L34
- 1233 0884 8093 0000 	.L33:
- 1234               		ldi r24,lo8(.LC2)
- 1235 0888 80E0      		ldi r25,hi8(.LC2)
- 1236 088a 90E0      		rcall System_WriteString
- 1237 088c 00D0      		ldi r24,lo8(.LC3)
- 1238               		ldi r25,hi8(.LC3)
+ 133               	e	setup, @function
+ 134               	setup:
+ 136 0000 DF93      	.LM0:
+ 137 0002 CF93      	.LFBB1:
+ 138 0004 CDB7      		push r29
+ 139 0006 DEB7      		push r28
+ 140               		in r28,__SP_L__
+ 141               		in r29,__SP_H__
+  17:timetest.c    ****   sbi(DEFAULTDDR, TASKAPIN);
+ 142               	SP_L__
+ 143               		in r29,__SP_H__
+ 144 0008 A7E3      	/* prologue: function */
+ 145 000a B0E0      	/* frame size = 0 */
+ 147 000e F0E0      	.LM1:
+ 148 0010 8081      		ldi r26,lo8(55)
+ 149 0012 8160      		ldi r27,hi8(55)
+ 150 0014 8C93      		ldi r30,lo8(55)
+  18:timetest.c    ****   sbi(DEFAULTDDR, TASKBPIN);
+ 151               	8(55)
+ 152               		ldi r30,lo8(55)
+ 153 0016 A7E3      		ldi r31,hi8(55)
+ 154 0018 B0E0      		ld r24,Z
+ 155 001a E7E3      		ori r24,lo8(1)
+ 156 001c F0E0      		st X,r24
+ 158 0020 8260      	.LM2:
+ 159 0022 8C93      		ldi r26,lo8(55)
+  19:timetest.c    ****   sbi(DEFAULTDDR, TASKCPIN);
+ 160               	
+ 161               	.LM2:
+ 162 0024 A7E3      		ldi r26,lo8(55)
+ 163 0026 B0E0      		ldi r27,hi8(55)
+ 164 0028 E7E3      		ldi r30,lo8(55)
+ 165 002a F0E0      		ldi r31,hi8(55)
+ 166 002c 8081      		ld r24,Z
+ 167 002e 8460      		ori r24,lo8(2)
+ 168 0030 8C93      		st X,r24
+  20:timetest.c    ****   sbi(DEFAULTDDR, TASKDPIN);
+ 169               	ori r24,lo8(2)
+ 170               		st X,r24
+ 172 0034 B0E0      	.LM3:
+ 173 0036 E7E3      		ldi r26,lo8(55)
+ 174 0038 F0E0      		ldi r27,hi8(55)
+ 175 003a 8081      		ldi r30,lo8(55)
+ 176 003c 8860      		ldi r31,hi8(55)
+ 177 003e 8C93      		ld r24,Z
+  21:timetest.c    ****   sbi(DEFAULTDDR, TASKEPIN);
+ 178               	i r31,hi8(55)
+ 179               		ld r24,Z
+ 180 0040 A7E3      		ori r24,lo8(4)
+ 181 0042 B0E0      		st X,r24
+ 183 0046 F0E0      	.LM4:
+ 184 0048 8081      		ldi r26,lo8(55)
+ 185 004a 8061      		ldi r27,hi8(55)
+ 186 004c 8C93      		ldi r30,lo8(55)
+  22:timetest.c    ****   setTracepoint(1);
+ 187               	hi8(55)
+ 188               		ldi r30,lo8(55)
+ 189 004e 81E0      		ldi r31,hi8(55)
+ 190 0050 8093 0000 		ld r24,Z
+ 191               		ori r24,lo8(8)
+  23:timetest.c    **** }
+ 192               	(55)
+ 193               		ld r24,Z
+ 194 0054 CF91      		ori r24,lo8(8)
+ 195 0056 DF91      		st X,r24
+ 197               	.LM5:
+ 198               		ldi r26,lo8(55)
+ 199               		ldi r27,hi8(55)
+ 200               		ldi r30,lo8(55)
+ 201               		ldi r31,hi8(55)
+ 202               		ld r24,Z
+ 203               		ori r24,lo8(16)
+ 204               		st X,r24
+ 206               	.LM6:
+ 207               		ldi r24,lo8(1)
+ 208               		sts tracepoint,r24
+ 209               	/* epilogue start */
+ 211 0004 0000 0000 	.LM7:
+ 212               		pop r28
+ 213               		pop r29
+ 214               		ret
+ 216               	.Lscope1:
+ 217 0000 5354 4143 	.global	a
+ 217      4B00 
+ 218 0006 0000 0000 	.global	a
+ 218      0000 0000 
+ 218      0000 0000 
+ 218      0000 0000 
+ 218      0000 0000 
+ 219               		.section .bss
+ 222               	a:
+ 223 00a2 0000      		.skip 4,0
+ 224 00a4 0000      	.global	c
+ 225 00a6 0000      	.global	c
+ 228 00ab 00        	c:
+ 229 00ac 00        		.skip 4,0
+ 230 00ad 00        	.global	taskstack_A
+ 231 00ae 00        		.data
+ 234               	taskstack_A:
+ 235               		.string	"STACK"
+ 236               		.skip 156,0
+ 237               	.global	taskobj_A
+  24:timetest.c    **** 
+  25:timetest.c    **** u32 a = 0, c=0;
+  26:timetest.c    **** TASK(A,128)
+  27:timetest.c    **** {
+ 238               	156,0
+ 239               	.global	taskobj_A
+ 242 005c CF93      	taskobj_A:
+ 243 005e CDB7      		.word	gs(task_A)
+ 244 0060 DEB7      		.word	gs(task_A)
+ 245               		.word	taskstack_A
+ 246               		.word	taskstack_A+128
+  28:timetest.c    **** 	for(a=0;a < 1000;a++)
+ 247               		.word	taskstack_A+128
+ 248               		.byte	-94
+ 249 0062 1092 0000 		.byte	0
+ 250 0066 1092 0000 		.byte	0
+ 251 006a 1092 0000 		.byte	0
+ 252 006e 1092 0000 		.byte	0
+ 253 0072 00C0      		.skip 1,0
+ 254               		.text
+  29:timetest.c    **** 	{
+  30:timetest.c    **** 	   for(c=0; c<2;c++)
+ 255               	te	0
+ 256               		.skip 1,0
+ 257 0074 1092 0000 		.text
+ 259 007c 1092 0000 	.global	task_A
+ 261 0084 00C0      	task_A:
+  31:timetest.c    **** 	   {
+  32:timetest.c    **** 	   	nop();
+ 263               		68,0,27,.LM8-.LFBB2
+ 264               	.LM8:
+ 265               	.LFBB2:
+ 266               		push r29
+ 267 0086 0000      		push r28
+ 268               		in r28,__SP_L__
+ 269               		in r29,__SP_H__
+ 270               	/* prologue: function */
+ 271               	/* frame size = 0 */
+ 273 008c 9091 0000 	.LM9:
+ 274 0090 A091 0000 		sts a,__zero_reg__
+ 275 0094 B091 0000 		sts (a)+1,__zero_reg__
+ 276 0098 0196      		sts (a)+2,__zero_reg__
+ 277 009a A11D      		sts (a)+3,__zero_reg__
+ 278 009c B11D      		rjmp .L4
+ 279 009e 8093 0000 	.L7:
+ 281 00a6 A093 0000 	.LM10:
+ 282 00aa B093 0000 		sts c,__zero_reg__
+ 283               		sts (c)+1,__zero_reg__
+ 284 00ae 8091 0000 		sts (c)+2,__zero_reg__
+ 285 00b2 9091 0000 		sts (c)+3,__zero_reg__
+ 286 00b6 A091 0000 		rjmp .L5
+ 287 00ba B091 0000 	.L6:
+ 289 00c0 9105      	.LM11:
+ 290 00c2 A105      	/* #APP */
+ 291 00c4 B105      	 ;  32 "timetest.c" 1
+ 292 00c6 00F0      		nop
+ 293               	 ;  0 "" 2
+ 295 00c8 8091 0000 	.LM12:
+ 296 00cc 9091 0000 	/* #NOAPP */
+ 297 00d0 A091 0000 		lds r24,c
+ 298 00d4 B091 0000 		lds r25,(c)+1
+ 299 00d8 0196      		lds r26,(c)+2
+ 300 00da A11D      		lds r27,(c)+3
+ 301 00dc B11D      		adiw r24,1
+ 302 00de 8093 0000 		adc r26,__zero_reg__
+ 303 00e2 9093 0000 		adc r27,__zero_reg__
+ 304 00e6 A093 0000 		sts c,r24
+ 305 00ea B093 0000 		sts (c)+1,r25
+ 306               		sts (c)+2,r26
+ 307 00ee 8091 0000 		sts (c)+3,r27
+ 308 00f2 9091 0000 	.L5:
+ 309 00f6 A091 0000 		lds r24,c
+ 310 00fa B091 0000 		lds r25,(c)+1
+ 311 00fe 883E      		lds r26,(c)+2
+ 312 0100 23E0      		lds r27,(c)+3
+ 313 0102 9207      		cpi r24,lo8(2)
+ 314 0104 20E0      		cpc r25,__zero_reg__
+ 315 0106 A207      		cpc r26,__zero_reg__
+ 316 0108 20E0      		cpc r27,__zero_reg__
+ 317 010a B207      		brlo .L6
+ 319 010e 00C0      	.LM13:
+  33:timetest.c    **** 	   }
+  34:timetest.c    **** 	//	sbi(DEFAULTPORT, TASKAPIN);
+  35:timetest.c    **** 	//	cbi(DEFAULTPORT, TASKAPIN);
+  36:timetest.c    ****   	}
+  37:timetest.c    ****   	ENDTASK(A);
+ 320               	.LM13:
+ 321               		lds r24,a
+ 322 0110 83E0      		lds r25,(a)+1
+ 323 0112 8093 0000 		lds r26,(a)+2
+ 324               		lds r27,(a)+3
+ 325               		adiw r24,1
+ 326               		adc r26,__zero_reg__
+ 327 0116 0000      		adc r27,__zero_reg__
+ 328               		sts a,r24
+ 329               		sts (a)+1,r25
+ 330 0118 00C0      		sts (a)+2,r26
+ 331               		sts (a)+3,r27
+ 332               	.L4:
+ 333               		lds r24,a
+ 334               		lds r25,(a)+1
+ 335               		lds r26,(a)+2
+ 336               		lds r27,(a)+3
+ 337               		cpi r24,lo8(1000)
+ 338               		ldi r18,hi8(1000)
+ 339 0008 00        		cpc r25,r18
+ 340               		ldi r18,hlo8(1000)
+ 341               		cpc r26,r18
+ 342               		ldi r18,hhi8(1000)
+ 343               		cpc r27,r18
+ 344               		brsh .+2
+ 345 00b0 5354 4143 		rjmp .L7
+ 345      4B00 
+ 347               	.LM14:
+ 348               		ldi r24,lo8(3)
+ 349               		sts taskobj_A+13,r24
+ 350               	.L8:
+ 351 0152 0000      	/* #APP */
+ 352 0154 0000      	 ;  37 "timetest.c" 1
+ 353 0156 0000      		nop
+ 354 0158 0000      	 ;  0 "" 2
+ 355 015a A2        	/* #NOAPP */
+ 356 015b 00        		rjmp .L8
+ 358 015d 00        	.Lscope2:
+ 359 015e 00        	.global	b
+ 360 015f 00        	.global	b
+ 361               		.section .bss
+ 364               	b:
+ 365               		.skip 1,0
+  38:timetest.c    **** }
+  39:timetest.c    **** 
+  40:timetest.c    **** u08 b = 0;
+  41:timetest.c    **** TASK(B,128)
+  42:timetest.c    **** {
+ 366               	ize	b, 1
+ 367               	b:
+ 368               		.skip 1,0
+ 369 011a DF93      	.global	taskstack_B
+ 370 011c CF93      		.data
+ 373 0122 DEB7      	taskstack_B:
+ 374               		.string	"STACK"
+ 375               		.skip 156,0
+  43:timetest.c    ****    u08 i;
+  44:timetest.c    **** 	for(b=0;b<2;b++)
+ 376               	g	"STACK"
+ 377               		.skip 156,0
+ 378 0124 1092 0000 	.global	taskobj_B
+  45:timetest.c    **** 	{
+  46:timetest.c    **** 	   for(i=0; i < 100; i++)
+ 381               	ject
+ 383 012a 1982      	taskobj_B:
+ 384 012c 00C0      		.word	gs(task_B)
+ 385               		.word	gs(task_B)
+  47:timetest.c    **** 	   {
+  48:timetest.c    **** 			sbi(DEFAULTPORT, TASKBPIN);
+ 386               	s(task_B)
+ 387               		.word	gs(task_B)
+ 388 012e A8E3      		.word	taskstack_B
+ 389 0130 B0E0      		.word	taskstack_B+128
+ 390 0132 E8E3      		.byte	-94
+ 391 0134 F0E0      		.byte	0
+ 392 0136 8081      		.byte	0
+ 393 0138 8260      		.byte	0
+ 394 013a 8C93      		.byte	0
+  49:timetest.c    **** 			cbi(DEFAULTPORT, TASKBPIN);
+ 395               	te	0
+ 396               		.byte	0
+ 397 013c A8E3      		.byte	0
+ 398 013e B0E0      		.skip 1,0
+ 399 0140 E8E3      		.text
+ 401 0144 8081      	.global	task_B
+ 403 0148 8C93      	task_B:
+ 405               	.LM15:
+ 406 014a 8981      	.LFBB3:
+ 407 014c 8F5F      		push r29
+ 408 014e 8983      		push r28
+ 409               		push __tmp_reg__
+ 410 0150 8981      		in r28,__SP_L__
+ 411 0152 8436      		in r29,__SP_H__
+ 412 0154 00F0      	/* prologue: function */
+  50:timetest.c    **** 		}
+  51:timetest.c    **** 		sleep(20000);
+ 413               	e: function */
+ 414               	/* frame size = 1 */
+ 416 0158 7EE4      	.LM16:
+ 417 015a 80E0      		sts b,__zero_reg__
+ 418 015c 90E0      		rjmp .L11
+ 419 015e 0E94 0000 	.L14:
+ 421               	.LM17:
+ 422 0162 8091 0000 		std Y+1,__zero_reg__
+ 423 0166 8F5F      		rjmp .L12
+ 424 0168 8093 0000 	.L13:
+ 426 016c 8091 0000 	.LM18:
+ 427 0170 8230      		ldi r26,lo8(56)
+ 428 0172 00F0      		ldi r27,hi8(56)
+  52:timetest.c    ****   	}
+  53:timetest.c    ****   	setTracepoint(2);
+ 429               	ldi r27,hi8(56)
+ 430               		ldi r30,lo8(56)
+ 431 0174 82E0      		ldi r31,hi8(56)
+ 432 0176 8093 0000 		ld r24,Z
+  54:timetest.c    ****   	ENDTASK(B);
+ 433               		ldi r31,hi8(56)
+ 434               		ld r24,Z
+ 435 017a 83E0      		ori r24,lo8(2)
+ 436 017c 8093 0000 		st X,r24
+ 438               	.LM19:
+ 439               		ldi r26,lo8(56)
+ 440 0180 0000      		ldi r27,hi8(56)
+ 441               		ldi r30,lo8(56)
+ 442               		ldi r31,hi8(56)
+ 443 0182 00C0      		ld r24,Z
+ 444               		andi r24,lo8(-3)
+ 445               		st X,r24
+ 447               	.LM20:
+ 448               		ldd r24,Y+1
+ 449               		subi r24,lo8(-(1))
+ 450               		std Y+1,r24
+ 451               	.L12:
+ 452               		ldd r24,Y+1
+ 453               		cpi r24,lo8(100)
+ 454 0160 0000      		brlo .L13
+ 456               	.LM21:
+ 457               		ldi r22,lo8(20000)
+ 458               		ldi r23,hi8(20000)
+ 459               		ldi r24,hlo8(20000)
+ 460 0000 7469 6D65 		ldi r25,hhi8(20000)
+ 460      7465 7374 
+ 460      2E63 00
+ 461               		call sleep
+ 463               	.LM22:
+ 464 000b 7469 6D65 		lds r24,b
+ 464      7465 7374 
+ 464      2E63 00
+ 465               		subi r24,lo8(-(1))
+ 466               		sts b,r24
+ 467               	.L11:
+ 468 0016 7469 6D65 		lds r24,b
+ 468      7465 7374 
+ 468      2E63 00
+ 469               		cpi r24,lo8(2)
+ 470               		brlo .L14
+ 472 0021 7469 6D65 	.LM23:
+ 472      7465 7374 
+ 472      2E63 00
+ 473               		ldi r24,lo8(2)
+ 474               		sts tracepoint,r24
+ 476 002c 7469 6D65 	.LM24:
+ 476      7465 7374 
+ 476      2E63 00
+ 477               		ldi r24,lo8(3)
+ 478               		sts taskobj_B+13,r24
+ 479               	.L15:
+ 480               	/* #APP */
+ 481               	 ;  54 "timetest.c" 1
   55:timetest.c    **** }
- 1239               	i8(.LC3)
- 1240               		rcall System_WriteString
- 1241 088e 0F90      		ldi r24,lo8(.LC39)
- 1242 0890 0F90      		ldi r25,hi8(.LC39)
- 1243 0892 CF91      		rcall System_WriteString
- 1244 0894 DF91      		ldi r24,lo8(.LC10)
- 1245 0896 0895      		ldi r25,hi8(.LC10)
- 1246               		rcall System_WriteString
- 1247               		ldi r24,lo8(.LC27)
- 1248               		ldi r25,hi8(.LC27)
- 1249               		rcall System_WriteString
- 1250               		ldi r24,lo8(.LC7)
- 1251               		ldi r25,hi8(.LC7)
- 1252               		rcall System_WriteString
- 1253 016c 4445 4D4F 		ldi r24,lo8(.LC28)
- 1253      3A43 6865 
- 1253      636B 6C69 
- 1253      7374 7300 
- 1254               		ldi r25,hi8(.LC28)
- 1255 017c 3731 00   		rcall System_WriteString
- 1256               		ldi r24,lo8(.LC9)
- 1257 017f 2D31 302C 		ldi r25,hi8(.LC9)
- 1257      6300 
- 1258               		rcall System_WriteString
- 1259 0185 3732 00   		lds r24,ucunit_testcases_failed
- 1260               		lds r25,(ucunit_testcases_failed)+1
- 1261 0188 4973 496E 		adiw r24,1
- 1261      5261 6E67 
- 1261      6500 
- 1262               		sts (ucunit_testcases_failed)+1,r25
- 1263 0192 612C 302C 		sts ucunit_testcases_failed,r24
- 1263      3130 00
- 1264               	.L34:
- 1265 0199 3733 00   		ldi r24,lo8(.LC24)
- 1266               		ldi r25,hi8(.LC24)
- 1267 019c 612C 3131 		rcall System_WriteString
- 1267      2C32 3000 
- 1268               	/* epilogue start */
- 1270               	.LM26:
- 1271 01a7 612C 302C 		pop __tmp_reg__
- 1271      3900 
- 1272               		pop __tmp_reg__
- 1273 01ad 3735 00   		pop r28
- 1274               		pop r29
- 1275 01b0 4368 6563 		ret
- 1275      6B6C 6973 
- 1275      7400 
- 1280               	.Lscope2:
- 1281               		.data
   56:timetest.c    **** 
-  57:timetest.c    **** static void Test_ChecklistDemo(void)
-  58:timetest.c    **** {
- 1282               	
- 1283               		.data
- 1284               	.LC40:
- 1285 0898 DF93      		.string	"DEMO:Checklists"
- 1286 089a CF93      	.LC41:
- 1287 089c 00D0      		.string	"71"
- 1288 089e 00D0      	.LC42:
- 1289 08a0 00D0      		.string	"-10,c"
- 1290 08a2 CDB7      	.LC43:
- 1291 08a4 DEB7      		.string	"72"
- 1292               	.LC44:
- 1293               		.string	"IsInRange"
-  59:timetest.c    ****     int a = 0;
- 1294               	4:
- 1295               		.string	"IsInRange"
- 1296 08a6 1E82      	.LC45:
- 1297 08a8 1D82      		.string	"a,0,10"
-  60:timetest.c    ****     int b = 0;
- 1298               	nge"
- 1299               	.LC45:
- 1300 08aa 1C82      		.string	"a,0,10"
- 1301 08ac 1B82      	.LC46:
-  61:timetest.c    ****     int c = 0;
- 1302               	45:
- 1303               		.string	"a,0,10"
- 1304 08ae 1A82      	.LC46:
- 1305 08b0 1982      		.string	"73"
+  57:timetest.c    **** 
+  58:timetest.c    **** //----- Begin Code ------------------------------------------------------------
+  59:timetest.c    **** 
+  60:timetest.c    **** #define TASK_AMOUNT 2
+  61:timetest.c    **** TASK *taskset[] = {&taskobj_A, &taskobj_B/*, &taskobj_C, &taskobj_D*/};
   62:timetest.c    **** 
-  63:timetest.c    ****     UCUNIT_TestcaseBegin("DEMO:Checklists");
- 1306               	a,0,10"
- 1307               	.LC46:
- 1308 08b2 80E0      		.string	"73"
- 1309 08b4 90E0      	.LC47:
- 1310 08b6 00D0      		.string	"a,11,20"
- 1311 08b8 80E0      	.LC48:
- 1312 08ba 90E0      		.string	"74"
- 1313 08bc 00D0      	.LC49:
- 1314 08be 80E0      		.string	"a,0,9"
- 1315 08c0 90E0      	.LC50:
- 1316 08c2 00D0      		.string	"75"
- 1317 08c4 8091 0000 	.LC51:
- 1318 08c8 9091 0000 		.string	"Checklist"
- 1319 08cc 9093 0000 	.LC52:
- 1320 08d0 8093 0000 		.string	"77"
-  64:timetest.c    **** 
-  65:timetest.c    ****     /* Check if calculation works */
-  66:timetest.c    ****     a = 10;
- 1321               	52:
- 1322               		.string	"77"
- 1323 08d4 8AE0      		.text
- 1326 08da 8D83      	Test_ChecklistDemo:
-  67:timetest.c    ****     b = -20;
- 1327               	n
- 1328               	Test_ChecklistDemo:
- 1330 08de 9FEF      	.LM27:
- 1331 08e0 9C83      	.LFBB3:
- 1332 08e2 8B83      		push r29
-  68:timetest.c    ****     c = a + b;
- 1333               	LM27:
- 1334               	.LFBB3:
- 1335 08e4 2D81      		push r29
- 1336 08e6 3E81      		push r28
- 1337 08e8 8B81      		rcall .
- 1338 08ea 9C81      		rcall .
- 1339 08ec 820F      		rcall .
- 1340 08ee 931F      		in r28,__SP_L__
- 1341 08f0 9A83      		in r29,__SP_H__
- 1342 08f2 8983      	/* prologue: function */
-  69:timetest.c    **** 
-  70:timetest.c    ****     UCUNIT_ChecklistBegin(UCUNIT_ACTION_WARNING);
- 1343               	logue: function */
- 1344               	/* frame size = 6 */
- 1346 08f8 1092 0000 	.LM28:
- 1347 08fc 1092 0000 		std Y+6,__zero_reg__
- 1348 0900 1092 0000 		std Y+5,__zero_reg__
-  71:timetest.c    ****     UCUNIT_CheckIsEqual( -10, c ); /* Pass */
- 1349               	d Y+5,__zero_reg__
- 1351 0904 8981      	.LM29:
- 1352 0906 9A81      		std Y+4,__zero_reg__
- 1353 0908 2FEF      		std Y+3,__zero_reg__
- 1355 090c 9207      	.LM30:
- 1356 090e 01F4      		std Y+2,__zero_reg__
- 1357 0910 80E0      		std Y+1,__zero_reg__
- 1359 0914 00D0      	.LM31:
- 1360 0916 80E0      		ldi r24,lo8(.LC0)
- 1361 0918 90E0      		ldi r25,hi8(.LC0)
- 1362 091a 00D0      		rcall System_WriteString
- 1363 091c 80E0      		ldi r24,lo8(.LC40)
- 1364 091e 90E0      		ldi r25,hi8(.LC40)
- 1365 0920 00D0      		rcall System_WriteString
- 1366 0922 80E0      		ldi r24,lo8(.LC0)
- 1367 0924 90E0      		ldi r25,hi8(.LC0)
- 1368 0926 00D0      		rcall System_WriteString
- 1369 0928 80E0      		lds r24,ucunit_checks_failed
- 1370 092a 90E0      		lds r25,(ucunit_checks_failed)+1
- 1371 092c 00D0      		sts (ucunit_testcases_failed_checks)+1,r25
- 1372 092e 80E0      		sts ucunit_testcases_failed_checks,r24
- 1374 0932 00D0      	.LM32:
- 1375 0934 80E0      		ldi r24,lo8(10)
- 1376 0936 90E0      		ldi r25,hi8(10)
- 1377 0938 00D0      		std Y+6,r25
- 1378 093a 80E0      		std Y+5,r24
- 1380 093e 00D0      	.LM33:
- 1381 0940 8091 0000 		ldi r24,lo8(-20)
- 1382 0944 9091 0000 		ldi r25,hi8(-20)
- 1383 0948 0196      		std Y+4,r25
- 1384 094a 9093 0000 		std Y+3,r24
- 1386 0952 00C0      	.LM34:
- 1387               		ldd r18,Y+5
- 1388 0954 8091 0000 		ldd r19,Y+6
- 1389 0958 9091 0000 		ldd r24,Y+3
- 1390 095c 8230      		ldd r25,Y+4
- 1391 095e 9105      		add r24,r18
- 1392 0960 01F4      		adc r25,r19
- 1393 0962 00D0      		std Y+2,r25
- 1394               		std Y+1,r24
- 1396 0966 90E0      	.LM35:
- 1397 0968 00D0      		sts (ucunit_action)+1,__zero_reg__
- 1398 096a 80E0      		sts ucunit_action,__zero_reg__
- 1399 096c 90E0      		sts (ucunit_checklist_failed_checks)+1,__zero_reg__
- 1400 096e 00D0      		sts ucunit_checklist_failed_checks,__zero_reg__
- 1402 0972 90E0      	.LM36:
- 1403 0974 00D0      		ldd r24,Y+1
- 1404 0976 80E0      		ldd r25,Y+2
- 1405 0978 90E0      		ldi r18,hi8(-10)
- 1406 097a 00D0      		cpi r24,lo8(-10)
- 1407 097c 80E0      		cpc r25,r18
- 1408 097e 90E0      		brne .L37
- 1409 0980 00D0      		ldi r24,lo8(.LC2)
- 1410 0982 80E0      		ldi r25,hi8(.LC2)
- 1411 0984 90E0      		rcall System_WriteString
- 1412 0986 00D0      		ldi r24,lo8(.LC3)
- 1413 0988 80E0      		ldi r25,hi8(.LC3)
- 1414 098a 90E0      		rcall System_WriteString
- 1415 098c 00D0      		ldi r24,lo8(.LC41)
- 1416 098e 80E0      		ldi r25,hi8(.LC41)
- 1417 0990 90E0      		rcall System_WriteString
- 1418 0992 00D0      		ldi r24,lo8(.LC5)
- 1419 0994 8091 0000 		ldi r25,hi8(.LC5)
- 1420 0998 9091 0000 		rcall System_WriteString
- 1421 099c 0196      		ldi r24,lo8(.LC6)
- 1422 099e 9093 0000 		ldi r25,hi8(.LC6)
- 1423 09a2 8093 0000 		rcall System_WriteString
- 1424 09a6 8091 0000 		ldi r24,lo8(.LC7)
- 1425 09aa 9091 0000 		ldi r25,hi8(.LC7)
- 1426 09ae 0196      		rcall System_WriteString
- 1427 09b0 9093 0000 		ldi r24,lo8(.LC42)
- 1428 09b4 8093 0000 		ldi r25,hi8(.LC42)
- 1429               		rcall System_WriteString
-  72:timetest.c    ****     UCUNIT_CheckIsInRange(a,0,10); /* Pass */
- 1430               	ystem_WriteString
- 1431               		ldi r24,lo8(.LC9)
- 1432 09b8 8D81      		ldi r25,hi8(.LC9)
- 1433 09ba 9E81      		rcall System_WriteString
- 1434 09bc 9923      		lds r24,ucunit_checks_passed
- 1435 09be 04F0      		lds r25,(ucunit_checks_passed)+1
- 1436 09c0 8D81      		adiw r24,1
- 1437 09c2 9E81      		sts (ucunit_checks_passed)+1,r25
- 1438 09c4 8B30      		sts ucunit_checks_passed,r24
- 1439 09c6 9105      		rjmp .L38
- 1440 09c8 04F4      	.L37:
- 1441 09ca 80E0      		lds r24,ucunit_action
- 1442 09cc 90E0      		lds r25,(ucunit_action)+1
- 1443 09ce 00D0      		cpi r24,2
- 1444 09d0 80E0      		cpc r25,__zero_reg__
- 1445 09d2 90E0      		brne .L39
- 1446 09d4 00D0      		rcall System_Safestate
- 1447 09d6 80E0      	.L39:
- 1448 09d8 90E0      		ldi r24,lo8(.LC2)
- 1449 09da 00D0      		ldi r25,hi8(.LC2)
- 1450 09dc 80E0      		rcall System_WriteString
- 1451 09de 90E0      		ldi r24,lo8(.LC3)
- 1452 09e0 00D0      		ldi r25,hi8(.LC3)
- 1453 09e2 80E0      		rcall System_WriteString
- 1454 09e4 90E0      		ldi r24,lo8(.LC41)
- 1455 09e6 00D0      		ldi r25,hi8(.LC41)
- 1456 09e8 80E0      		rcall System_WriteString
- 1457 09ea 90E0      		ldi r24,lo8(.LC10)
- 1458 09ec 00D0      		ldi r25,hi8(.LC10)
- 1459 09ee 80E0      		rcall System_WriteString
- 1460 09f0 90E0      		ldi r24,lo8(.LC6)
- 1461 09f2 00D0      		ldi r25,hi8(.LC6)
- 1462 09f4 80E0      		rcall System_WriteString
- 1463 09f6 90E0      		ldi r24,lo8(.LC7)
- 1464 09f8 00D0      		ldi r25,hi8(.LC7)
- 1465 09fa 8091 0000 		rcall System_WriteString
- 1466 09fe 9091 0000 		ldi r24,lo8(.LC42)
- 1467 0a02 0196      		ldi r25,hi8(.LC42)
- 1468 0a04 9093 0000 		rcall System_WriteString
- 1469 0a08 8093 0000 		ldi r24,lo8(.LC9)
- 1470 0a0c 00C0      		ldi r25,hi8(.LC9)
- 1471               		rcall System_WriteString
- 1472 0a0e 8091 0000 		lds r24,ucunit_checks_failed
- 1473 0a12 9091 0000 		lds r25,(ucunit_checks_failed)+1
- 1474 0a16 8230      		adiw r24,1
- 1475 0a18 9105      		sts (ucunit_checks_failed)+1,r25
- 1476 0a1a 01F4      		sts ucunit_checks_failed,r24
- 1477 0a1c 00D0      		lds r24,ucunit_checklist_failed_checks
- 1478               		lds r25,(ucunit_checklist_failed_checks)+1
- 1479 0a1e 80E0      		adiw r24,1
- 1480 0a20 90E0      		sts (ucunit_checklist_failed_checks)+1,r25
- 1481 0a22 00D0      		sts ucunit_checklist_failed_checks,r24
- 1482 0a24 80E0      	.L38:
- 1484 0a28 00D0      	.LM37:
- 1485 0a2a 80E0      		ldd r24,Y+5
- 1486 0a2c 90E0      		ldd r25,Y+6
- 1487 0a2e 00D0      		tst r25
- 1488 0a30 80E0      		brlt .L40
- 1489 0a32 90E0      		ldd r24,Y+5
- 1490 0a34 00D0      		ldd r25,Y+6
- 1491 0a36 80E0      		cpi r24,11
- 1492 0a38 90E0      		cpc r25,__zero_reg__
- 1493 0a3a 00D0      		brge .L40
- 1494 0a3c 80E0      		ldi r24,lo8(.LC2)
- 1495 0a3e 90E0      		ldi r25,hi8(.LC2)
- 1496 0a40 00D0      		rcall System_WriteString
- 1497 0a42 80E0      		ldi r24,lo8(.LC3)
- 1498 0a44 90E0      		ldi r25,hi8(.LC3)
- 1499 0a46 00D0      		rcall System_WriteString
- 1500 0a48 80E0      		ldi r24,lo8(.LC43)
- 1501 0a4a 90E0      		ldi r25,hi8(.LC43)
- 1502 0a4c 00D0      		rcall System_WriteString
- 1503 0a4e 8091 0000 		ldi r24,lo8(.LC5)
- 1504 0a52 9091 0000 		ldi r25,hi8(.LC5)
- 1505 0a56 0196      		rcall System_WriteString
- 1506 0a58 9093 0000 		ldi r24,lo8(.LC44)
- 1507 0a5c 8093 0000 		ldi r25,hi8(.LC44)
- 1508 0a60 8091 0000 		rcall System_WriteString
- 1509 0a64 9091 0000 		ldi r24,lo8(.LC7)
- 1510 0a68 0196      		ldi r25,hi8(.LC7)
- 1511 0a6a 9093 0000 		rcall System_WriteString
- 1512 0a6e 8093 0000 		ldi r24,lo8(.LC45)
- 1513               		ldi r25,hi8(.LC45)
-  73:timetest.c    ****     UCUNIT_CheckIsInRange(a,11,20); /* Fail */
- 1514               	hi8(.LC45)
- 1515               		rcall System_WriteString
- 1516 0a72 8D81      		ldi r24,lo8(.LC9)
- 1517 0a74 9E81      		ldi r25,hi8(.LC9)
- 1518 0a76 8B30      		rcall System_WriteString
- 1519 0a78 9105      		lds r24,ucunit_checks_passed
- 1520 0a7a 04F0      		lds r25,(ucunit_checks_passed)+1
- 1521 0a7c 8D81      		adiw r24,1
- 1522 0a7e 9E81      		sts (ucunit_checks_passed)+1,r25
- 1523 0a80 8531      		sts ucunit_checks_passed,r24
- 1524 0a82 9105      		rjmp .L41
- 1525 0a84 04F4      	.L40:
- 1526 0a86 80E0      		lds r24,ucunit_action
- 1527 0a88 90E0      		lds r25,(ucunit_action)+1
- 1528 0a8a 00D0      		cpi r24,2
- 1529 0a8c 80E0      		cpc r25,__zero_reg__
- 1530 0a8e 90E0      		brne .L42
- 1531 0a90 00D0      		rcall System_Safestate
- 1532 0a92 80E0      	.L42:
- 1533 0a94 90E0      		ldi r24,lo8(.LC2)
- 1534 0a96 00D0      		ldi r25,hi8(.LC2)
- 1535 0a98 80E0      		rcall System_WriteString
- 1536 0a9a 90E0      		ldi r24,lo8(.LC3)
- 1537 0a9c 00D0      		ldi r25,hi8(.LC3)
- 1538 0a9e 80E0      		rcall System_WriteString
- 1539 0aa0 90E0      		ldi r24,lo8(.LC43)
- 1540 0aa2 00D0      		ldi r25,hi8(.LC43)
- 1541 0aa4 80E0      		rcall System_WriteString
- 1542 0aa6 90E0      		ldi r24,lo8(.LC10)
- 1543 0aa8 00D0      		ldi r25,hi8(.LC10)
- 1544 0aaa 80E0      		rcall System_WriteString
- 1545 0aac 90E0      		ldi r24,lo8(.LC44)
- 1546 0aae 00D0      		ldi r25,hi8(.LC44)
- 1547 0ab0 80E0      		rcall System_WriteString
- 1548 0ab2 90E0      		ldi r24,lo8(.LC7)
- 1549 0ab4 00D0      		ldi r25,hi8(.LC7)
- 1550 0ab6 8091 0000 		rcall System_WriteString
- 1551 0aba 9091 0000 		ldi r24,lo8(.LC45)
- 1552 0abe 0196      		ldi r25,hi8(.LC45)
- 1553 0ac0 9093 0000 		rcall System_WriteString
- 1554 0ac4 8093 0000 		ldi r24,lo8(.LC9)
- 1555 0ac8 00C0      		ldi r25,hi8(.LC9)
- 1556               		rcall System_WriteString
- 1557 0aca 8091 0000 		lds r24,ucunit_checks_failed
- 1558 0ace 9091 0000 		lds r25,(ucunit_checks_failed)+1
- 1559 0ad2 8230      		adiw r24,1
- 1560 0ad4 9105      		sts (ucunit_checks_failed)+1,r25
- 1561 0ad6 01F4      		sts ucunit_checks_failed,r24
- 1562 0ad8 00D0      		lds r24,ucunit_checklist_failed_checks
- 1563               		lds r25,(ucunit_checklist_failed_checks)+1
- 1564 0ada 80E0      		adiw r24,1
- 1565 0adc 90E0      		sts (ucunit_checklist_failed_checks)+1,r25
- 1566 0ade 00D0      		sts ucunit_checklist_failed_checks,r24
- 1567 0ae0 80E0      	.L41:
- 1569 0ae4 00D0      	.LM38:
- 1570 0ae6 80E0      		ldd r24,Y+5
- 1571 0ae8 90E0      		ldd r25,Y+6
- 1572 0aea 00D0      		cpi r24,11
- 1573 0aec 80E0      		cpc r25,__zero_reg__
- 1574 0aee 90E0      		brlt .L43
- 1575 0af0 00D0      		ldd r24,Y+5
- 1576 0af2 80E0      		ldd r25,Y+6
- 1577 0af4 90E0      		cpi r24,21
- 1578 0af6 00D0      		cpc r25,__zero_reg__
- 1579 0af8 80E0      		brge .L43
- 1580 0afa 90E0      		ldi r24,lo8(.LC2)
- 1581 0afc 00D0      		ldi r25,hi8(.LC2)
- 1582 0afe 80E0      		rcall System_WriteString
- 1583 0b00 90E0      		ldi r24,lo8(.LC3)
- 1584 0b02 00D0      		ldi r25,hi8(.LC3)
- 1585 0b04 80E0      		rcall System_WriteString
- 1586 0b06 90E0      		ldi r24,lo8(.LC46)
- 1587 0b08 00D0      		ldi r25,hi8(.LC46)
- 1588 0b0a 8091 0000 		rcall System_WriteString
- 1589 0b0e 9091 0000 		ldi r24,lo8(.LC5)
- 1590 0b12 0196      		ldi r25,hi8(.LC5)
- 1591 0b14 9093 0000 		rcall System_WriteString
- 1592 0b18 8093 0000 		ldi r24,lo8(.LC44)
- 1593 0b1c 8091 0000 		ldi r25,hi8(.LC44)
- 1594 0b20 9091 0000 		rcall System_WriteString
- 1595 0b24 0196      		ldi r24,lo8(.LC7)
- 1596 0b26 9093 0000 		ldi r25,hi8(.LC7)
- 1597 0b2a 8093 0000 		rcall System_WriteString
- 1598               		ldi r24,lo8(.LC47)
-  74:timetest.c    ****     UCUNIT_CheckIsInRange(a,0,9); /* Fail */
- 1599               	8(.LC47)
- 1600               		ldi r25,hi8(.LC47)
- 1601 0b2e 8D81      		rcall System_WriteString
- 1602 0b30 9E81      		ldi r24,lo8(.LC9)
- 1603 0b32 9923      		ldi r25,hi8(.LC9)
- 1604 0b34 04F0      		rcall System_WriteString
- 1605 0b36 8D81      		lds r24,ucunit_checks_passed
- 1606 0b38 9E81      		lds r25,(ucunit_checks_passed)+1
- 1607 0b3a 8A30      		adiw r24,1
- 1608 0b3c 9105      		sts (ucunit_checks_passed)+1,r25
- 1609 0b3e 04F4      		sts ucunit_checks_passed,r24
- 1610 0b40 80E0      		rjmp .L44
- 1611 0b42 90E0      	.L43:
- 1612 0b44 00D0      		lds r24,ucunit_action
- 1613 0b46 80E0      		lds r25,(ucunit_action)+1
- 1614 0b48 90E0      		cpi r24,2
- 1615 0b4a 00D0      		cpc r25,__zero_reg__
- 1616 0b4c 80E0      		brne .L45
- 1617 0b4e 90E0      		rcall System_Safestate
- 1618 0b50 00D0      	.L45:
- 1619 0b52 80E0      		ldi r24,lo8(.LC2)
- 1620 0b54 90E0      		ldi r25,hi8(.LC2)
- 1621 0b56 00D0      		rcall System_WriteString
- 1622 0b58 80E0      		ldi r24,lo8(.LC3)
- 1623 0b5a 90E0      		ldi r25,hi8(.LC3)
- 1624 0b5c 00D0      		rcall System_WriteString
- 1625 0b5e 80E0      		ldi r24,lo8(.LC46)
- 1626 0b60 90E0      		ldi r25,hi8(.LC46)
- 1627 0b62 00D0      		rcall System_WriteString
- 1628 0b64 80E0      		ldi r24,lo8(.LC10)
- 1629 0b66 90E0      		ldi r25,hi8(.LC10)
- 1630 0b68 00D0      		rcall System_WriteString
- 1631 0b6a 80E0      		ldi r24,lo8(.LC44)
- 1632 0b6c 90E0      		ldi r25,hi8(.LC44)
- 1633 0b6e 00D0      		rcall System_WriteString
- 1634 0b70 8091 0000 		ldi r24,lo8(.LC7)
- 1635 0b74 9091 0000 		ldi r25,hi8(.LC7)
- 1636 0b78 0196      		rcall System_WriteString
- 1637 0b7a 9093 0000 		ldi r24,lo8(.LC47)
- 1638 0b7e 8093 0000 		ldi r25,hi8(.LC47)
- 1639 0b82 00C0      		rcall System_WriteString
- 1640               		ldi r24,lo8(.LC9)
- 1641 0b84 8091 0000 		ldi r25,hi8(.LC9)
- 1642 0b88 9091 0000 		rcall System_WriteString
- 1643 0b8c 8230      		lds r24,ucunit_checks_failed
- 1644 0b8e 9105      		lds r25,(ucunit_checks_failed)+1
- 1645 0b90 01F4      		adiw r24,1
- 1646 0b92 00D0      		sts (ucunit_checks_failed)+1,r25
- 1647               		sts ucunit_checks_failed,r24
- 1648 0b94 80E0      		lds r24,ucunit_checklist_failed_checks
- 1649 0b96 90E0      		lds r25,(ucunit_checklist_failed_checks)+1
- 1650 0b98 00D0      		adiw r24,1
- 1651 0b9a 80E0      		sts (ucunit_checklist_failed_checks)+1,r25
- 1652 0b9c 90E0      		sts ucunit_checklist_failed_checks,r24
- 1653 0b9e 00D0      	.L44:
- 1655 0ba2 90E0      	.LM39:
- 1656 0ba4 00D0      		ldd r24,Y+5
- 1657 0ba6 80E0      		ldd r25,Y+6
- 1658 0ba8 90E0      		tst r25
- 1659 0baa 00D0      		brlt .L46
- 1660 0bac 80E0      		ldd r24,Y+5
- 1661 0bae 90E0      		ldd r25,Y+6
- 1662 0bb0 00D0      		cpi r24,10
- 1663 0bb2 80E0      		cpc r25,__zero_reg__
- 1664 0bb4 90E0      		brge .L46
- 1665 0bb6 00D0      		ldi r24,lo8(.LC2)
- 1666 0bb8 80E0      		ldi r25,hi8(.LC2)
- 1667 0bba 90E0      		rcall System_WriteString
- 1668 0bbc 00D0      		ldi r24,lo8(.LC3)
- 1669 0bbe 80E0      		ldi r25,hi8(.LC3)
- 1670 0bc0 90E0      		rcall System_WriteString
- 1671 0bc2 00D0      		ldi r24,lo8(.LC48)
- 1672 0bc4 8091 0000 		ldi r25,hi8(.LC48)
- 1673 0bc8 9091 0000 		rcall System_WriteString
- 1674 0bcc 0196      		ldi r24,lo8(.LC5)
- 1675 0bce 9093 0000 		ldi r25,hi8(.LC5)
- 1676 0bd2 8093 0000 		rcall System_WriteString
- 1677 0bd6 8091 0000 		ldi r24,lo8(.LC44)
- 1678 0bda 9091 0000 		ldi r25,hi8(.LC44)
- 1679 0bde 0196      		rcall System_WriteString
- 1680 0be0 9093 0000 		ldi r24,lo8(.LC7)
- 1681 0be4 8093 0000 		ldi r25,hi8(.LC7)
- 1682               		rcall System_WriteString
-  75:timetest.c    ****     UCUNIT_ChecklistEnd();
- 1683               	iteString
- 1684               		ldi r24,lo8(.LC49)
- 1685 0be8 8091 0000 		ldi r25,hi8(.LC49)
- 1686 0bec 9091 0000 		rcall System_WriteString
- 1687 0bf0 0097      		ldi r24,lo8(.LC9)
- 1688 0bf2 01F0      		ldi r25,hi8(.LC9)
- 1689 0bf4 80E0      		rcall System_WriteString
- 1690 0bf6 90E0      		lds r24,ucunit_checks_passed
- 1691 0bf8 00D0      		lds r25,(ucunit_checks_passed)+1
- 1692 0bfa 80E0      		adiw r24,1
- 1693 0bfc 90E0      		sts (ucunit_checks_passed)+1,r25
- 1694 0bfe 00D0      		sts ucunit_checks_passed,r24
- 1695 0c00 80E0      		rjmp .L47
- 1696 0c02 90E0      	.L46:
- 1697 0c04 00D0      		lds r24,ucunit_action
- 1698 0c06 80E0      		lds r25,(ucunit_action)+1
- 1699 0c08 90E0      		cpi r24,2
- 1700 0c0a 00D0      		cpc r25,__zero_reg__
- 1701 0c0c 80E0      		brne .L48
- 1702 0c0e 90E0      		rcall System_Safestate
- 1703 0c10 00D0      	.L48:
- 1704 0c12 80E0      		ldi r24,lo8(.LC2)
- 1705 0c14 90E0      		ldi r25,hi8(.LC2)
- 1706 0c16 00D0      		rcall System_WriteString
- 1707 0c18 80E0      		ldi r24,lo8(.LC3)
- 1708 0c1a 90E0      		ldi r25,hi8(.LC3)
- 1709 0c1c 00D0      		rcall System_WriteString
- 1710 0c1e 80E0      		ldi r24,lo8(.LC48)
- 1711 0c20 90E0      		ldi r25,hi8(.LC48)
- 1712 0c22 00D0      		rcall System_WriteString
- 1713 0c24 8091 0000 		ldi r24,lo8(.LC10)
- 1714 0c28 9091 0000 		ldi r25,hi8(.LC10)
- 1715 0c2c 8130      		rcall System_WriteString
- 1716 0c2e 9105      		ldi r24,lo8(.LC44)
- 1717 0c30 01F4      		ldi r25,hi8(.LC44)
- 1718 0c32 00D0      		rcall System_WriteString
- 1719 0c34 00C0      		ldi r24,lo8(.LC7)
- 1720               		ldi r25,hi8(.LC7)
- 1721 0c36 80E0      		rcall System_WriteString
- 1722 0c38 90E0      		ldi r24,lo8(.LC49)
- 1723 0c3a 00D0      		ldi r25,hi8(.LC49)
- 1724 0c3c 80E0      		rcall System_WriteString
- 1725 0c3e 90E0      		ldi r24,lo8(.LC9)
- 1726 0c40 00D0      		ldi r25,hi8(.LC9)
- 1727 0c42 80E0      		rcall System_WriteString
- 1728 0c44 90E0      		lds r24,ucunit_checks_failed
- 1729 0c46 00D0      		lds r25,(ucunit_checks_failed)+1
- 1730 0c48 80E0      		adiw r24,1
- 1731 0c4a 90E0      		sts (ucunit_checks_failed)+1,r25
- 1732 0c4c 00D0      		sts ucunit_checks_failed,r24
- 1733 0c4e 80E0      		lds r24,ucunit_checklist_failed_checks
- 1734 0c50 90E0      		lds r25,(ucunit_checklist_failed_checks)+1
- 1735 0c52 00D0      		adiw r24,1
- 1736 0c54 80E0      		sts (ucunit_checklist_failed_checks)+1,r25
- 1737 0c56 90E0      		sts ucunit_checklist_failed_checks,r24
- 1738 0c58 00D0      	.L47:
- 1740 0c5c 90E0      	.LM40:
- 1741 0c5e 00D0      		lds r24,ucunit_checklist_failed_checks
- 1742 0c60 80E0      		lds r25,(ucunit_checklist_failed_checks)+1
- 1743 0c62 90E0      		sbiw r24,0
- 1744 0c64 00D0      		breq .L49
- 1745               		ldi r24,lo8(.LC2)
-  76:timetest.c    **** 
-  77:timetest.c    ****     UCUNIT_TestcaseEnd(); /* Fail */
- 1746               	C2)
- 1747               		ldi r25,hi8(.LC2)
- 1748 0c66 80E0      		rcall System_WriteString
- 1749 0c68 90E0      		ldi r24,lo8(.LC3)
- 1750 0c6a 00D0      		ldi r25,hi8(.LC3)
- 1751 0c6c 2091 0000 		rcall System_WriteString
- 1752 0c70 3091 0000 		ldi r24,lo8(.LC50)
- 1753 0c74 8091 0000 		ldi r25,hi8(.LC50)
- 1754 0c78 9091 0000 		rcall System_WriteString
- 1755 0c7c 2817      		ldi r24,lo8(.LC10)
- 1756 0c7e 3907      		ldi r25,hi8(.LC10)
- 1757 0c80 01F4      		rcall System_WriteString
- 1758 0c82 80E0      		ldi r24,lo8(.LC51)
- 1759 0c84 90E0      		ldi r25,hi8(.LC51)
- 1760 0c86 00D0      		rcall System_WriteString
- 1761 0c88 8091 0000 		ldi r24,lo8(.LC7)
- 1762 0c8c 9091 0000 		ldi r25,hi8(.LC7)
- 1763 0c90 0196      		rcall System_WriteString
- 1764 0c92 9093 0000 		ldi r24,lo8(.LC28)
- 1765 0c96 8093 0000 		ldi r25,hi8(.LC28)
- 1766 0c9a 00C0      		rcall System_WriteString
- 1767               		ldi r24,lo8(.LC9)
- 1768 0c9c 80E0      		ldi r25,hi8(.LC9)
- 1769 0c9e 90E0      		rcall System_WriteString
- 1770 0ca0 00D0      		lds r24,ucunit_action
- 1771 0ca2 80E0      		lds r25,(ucunit_action)+1
- 1772 0ca4 90E0      		cpi r24,1
- 1773 0ca6 00D0      		cpc r25,__zero_reg__
- 1774 0ca8 80E0      		brne .L51
- 1775 0caa 90E0      		rcall System_Shutdown
- 1776 0cac 00D0      		rjmp .L51
- 1777 0cae 80E0      	.L49:
- 1778 0cb0 90E0      		ldi r24,lo8(.LC2)
- 1779 0cb2 00D0      		ldi r25,hi8(.LC2)
- 1780 0cb4 80E0      		rcall System_WriteString
- 1781 0cb6 90E0      		ldi r24,lo8(.LC3)
- 1782 0cb8 00D0      		ldi r25,hi8(.LC3)
- 1783 0cba 80E0      		rcall System_WriteString
- 1784 0cbc 90E0      		ldi r24,lo8(.LC50)
- 1785 0cbe 00D0      		ldi r25,hi8(.LC50)
- 1786 0cc0 80E0      		rcall System_WriteString
- 1787 0cc2 90E0      		ldi r24,lo8(.LC5)
- 1788 0cc4 00D0      		ldi r25,hi8(.LC5)
- 1789 0cc6 80E0      		rcall System_WriteString
- 1790 0cc8 90E0      		ldi r24,lo8(.LC51)
- 1791 0cca 00D0      		ldi r25,hi8(.LC51)
- 1792 0ccc 8091 0000 		rcall System_WriteString
- 1793 0cd0 9091 0000 		ldi r24,lo8(.LC7)
- 1794 0cd4 0196      		ldi r25,hi8(.LC7)
- 1795 0cd6 9093 0000 		rcall System_WriteString
- 1796 0cda 8093 0000 		ldi r24,lo8(.LC28)
- 1797               		ldi r25,hi8(.LC28)
- 1798 0cde 80E0      		rcall System_WriteString
- 1799 0ce0 90E0      		ldi r24,lo8(.LC9)
- 1800 0ce2 00D0      		ldi r25,hi8(.LC9)
- 1801               		rcall System_WriteString
-  78:timetest.c    **** }
- 1802               	tem_WriteString
- 1803               	.L51:
- 1805 0ce6 0FB6      	.LM41:
- 1806 0ce8 F894      		ldi r24,lo8(.LC24)
- 1807 0cea DEBF      		ldi r25,hi8(.LC24)
- 1808 0cec 0FBE      		rcall System_WriteString
- 1809 0cee CDBF      		lds r18,ucunit_testcases_failed_checks
- 1810 0cf0 CF91      		lds r19,(ucunit_testcases_failed_checks)+1
- 1811 0cf2 DF91      		lds r24,ucunit_checks_failed
- 1812 0cf4 0895      		lds r25,(ucunit_checks_failed)+1
- 1813               		cp r18,r24
- 1814               		cpc r19,r25
- 1815               		brne .L52
- 1816               		ldi r24,lo8(.LC25)
- 1817               		ldi r25,hi8(.LC25)
- 1818               		rcall System_WriteString
- 1819               		lds r24,ucunit_testcases_passed
- 1820               		lds r25,(ucunit_testcases_passed)+1
- 1821               		adiw r24,1
- 1822 01bd 4445 4D4F 		sts (ucunit_testcases_passed)+1,r25
- 1822      3A43 6865 
- 1822      636B 696E 
- 1822      6720 4269 
- 1822      7473 00
- 1823               		sts ucunit_testcases_passed,r24
- 1824 01d0 3834 00   		rjmp .L53
- 1825               	.L52:
- 1826 01d3 4973 4269 		ldi r24,lo8(.LC2)
- 1826      7453 6574 
- 1826      00
- 1827               		ldi r25,hi8(.LC2)
- 1828 01dc 3078 3030 		rcall System_WriteString
- 1828      3031 2C30 
- 1828      00
- 1829               		ldi r24,lo8(.LC3)
- 1830 01e5 3835 00   		ldi r25,hi8(.LC3)
- 1831               		rcall System_WriteString
- 1832 01e8 3078 3030 		ldi r24,lo8(.LC52)
- 1832      3030 2C30 
- 1832      00
- 1833               		ldi r25,hi8(.LC52)
- 1834 01f1 3836 00   		rcall System_WriteString
- 1835               		ldi r24,lo8(.LC10)
- 1836 01f4 3078 3030 		ldi r25,hi8(.LC10)
- 1836      3032 2C31 
- 1836      00
- 1837               		rcall System_WriteString
- 1838 01fd 3837 00   		ldi r24,lo8(.LC27)
- 1839               		ldi r25,hi8(.LC27)
- 1840 0200 3078 3030 		rcall System_WriteString
- 1840      3030 2C36 
- 1840      00
- 1841               		ldi r24,lo8(.LC7)
- 1842 0209 3838 00   		ldi r25,hi8(.LC7)
- 1843               		rcall System_WriteString
- 1844 020c 3078 4646 		ldi r24,lo8(.LC28)
- 1844      4646 2C36 
- 1844      00
- 1845               		ldi r25,hi8(.LC28)
- 1846 0215 3930 00   		rcall System_WriteString
- 1847               		ldi r24,lo8(.LC9)
- 1848 0218 4973 4269 		ldi r25,hi8(.LC9)
- 1848      7443 6C65 
- 1848      6172 00
- 1849               		rcall System_WriteString
- 1850 0223 3931 00   		lds r24,ucunit_testcases_failed
- 1851               		lds r25,(ucunit_testcases_failed)+1
- 1852 0226 3078 3030 		adiw r24,1
- 1852      3031 2C31 
- 1852      00
- 1853               		sts (ucunit_testcases_failed)+1,r25
- 1854 022f 3933 00   		sts ucunit_testcases_failed,r24
- 1855               	.L53:
- 1856               		ldi r24,lo8(.LC24)
- 1857               		ldi r25,hi8(.LC24)
- 1858               		rcall System_WriteString
-  79:timetest.c    **** 
-  80:timetest.c    **** static void Test_BitChecksDemo(void)
-  81:timetest.c    **** {
- 1859               	_WriteString
- 1860               	/* epilogue start */
- 1862 0cf6 DF93      	.LM42:
- 1863 0cf8 CF93      		adiw r28,6
- 1864 0cfa CDB7      		in __tmp_reg__,__SREG__
- 1865 0cfc DEB7      		cli
- 1866               		out __SP_H__,r29
- 1867               		out __SREG__,__tmp_reg__
-  82:timetest.c    ****     UCUNIT_TestcaseBegin("DEMO:Checking Bits");
- 1868               	SREG__,__tmp_reg__
- 1869               		out __SP_L__,r28
- 1870 0cfe 80E0      		pop r28
- 1871 0d00 90E0      		pop r29
- 1872 0d02 00D0      		ret
- 1879 0d10 8091 0000 	.Lscope3:
- 1880 0d14 9091 0000 		.data
- 1881 0d18 9093 0000 	.LC53:
- 1882 0d1c 8093 0000 		.string	"DEMO:Checking Bits"
-  83:timetest.c    **** 
-  84:timetest.c    ****     UCUNIT_CheckIsBitSet(0x0001, 0); /* Pass */
- 1883               	O:Checking Bits"
- 1884               	.LC54:
- 1885 0d20 80E0      		.string	"84"
- 1886 0d22 90E0      	.LC55:
- 1887 0d24 00D0      		.string	"IsBitSet"
- 1888 0d26 80E0      	.LC56:
- 1889 0d28 90E0      		.string	"0x0001,0"
- 1890 0d2a 00D0      	.LC57:
- 1891 0d2c 80E0      		.string	"85"
- 1892 0d2e 90E0      	.LC58:
- 1893 0d30 00D0      		.string	"0x0000,0"
- 1894 0d32 80E0      	.LC59:
- 1895 0d34 90E0      		.string	"86"
- 1896 0d36 00D0      	.LC60:
- 1897 0d38 80E0      		.string	"0x0002,1"
- 1898 0d3a 90E0      	.LC61:
- 1899 0d3c 00D0      		.string	"87"
- 1900 0d3e 80E0      	.LC62:
- 1901 0d40 90E0      		.string	"0x0000,6"
- 1902 0d42 00D0      	.LC63:
- 1903 0d44 80E0      		.string	"88"
- 1904 0d46 90E0      	.LC64:
- 1905 0d48 00D0      		.string	"0xFFFF,6"
- 1906 0d4a 80E0      	.LC65:
- 1907 0d4c 90E0      		.string	"90"
- 1908 0d4e 00D0      	.LC66:
- 1909 0d50 8091 0000 		.string	"IsBitClear"
- 1910 0d54 9091 0000 	.LC67:
- 1911 0d58 0196      		.string	"91"
- 1912 0d5a 9093 0000 	.LC68:
- 1913 0d5e 8093 0000 		.string	"0x0001,1"
-  85:timetest.c    ****     UCUNIT_CheckIsBitSet(0x0000, 0); /* Fail */
- 1914               	1,1"
- 1915               	.LC69:
- 1916 0d62 8091 0000 		.string	"93"
- 1917 0d66 9091 0000 		.text
- 1920 0d6e 01F4      	Test_BitChecksDemo:
- 1922               	.LM43:
- 1923 0d72 80E0      	.LFBB4:
- 1924 0d74 90E0      		push r29
- 1925 0d76 00D0      		push r28
- 1926 0d78 80E0      		in r28,__SP_L__
- 1927 0d7a 90E0      		in r29,__SP_H__
- 1928 0d7c 00D0      	/* prologue: function */
- 1929 0d7e 80E0      	/* frame size = 0 */
- 1931 0d82 00D0      	.LM44:
- 1932 0d84 80E0      		ldi r24,lo8(.LC0)
- 1933 0d86 90E0      		ldi r25,hi8(.LC0)
- 1934 0d88 00D0      		rcall System_WriteString
- 1935 0d8a 80E0      		ldi r24,lo8(.LC53)
- 1936 0d8c 90E0      		ldi r25,hi8(.LC53)
- 1937 0d8e 00D0      		rcall System_WriteString
- 1938 0d90 80E0      		ldi r24,lo8(.LC0)
- 1939 0d92 90E0      		ldi r25,hi8(.LC0)
- 1940 0d94 00D0      		rcall System_WriteString
- 1941 0d96 80E0      		lds r24,ucunit_checks_failed
- 1942 0d98 90E0      		lds r25,(ucunit_checks_failed)+1
- 1943 0d9a 00D0      		sts (ucunit_testcases_failed_checks)+1,r25
- 1944 0d9c 80E0      		sts ucunit_testcases_failed_checks,r24
- 1946 0da0 00D0      	.LM45:
- 1947 0da2 8091 0000 		ldi r24,lo8(.LC2)
- 1948 0da6 9091 0000 		ldi r25,hi8(.LC2)
- 1949 0daa 0196      		rcall System_WriteString
- 1950 0dac 9093 0000 		ldi r24,lo8(.LC3)
- 1951 0db0 8093 0000 		ldi r25,hi8(.LC3)
- 1952 0db4 8091 0000 		rcall System_WriteString
- 1953 0db8 9091 0000 		ldi r24,lo8(.LC54)
- 1954 0dbc 0196      		ldi r25,hi8(.LC54)
- 1955 0dbe 9093 0000 		rcall System_WriteString
- 1956 0dc2 8093 0000 		ldi r24,lo8(.LC5)
-  86:timetest.c    ****     UCUNIT_CheckIsBitSet(0x0002, 1); /* Pass */
- 1957               	C5)
- 1958               		ldi r25,hi8(.LC5)
- 1959 0dc6 80E0      		rcall System_WriteString
- 1960 0dc8 90E0      		ldi r24,lo8(.LC55)
- 1961 0dca 00D0      		ldi r25,hi8(.LC55)
- 1962 0dcc 80E0      		rcall System_WriteString
- 1963 0dce 90E0      		ldi r24,lo8(.LC7)
- 1964 0dd0 00D0      		ldi r25,hi8(.LC7)
- 1965 0dd2 80E0      		rcall System_WriteString
- 1966 0dd4 90E0      		ldi r24,lo8(.LC56)
- 1967 0dd6 00D0      		ldi r25,hi8(.LC56)
- 1968 0dd8 80E0      		rcall System_WriteString
- 1969 0dda 90E0      		ldi r24,lo8(.LC9)
- 1970 0ddc 00D0      		ldi r25,hi8(.LC9)
- 1971 0dde 80E0      		rcall System_WriteString
- 1972 0de0 90E0      		lds r24,ucunit_checks_passed
- 1973 0de2 00D0      		lds r25,(ucunit_checks_passed)+1
- 1974 0de4 80E0      		adiw r24,1
- 1975 0de6 90E0      		sts (ucunit_checks_passed)+1,r25
- 1976 0de8 00D0      		sts ucunit_checks_passed,r24
- 1978 0dec 90E0      	.LM46:
- 1979 0dee 00D0      		lds r24,ucunit_action
- 1980 0df0 80E0      		lds r25,(ucunit_action)+1
- 1981 0df2 90E0      		cpi r24,2
- 1982 0df4 00D0      		cpc r25,__zero_reg__
- 1983 0df6 8091 0000 		brne .L56
- 1984 0dfa 9091 0000 		rcall System_Safestate
- 1985 0dfe 0196      	.L56:
- 1986 0e00 9093 0000 		ldi r24,lo8(.LC2)
- 1987 0e04 8093 0000 		ldi r25,hi8(.LC2)
-  87:timetest.c    ****     UCUNIT_CheckIsBitSet(0x0000, 6); /* Fail */
- 1988               	di r25,hi8(.LC2)
- 1989               		rcall System_WriteString
- 1990 0e08 8091 0000 		ldi r24,lo8(.LC3)
- 1991 0e0c 9091 0000 		ldi r25,hi8(.LC3)
- 1992 0e10 8230      		rcall System_WriteString
- 1993 0e12 9105      		ldi r24,lo8(.LC57)
- 1994 0e14 01F4      		ldi r25,hi8(.LC57)
- 1995 0e16 00D0      		rcall System_WriteString
- 1996               		ldi r24,lo8(.LC10)
- 1997 0e18 80E0      		ldi r25,hi8(.LC10)
- 1998 0e1a 90E0      		rcall System_WriteString
- 1999 0e1c 00D0      		ldi r24,lo8(.LC55)
- 2000 0e1e 80E0      		ldi r25,hi8(.LC55)
- 2001 0e20 90E0      		rcall System_WriteString
- 2002 0e22 00D0      		ldi r24,lo8(.LC7)
- 2003 0e24 80E0      		ldi r25,hi8(.LC7)
- 2004 0e26 90E0      		rcall System_WriteString
- 2005 0e28 00D0      		ldi r24,lo8(.LC58)
- 2006 0e2a 80E0      		ldi r25,hi8(.LC58)
- 2007 0e2c 90E0      		rcall System_WriteString
- 2008 0e2e 00D0      		ldi r24,lo8(.LC9)
- 2009 0e30 80E0      		ldi r25,hi8(.LC9)
- 2010 0e32 90E0      		rcall System_WriteString
- 2011 0e34 00D0      		lds r24,ucunit_checks_failed
- 2012 0e36 80E0      		lds r25,(ucunit_checks_failed)+1
- 2013 0e38 90E0      		adiw r24,1
- 2014 0e3a 00D0      		sts (ucunit_checks_failed)+1,r25
- 2015 0e3c 80E0      		sts ucunit_checks_failed,r24
- 2016 0e3e 90E0      		lds r24,ucunit_checklist_failed_checks
- 2017 0e40 00D0      		lds r25,(ucunit_checklist_failed_checks)+1
- 2018 0e42 80E0      		adiw r24,1
- 2019 0e44 90E0      		sts (ucunit_checklist_failed_checks)+1,r25
- 2020 0e46 00D0      		sts ucunit_checklist_failed_checks,r24
- 2022 0e4c 9091 0000 	.LM47:
- 2023 0e50 0196      		ldi r24,lo8(.LC2)
- 2024 0e52 9093 0000 		ldi r25,hi8(.LC2)
- 2025 0e56 8093 0000 		rcall System_WriteString
- 2026 0e5a 8091 0000 		ldi r24,lo8(.LC3)
- 2027 0e5e 9091 0000 		ldi r25,hi8(.LC3)
- 2028 0e62 0196      		rcall System_WriteString
- 2029 0e64 9093 0000 		ldi r24,lo8(.LC59)
- 2030 0e68 8093 0000 		ldi r25,hi8(.LC59)
-  88:timetest.c    ****     UCUNIT_CheckIsBitSet(0xFFFF, 6); /* Pass */
- 2031               		rcall System_WriteString
- 2032               		ldi r24,lo8(.LC5)
- 2033 0e6c 80E0      		ldi r25,hi8(.LC5)
- 2034 0e6e 90E0      		rcall System_WriteString
- 2035 0e70 00D0      		ldi r24,lo8(.LC55)
- 2036 0e72 80E0      		ldi r25,hi8(.LC55)
- 2037 0e74 90E0      		rcall System_WriteString
- 2038 0e76 00D0      		ldi r24,lo8(.LC7)
- 2039 0e78 80E0      		ldi r25,hi8(.LC7)
- 2040 0e7a 90E0      		rcall System_WriteString
- 2041 0e7c 00D0      		ldi r24,lo8(.LC60)
- 2042 0e7e 80E0      		ldi r25,hi8(.LC60)
- 2043 0e80 90E0      		rcall System_WriteString
- 2044 0e82 00D0      		ldi r24,lo8(.LC9)
- 2045 0e84 80E0      		ldi r25,hi8(.LC9)
- 2046 0e86 90E0      		rcall System_WriteString
- 2047 0e88 00D0      		lds r24,ucunit_checks_passed
- 2048 0e8a 80E0      		lds r25,(ucunit_checks_passed)+1
- 2049 0e8c 90E0      		adiw r24,1
- 2050 0e8e 00D0      		sts (ucunit_checks_passed)+1,r25
- 2051 0e90 80E0      		sts ucunit_checks_passed,r24
- 2053 0e94 00D0      	.LM48:
- 2054 0e96 80E0      		lds r24,ucunit_action
- 2055 0e98 90E0      		lds r25,(ucunit_action)+1
- 2056 0e9a 00D0      		cpi r24,2
- 2057 0e9c 8091 0000 		cpc r25,__zero_reg__
- 2058 0ea0 9091 0000 		brne .L57
- 2059 0ea4 0196      		rcall System_Safestate
- 2060 0ea6 9093 0000 	.L57:
- 2061 0eaa 8093 0000 		ldi r24,lo8(.LC2)
-  89:timetest.c    **** 
-  90:timetest.c    ****     UCUNIT_CheckIsBitClear(0x0001, 0); /* Fail */
- 2062               	i r24,lo8(.LC2)
- 2063               		ldi r25,hi8(.LC2)
- 2064 0eae 8091 0000 		rcall System_WriteString
- 2065 0eb2 9091 0000 		ldi r24,lo8(.LC3)
- 2066 0eb6 8230      		ldi r25,hi8(.LC3)
- 2067 0eb8 9105      		rcall System_WriteString
- 2068 0eba 01F4      		ldi r24,lo8(.LC61)
- 2069 0ebc 00D0      		ldi r25,hi8(.LC61)
- 2070               		rcall System_WriteString
- 2071 0ebe 80E0      		ldi r24,lo8(.LC10)
- 2072 0ec0 90E0      		ldi r25,hi8(.LC10)
- 2073 0ec2 00D0      		rcall System_WriteString
- 2074 0ec4 80E0      		ldi r24,lo8(.LC55)
- 2075 0ec6 90E0      		ldi r25,hi8(.LC55)
- 2076 0ec8 00D0      		rcall System_WriteString
- 2077 0eca 80E0      		ldi r24,lo8(.LC7)
- 2078 0ecc 90E0      		ldi r25,hi8(.LC7)
- 2079 0ece 00D0      		rcall System_WriteString
- 2080 0ed0 80E0      		ldi r24,lo8(.LC62)
- 2081 0ed2 90E0      		ldi r25,hi8(.LC62)
- 2082 0ed4 00D0      		rcall System_WriteString
- 2083 0ed6 80E0      		ldi r24,lo8(.LC9)
- 2084 0ed8 90E0      		ldi r25,hi8(.LC9)
- 2085 0eda 00D0      		rcall System_WriteString
- 2086 0edc 80E0      		lds r24,ucunit_checks_failed
- 2087 0ede 90E0      		lds r25,(ucunit_checks_failed)+1
- 2088 0ee0 00D0      		adiw r24,1
- 2089 0ee2 80E0      		sts (ucunit_checks_failed)+1,r25
- 2090 0ee4 90E0      		sts ucunit_checks_failed,r24
- 2091 0ee6 00D0      		lds r24,ucunit_checklist_failed_checks
- 2092 0ee8 80E0      		lds r25,(ucunit_checklist_failed_checks)+1
- 2093 0eea 90E0      		adiw r24,1
- 2094 0eec 00D0      		sts (ucunit_checklist_failed_checks)+1,r25
- 2095 0eee 8091 0000 		sts ucunit_checklist_failed_checks,r24
- 2097 0ef6 0196      	.LM49:
- 2098 0ef8 9093 0000 		ldi r24,lo8(.LC2)
- 2099 0efc 8093 0000 		ldi r25,hi8(.LC2)
- 2100 0f00 8091 0000 		rcall System_WriteString
- 2101 0f04 9091 0000 		ldi r24,lo8(.LC3)
- 2102 0f08 0196      		ldi r25,hi8(.LC3)
- 2103 0f0a 9093 0000 		rcall System_WriteString
- 2104 0f0e 8093 0000 		ldi r24,lo8(.LC63)
-  91:timetest.c    ****     UCUNIT_CheckIsBitClear(0x0001, 1); /* Pass */
- 2105               		ldi r25,hi8(.LC63)
- 2106               		rcall System_WriteString
- 2107 0f12 80E0      		ldi r24,lo8(.LC5)
- 2108 0f14 90E0      		ldi r25,hi8(.LC5)
- 2109 0f16 00D0      		rcall System_WriteString
- 2110 0f18 80E0      		ldi r24,lo8(.LC55)
- 2111 0f1a 90E0      		ldi r25,hi8(.LC55)
- 2112 0f1c 00D0      		rcall System_WriteString
- 2113 0f1e 80E0      		ldi r24,lo8(.LC7)
- 2114 0f20 90E0      		ldi r25,hi8(.LC7)
- 2115 0f22 00D0      		rcall System_WriteString
- 2116 0f24 80E0      		ldi r24,lo8(.LC64)
- 2117 0f26 90E0      		ldi r25,hi8(.LC64)
- 2118 0f28 00D0      		rcall System_WriteString
- 2119 0f2a 80E0      		ldi r24,lo8(.LC9)
- 2120 0f2c 90E0      		ldi r25,hi8(.LC9)
- 2121 0f2e 00D0      		rcall System_WriteString
- 2122 0f30 80E0      		lds r24,ucunit_checks_passed
- 2123 0f32 90E0      		lds r25,(ucunit_checks_passed)+1
- 2124 0f34 00D0      		adiw r24,1
- 2125 0f36 80E0      		sts (ucunit_checks_passed)+1,r25
- 2126 0f38 90E0      		sts ucunit_checks_passed,r24
- 2128 0f3c 80E0      	.LM50:
- 2129 0f3e 90E0      		lds r24,ucunit_action
- 2130 0f40 00D0      		lds r25,(ucunit_action)+1
- 2131 0f42 8091 0000 		cpi r24,2
- 2132 0f46 9091 0000 		cpc r25,__zero_reg__
- 2133 0f4a 0196      		brne .L58
- 2134 0f4c 9093 0000 		rcall System_Safestate
- 2135 0f50 8093 0000 	.L58:
-  92:timetest.c    **** 
-  93:timetest.c    ****     UCUNIT_TestcaseEnd(); /* Fail */
- 2136               	Safestate
- 2137               	.L58:
- 2138 0f54 80E0      		ldi r24,lo8(.LC2)
- 2139 0f56 90E0      		ldi r25,hi8(.LC2)
- 2140 0f58 00D0      		rcall System_WriteString
- 2141 0f5a 2091 0000 		ldi r24,lo8(.LC3)
- 2142 0f5e 3091 0000 		ldi r25,hi8(.LC3)
- 2143 0f62 8091 0000 		rcall System_WriteString
- 2144 0f66 9091 0000 		ldi r24,lo8(.LC65)
- 2145 0f6a 2817      		ldi r25,hi8(.LC65)
- 2146 0f6c 3907      		rcall System_WriteString
- 2147 0f6e 01F4      		ldi r24,lo8(.LC10)
- 2148 0f70 80E0      		ldi r25,hi8(.LC10)
- 2149 0f72 90E0      		rcall System_WriteString
- 2150 0f74 00D0      		ldi r24,lo8(.LC66)
- 2151 0f76 8091 0000 		ldi r25,hi8(.LC66)
- 2152 0f7a 9091 0000 		rcall System_WriteString
- 2153 0f7e 0196      		ldi r24,lo8(.LC7)
- 2154 0f80 9093 0000 		ldi r25,hi8(.LC7)
- 2155 0f84 8093 0000 		rcall System_WriteString
- 2156 0f88 00C0      		ldi r24,lo8(.LC56)
- 2157               		ldi r25,hi8(.LC56)
- 2158 0f8a 80E0      		rcall System_WriteString
- 2159 0f8c 90E0      		ldi r24,lo8(.LC9)
- 2160 0f8e 00D0      		ldi r25,hi8(.LC9)
- 2161 0f90 80E0      		rcall System_WriteString
- 2162 0f92 90E0      		lds r24,ucunit_checks_failed
- 2163 0f94 00D0      		lds r25,(ucunit_checks_failed)+1
- 2164 0f96 80E0      		adiw r24,1
- 2165 0f98 90E0      		sts (ucunit_checks_failed)+1,r25
- 2166 0f9a 00D0      		sts ucunit_checks_failed,r24
- 2167 0f9c 80E0      		lds r24,ucunit_checklist_failed_checks
- 2168 0f9e 90E0      		lds r25,(ucunit_checklist_failed_checks)+1
- 2169 0fa0 00D0      		adiw r24,1
- 2170 0fa2 80E0      		sts (ucunit_checklist_failed_checks)+1,r25
- 2171 0fa4 90E0      		sts ucunit_checklist_failed_checks,r24
- 2173 0fa8 80E0      	.LM51:
- 2174 0faa 90E0      		ldi r24,lo8(.LC2)
- 2175 0fac 00D0      		ldi r25,hi8(.LC2)
- 2176 0fae 80E0      		rcall System_WriteString
- 2177 0fb0 90E0      		ldi r24,lo8(.LC3)
- 2178 0fb2 00D0      		ldi r25,hi8(.LC3)
- 2179 0fb4 80E0      		rcall System_WriteString
- 2180 0fb6 90E0      		ldi r24,lo8(.LC67)
- 2181 0fb8 00D0      		ldi r25,hi8(.LC67)
- 2182 0fba 8091 0000 		rcall System_WriteString
- 2183 0fbe 9091 0000 		ldi r24,lo8(.LC5)
- 2184 0fc2 0196      		ldi r25,hi8(.LC5)
- 2185 0fc4 9093 0000 		rcall System_WriteString
- 2186 0fc8 8093 0000 		ldi r24,lo8(.LC66)
- 2187               		ldi r25,hi8(.LC66)
- 2188 0fcc 80E0      		rcall System_WriteString
- 2189 0fce 90E0      		ldi r24,lo8(.LC7)
- 2190 0fd0 00D0      		ldi r25,hi8(.LC7)
- 2191               		rcall System_WriteString
-  94:timetest.c    **** }
- 2192               	iteString
- 2193               		ldi r24,lo8(.LC68)
- 2194 0fd2 CF91      		ldi r25,hi8(.LC68)
- 2195 0fd4 DF91      		rcall System_WriteString
- 2196 0fd6 0895      		ldi r24,lo8(.LC9)
- 2197               		ldi r25,hi8(.LC9)
- 2198               		rcall System_WriteString
- 2199               		lds r24,ucunit_checks_passed
- 2200               		lds r25,(ucunit_checks_passed)+1
- 2201 0232 4445 4D4F 		adiw r24,1
- 2201      3A54 7261 
- 2201      6365 706F 
- 2201      696E 7473 
- 2201      00
- 2202               		sts (ucunit_checks_passed)+1,r25
- 2203 0243 3130 3800 		sts ucunit_checks_passed,r24
- 2205 0247 4973 3842 	.LM52:
- 2205      6974 00
- 2206               		ldi r24,lo8(.LC24)
- 2207 024e 6100      		ldi r25,hi8(.LC24)
- 2208               		rcall System_WriteString
- 2209 0250 3130 3900 		lds r18,ucunit_testcases_failed_checks
- 2210               		lds r19,(ucunit_testcases_failed_checks)+1
- 2211 0254 4973 3136 		lds r24,ucunit_checks_failed
- 2211      4269 7400 
- 2212               		lds r25,(ucunit_checks_failed)+1
- 2213 025c 3131 3000 		cp r18,r24
- 2214               		cpc r19,r25
- 2215 0260 4973 3332 		brne .L59
- 2215      4269 7400 
- 2216               		ldi r24,lo8(.LC25)
- 2217 0268 3131 3300 		ldi r25,hi8(.LC25)
- 2218               		rcall System_WriteString
- 2219 026c 5472 6163 		lds r24,ucunit_testcases_passed
- 2219      6570 6F69 
- 2219      6E74 436F 
- 2219      7665 7261 
- 2219      6765 00
- 2220               		lds r25,(ucunit_testcases_passed)+1
- 2221 027f 3000      		adiw r24,1
- 2222               		sts (ucunit_testcases_passed)+1,r25
- 2223 0281 3131 3400 		sts ucunit_testcases_passed,r24
- 2224               		rjmp .L60
- 2225 0285 3100      	.L59:
- 2226               		ldi r24,lo8(.LC2)
- 2227 0287 3133 3800 		ldi r25,hi8(.LC2)
- 2228               		rcall System_WriteString
- 2229 028b 3133 3900 		ldi r24,lo8(.LC3)
- 2230               		ldi r25,hi8(.LC3)
- 2231 028f 3134 3000 		rcall System_WriteString
- 2232               		ldi r24,lo8(.LC69)
- 2233 0293 3200      		ldi r25,hi8(.LC69)
- 2234               		rcall System_WriteString
- 2235 0295 3134 3200 		ldi r24,lo8(.LC10)
- 2236               		ldi r25,hi8(.LC10)
- 2237               		rcall System_WriteString
- 2238               		ldi r24,lo8(.LC27)
- 2239               		ldi r25,hi8(.LC27)
-  95:timetest.c    **** 
-  96:timetest.c    **** static void Test_CheckTracepointsDemo(void)
-  97:timetest.c    **** {
- 2240               	di r25,hi8(.LC27)
- 2241               		rcall System_WriteString
- 2242               		ldi r24,lo8(.LC7)
- 2243 0fd8 DF93      		ldi r25,hi8(.LC7)
- 2244 0fda CF93      		rcall System_WriteString
- 2245 0fdc 00D0      		ldi r24,lo8(.LC28)
- 2246 0fde 00D0      		ldi r25,hi8(.LC28)
- 2247 0fe0 00D0      		rcall System_WriteString
- 2248 0fe2 CDB7      		ldi r24,lo8(.LC9)
- 2249 0fe4 DEB7      		ldi r25,hi8(.LC9)
- 2250               		rcall System_WriteString
- 2251               		lds r24,ucunit_testcases_failed
-  98:timetest.c    **** 
-  99:timetest.c    ****     int found = FALSE;
- 2252               	es_failed
- 2253               		lds r25,(ucunit_testcases_failed)+1
- 2254 0fe6 1E82      		adiw r24,1
- 2255 0fe8 1D82      		sts (ucunit_testcases_failed)+1,r25
- 100:timetest.c    ****     int i = 0;
- 2256               	it_testcases_failed)+1,r25
- 2257               		sts ucunit_testcases_failed,r24
- 2258 0fea 1C82      	.L60:
- 2259 0fec 1B82      		ldi r24,lo8(.LC24)
- 101:timetest.c    ****     unsigned short a = 0;
- 2260               	r24
- 2261               	.L60:
- 2262 0fee 1A82      		ldi r24,lo8(.LC24)
- 2263 0ff0 1982      		ldi r25,hi8(.LC24)
- 102:timetest.c    **** 
- 103:timetest.c    ****     UCUNIT_TestcaseBegin("DEMO:Tracepoints");
- 2264               	4,lo8(.LC24)
- 2265               		ldi r25,hi8(.LC24)
- 2266 0ff2 80E0      		rcall System_WriteString
- 2267 0ff4 90E0      	/* epilogue start */
- 2269 0ff8 80E0      	.LM53:
- 2270 0ffa 90E0      		pop r28
- 2271 0ffc 00D0      		pop r29
- 2272 0ffe 80E0      		ret
- 2274 1002 00D0      	.Lscope4:
- 2275 1004 8091 0000 		.data
- 2276 1008 9091 0000 	.LC70:
- 2277 100c 9093 0000 		.string	"DEMO:Tracepoints"
- 2278 1010 8093 0000 	.LC71:
- 104:timetest.c    **** 
- 105:timetest.c    ****     a = 0x1234;
- 2279               	O:Tracepoints"
- 2280               	.LC71:
- 2281 1014 84E3      		.string	"108"
- 2282 1016 92E1      	.LC72:
- 2283 1018 9A83      		.string	"Is8Bit"
- 2284 101a 8983      	.LC73:
- 106:timetest.c    ****     UCUNIT_ResetTracepointCoverage();
- 2285               	LC72:
- 2286               		.string	"Is8Bit"
- 2287 101c 1092 0000 	.LC73:
- 2288 1020 1092 0000 		.string	"a"
- 2289 1024 00C0      	.LC74:
- 2290               		.string	"109"
- 2291 1026 8091 0000 	.LC75:
- 2292 102a 9091 0000 		.string	"Is16Bit"
- 2293 102e 880F      	.LC76:
- 2294 1030 991F      		.string	"110"
- 2295 1032 FC01      	.LC77:
- 2296 1034 E050      		.string	"Is32Bit"
- 2297 1036 F040      	.LC78:
- 2298 1038 1182      		.string	"113"
- 2299 103a 1082      	.LC79:
- 2300 103c 8091 0000 		.string	"TracepointCoverage"
- 2301 1040 9091 0000 	.LC80:
- 2302 1044 0196      		.string	"0"
- 2303 1046 9093 0000 	.LC81:
- 2304 104a 8093 0000 		.string	"114"
- 2305               	.LC82:
- 2306 104e 8091 0000 		.string	"1"
- 2307 1052 9091 0000 	.LC83:
- 2308 1056 8031      		.string	"138"
- 2309 1058 9105      	.LC84:
- 2310 105a 04F0      		.string	"139"
- 107:timetest.c    ****     UCUNIT_Tracepoint(0); /* Pass */
- 2311               	ng	"139"
- 2312               	.LC85:
- 2313 105c 8BE6      		.string	"140"
- 2314 105e 90E0      	.LC86:
- 2315 1060 9093 0000 		.string	"2"
- 2316 1064 8093 0000 	.LC87:
- 108:timetest.c    ****     UCUNIT_CheckIs8Bit(a); /* Fail */
- 2317               	:
- 2318               		.string	"2"
- 2319 1068 8981      	.LC87:
- 2320 106a 9A81      		.string	"142"
- 2321 106c 9C01      		.text
- 2324 1072 9A81      	Test_CheckTracepointsDemo:
- 2326 1076 3907      	.LM54:
- 2327 1078 01F4      	.LFBB5:
- 2328 107a 80E0      		push r29
- 2329 107c 90E0      		push r28
- 2330 107e 00D0      		rcall .
- 2331 1080 80E0      		rcall .
- 2332 1082 90E0      		rcall .
- 2333 1084 00D0      		in r28,__SP_L__
- 2334 1086 80E0      		in r29,__SP_H__
- 2335 1088 90E0      	/* prologue: function */
- 2336 108a 00D0      	/* frame size = 6 */
- 2338 108e 90E0      	.LM55:
- 2339 1090 00D0      		std Y+6,__zero_reg__
- 2340 1092 80E0      		std Y+5,__zero_reg__
- 2342 1096 00D0      	.LM56:
- 2343 1098 80E0      		std Y+4,__zero_reg__
- 2344 109a 90E0      		std Y+3,__zero_reg__
- 2346 109e 80E0      	.LM57:
- 2347 10a0 90E0      		std Y+2,__zero_reg__
- 2348 10a2 00D0      		std Y+1,__zero_reg__
- 2350 10a6 90E0      	.LM58:
- 2351 10a8 00D0      		ldi r24,lo8(.LC0)
- 2352 10aa 8091 0000 		ldi r25,hi8(.LC0)
- 2353 10ae 9091 0000 		rcall System_WriteString
- 2354 10b2 0196      		ldi r24,lo8(.LC70)
- 2355 10b4 9093 0000 		ldi r25,hi8(.LC70)
- 2356 10b8 8093 0000 		rcall System_WriteString
- 2357 10bc 00C0      		ldi r24,lo8(.LC0)
- 2358               		ldi r25,hi8(.LC0)
- 2359 10be 8091 0000 		rcall System_WriteString
- 2360 10c2 9091 0000 		lds r24,ucunit_checks_failed
- 2361 10c6 8230      		lds r25,(ucunit_checks_failed)+1
- 2362 10c8 9105      		sts (ucunit_testcases_failed_checks)+1,r25
- 2363 10ca 01F4      		sts ucunit_testcases_failed_checks,r24
- 2365               	.LM59:
- 2366 10ce 80E0      		ldi r24,lo8(4660)
- 2367 10d0 90E0      		ldi r25,hi8(4660)
- 2368 10d2 00D0      		std Y+2,r25
- 2369 10d4 80E0      		std Y+1,r24
- 2371 10d8 00D0      	.LM60:
- 2372 10da 80E0      		sts (ucunit_index)+1,__zero_reg__
- 2373 10dc 90E0      		sts ucunit_index,__zero_reg__
- 2374 10de 00D0      		rjmp .L63
- 2375 10e0 80E0      	.L64:
- 2376 10e2 90E0      		lds r24,ucunit_index
- 2377 10e4 00D0      		lds r25,(ucunit_index)+1
- 2378 10e6 80E0      		lsl r24
- 2379 10e8 90E0      		rol r25
- 2380 10ea 00D0      		movw r30,r24
- 2381 10ec 80E0      		subi r30,lo8(-(ucunit_checkpoints))
- 2382 10ee 90E0      		sbci r31,hi8(-(ucunit_checkpoints))
- 2383 10f0 00D0      		std Z+1,__zero_reg__
- 2384 10f2 80E0      		st Z,__zero_reg__
- 2385 10f4 90E0      		lds r24,ucunit_index
- 2386 10f6 00D0      		lds r25,(ucunit_index)+1
- 2387 10f8 80E0      		adiw r24,1
- 2388 10fa 90E0      		sts (ucunit_index)+1,r25
- 2389 10fc 00D0      		sts ucunit_index,r24
- 2390 10fe 8091 0000 	.L63:
- 2391 1102 9091 0000 		lds r24,ucunit_index
- 2392 1106 0196      		lds r25,(ucunit_index)+1
- 2393 1108 9093 0000 		cpi r24,16
- 2394 110c 8093 0000 		cpc r25,__zero_reg__
- 2395 1110 8091 0000 		brlt .L64
- 2397 1118 0196      	.LM61:
- 2398 111a 9093 0000 		ldi r24,lo8(107)
- 2399 111e 8093 0000 		ldi r25,hi8(107)
- 2400               		sts (ucunit_checkpoints)+1,r25
- 109:timetest.c    ****     UCUNIT_CheckIs16Bit(a); /* Pass */
- 2401               	checkpoints)+1,r25
- 2402               		sts ucunit_checkpoints,r24
- 2404 1124 90E0      	.LM62:
- 2405 1126 00D0      		ldd r24,Y+1
- 2406 1128 80E0      		ldd r25,Y+2
- 2407 112a 90E0      		movw r18,r24
- 2408 112c 00D0      		andi r19,hi8(255)
- 2409 112e 80E0      		ldd r24,Y+1
- 2410 1130 90E0      		ldd r25,Y+2
- 2411 1132 00D0      		cp r18,r24
- 2412 1134 80E0      		cpc r19,r25
- 2413 1136 90E0      		brne .L65
- 2414 1138 00D0      		ldi r24,lo8(.LC2)
- 2415 113a 80E0      		ldi r25,hi8(.LC2)
- 2416 113c 90E0      		rcall System_WriteString
- 2417 113e 00D0      		ldi r24,lo8(.LC3)
- 2418 1140 80E0      		ldi r25,hi8(.LC3)
- 2419 1142 90E0      		rcall System_WriteString
- 2420 1144 00D0      		ldi r24,lo8(.LC71)
- 2421 1146 80E0      		ldi r25,hi8(.LC71)
- 2422 1148 90E0      		rcall System_WriteString
- 2423 114a 00D0      		ldi r24,lo8(.LC5)
- 2424 114c 80E0      		ldi r25,hi8(.LC5)
- 2425 114e 90E0      		rcall System_WriteString
- 2426 1150 00D0      		ldi r24,lo8(.LC72)
- 2427 1152 8091 0000 		ldi r25,hi8(.LC72)
- 2428 1156 9091 0000 		rcall System_WriteString
- 2429 115a 0196      		ldi r24,lo8(.LC7)
- 2430 115c 9093 0000 		ldi r25,hi8(.LC7)
- 2431 1160 8093 0000 		rcall System_WriteString
- 110:timetest.c    ****     UCUNIT_CheckIs32Bit(a); /* Pass */
- 2432               	l System_WriteString
- 2433               		ldi r24,lo8(.LC73)
- 2434 1164 80E0      		ldi r25,hi8(.LC73)
- 2435 1166 90E0      		rcall System_WriteString
- 2436 1168 00D0      		ldi r24,lo8(.LC9)
- 2437 116a 80E0      		ldi r25,hi8(.LC9)
- 2438 116c 90E0      		rcall System_WriteString
- 2439 116e 00D0      		lds r24,ucunit_checks_passed
- 2440 1170 80E0      		lds r25,(ucunit_checks_passed)+1
- 2441 1172 90E0      		adiw r24,1
- 2442 1174 00D0      		sts (ucunit_checks_passed)+1,r25
- 2443 1176 80E0      		sts ucunit_checks_passed,r24
- 2444 1178 90E0      		rjmp .L66
- 2445 117a 00D0      	.L65:
- 2446 117c 80E0      		lds r24,ucunit_action
- 2447 117e 90E0      		lds r25,(ucunit_action)+1
- 2448 1180 00D0      		cpi r24,2
- 2449 1182 80E0      		cpc r25,__zero_reg__
- 2450 1184 90E0      		brne .L67
- 2451 1186 00D0      		rcall System_Safestate
- 2452 1188 80E0      	.L67:
- 2453 118a 90E0      		ldi r24,lo8(.LC2)
- 2454 118c 00D0      		ldi r25,hi8(.LC2)
- 2455 118e 80E0      		rcall System_WriteString
- 2456 1190 90E0      		ldi r24,lo8(.LC3)
- 2457 1192 00D0      		ldi r25,hi8(.LC3)
- 2458 1194 8091 0000 		rcall System_WriteString
- 2459 1198 9091 0000 		ldi r24,lo8(.LC71)
- 2460 119c 0196      		ldi r25,hi8(.LC71)
- 2461 119e 9093 0000 		rcall System_WriteString
- 2462 11a2 8093 0000 		ldi r24,lo8(.LC10)
- 111:timetest.c    ****     UCUNIT_Tracepoint(1); /* Pass */
- 2463               	 r24,lo8(.LC10)
- 2464               		ldi r25,hi8(.LC10)
- 2465 11a6 8FE6      		rcall System_WriteString
- 2466 11a8 90E0      		ldi r24,lo8(.LC72)
- 2467 11aa 9093 0000 		ldi r25,hi8(.LC72)
- 2468 11ae 8093 0000 		rcall System_WriteString
- 112:timetest.c    **** 
- 113:timetest.c    ****     UCUNIT_CheckTracepointCoverage(0); /* Pass */
- 2469               	em_WriteString
- 2470               		ldi r24,lo8(.LC7)
- 2471 11b2 8091 0000 		ldi r25,hi8(.LC7)
- 2472 11b6 9091 0000 		rcall System_WriteString
- 2473 11ba 0097      		ldi r24,lo8(.LC73)
- 2474 11bc 01F0      		ldi r25,hi8(.LC73)
- 2475 11be 80E0      		rcall System_WriteString
- 2476 11c0 90E0      		ldi r24,lo8(.LC9)
- 2477 11c2 00D0      		ldi r25,hi8(.LC9)
- 2478 11c4 80E0      		rcall System_WriteString
- 2479 11c6 90E0      		lds r24,ucunit_checks_failed
- 2480 11c8 00D0      		lds r25,(ucunit_checks_failed)+1
- 2481 11ca 80E0      		adiw r24,1
- 2482 11cc 90E0      		sts (ucunit_checks_failed)+1,r25
- 2483 11ce 00D0      		sts ucunit_checks_failed,r24
- 2484 11d0 80E0      		lds r24,ucunit_checklist_failed_checks
- 2485 11d2 90E0      		lds r25,(ucunit_checklist_failed_checks)+1
- 2486 11d4 00D0      		adiw r24,1
- 2487 11d6 80E0      		sts (ucunit_checklist_failed_checks)+1,r25
- 2488 11d8 90E0      		sts ucunit_checklist_failed_checks,r24
- 2489 11da 00D0      	.L66:
- 2491 11de 90E0      	.LM63:
- 2492 11e0 00D0      		ldi r24,lo8(.LC2)
- 2493 11e2 80E0      		ldi r25,hi8(.LC2)
- 2494 11e4 90E0      		rcall System_WriteString
- 2495 11e6 00D0      		ldi r24,lo8(.LC3)
- 2496 11e8 80E0      		ldi r25,hi8(.LC3)
- 2497 11ea 90E0      		rcall System_WriteString
- 2498 11ec 00D0      		ldi r24,lo8(.LC74)
- 2499 11ee 8091 0000 		ldi r25,hi8(.LC74)
- 2500 11f2 9091 0000 		rcall System_WriteString
- 2501 11f6 0196      		ldi r24,lo8(.LC5)
- 2502 11f8 9093 0000 		ldi r25,hi8(.LC5)
- 2503 11fc 8093 0000 		rcall System_WriteString
- 2504 1200 00C0      		ldi r24,lo8(.LC75)
- 2505               		ldi r25,hi8(.LC75)
- 2506 1202 8091 0000 		rcall System_WriteString
- 2507 1206 9091 0000 		ldi r24,lo8(.LC7)
- 2508 120a 8230      		ldi r25,hi8(.LC7)
- 2509 120c 9105      		rcall System_WriteString
- 2510 120e 01F4      		ldi r24,lo8(.LC73)
- 2511 1210 00D0      		ldi r25,hi8(.LC73)
- 2512               		rcall System_WriteString
- 2513 1212 80E0      		ldi r24,lo8(.LC9)
- 2514 1214 90E0      		ldi r25,hi8(.LC9)
- 2515 1216 00D0      		rcall System_WriteString
- 2516 1218 80E0      		lds r24,ucunit_checks_passed
- 2517 121a 90E0      		lds r25,(ucunit_checks_passed)+1
- 2518 121c 00D0      		adiw r24,1
- 2519 121e 80E0      		sts (ucunit_checks_passed)+1,r25
- 2520 1220 90E0      		sts ucunit_checks_passed,r24
- 2522 1224 80E0      	.LM64:
- 2523 1226 90E0      		ldi r24,lo8(.LC2)
- 2524 1228 00D0      		ldi r25,hi8(.LC2)
- 2525 122a 80E0      		rcall System_WriteString
- 2526 122c 90E0      		ldi r24,lo8(.LC3)
- 2527 122e 00D0      		ldi r25,hi8(.LC3)
- 2528 1230 80E0      		rcall System_WriteString
- 2529 1232 90E0      		ldi r24,lo8(.LC76)
- 2530 1234 00D0      		ldi r25,hi8(.LC76)
- 2531 1236 80E0      		rcall System_WriteString
- 2532 1238 90E0      		ldi r24,lo8(.LC5)
- 2533 123a 00D0      		ldi r25,hi8(.LC5)
- 2534 123c 80E0      		rcall System_WriteString
- 2535 123e 90E0      		ldi r24,lo8(.LC77)
- 2536 1240 00D0      		ldi r25,hi8(.LC77)
- 2537 1242 8091 0000 		rcall System_WriteString
- 2538 1246 9091 0000 		ldi r24,lo8(.LC7)
- 2539 124a 0196      		ldi r25,hi8(.LC7)
- 2540 124c 9093 0000 		rcall System_WriteString
- 2541 1250 8093 0000 		ldi r24,lo8(.LC73)
- 2542 1254 8091 0000 		ldi r25,hi8(.LC73)
- 2543 1258 9091 0000 		rcall System_WriteString
- 2544 125c 0196      		ldi r24,lo8(.LC9)
- 2545 125e 9093 0000 		ldi r25,hi8(.LC9)
- 2546 1262 8093 0000 		rcall System_WriteString
- 2547               		lds r24,ucunit_checks_passed
- 114:timetest.c    ****     UCUNIT_CheckTracepointCoverage(1); /* Pass */
- 2548               	s_passed
- 2549               		lds r25,(ucunit_checks_passed)+1
- 2550 1266 8091 0000 		adiw r24,1
- 2551 126a 9091 0000 		sts (ucunit_checks_passed)+1,r25
- 2552 126e 0097      		sts ucunit_checks_passed,r24
- 2554 1272 80E0      	.LM65:
- 2555 1274 90E0      		ldi r24,lo8(111)
- 2556 1276 00D0      		ldi r25,hi8(111)
- 2557 1278 80E0      		sts (ucunit_checkpoints+2)+1,r25
- 2558 127a 90E0      		sts ucunit_checkpoints+2,r24
- 2560 127e 80E0      	.LM66:
- 2561 1280 90E0      		lds r24,ucunit_checkpoints
- 2562 1282 00D0      		lds r25,(ucunit_checkpoints)+1
- 2563 1284 80E0      		sbiw r24,0
- 2564 1286 90E0      		breq .L68
- 2565 1288 00D0      		ldi r24,lo8(.LC2)
- 2566 128a 80E0      		ldi r25,hi8(.LC2)
- 2567 128c 90E0      		rcall System_WriteString
- 2568 128e 00D0      		ldi r24,lo8(.LC3)
- 2569 1290 80E0      		ldi r25,hi8(.LC3)
- 2570 1292 90E0      		rcall System_WriteString
- 2571 1294 00D0      		ldi r24,lo8(.LC78)
- 2572 1296 80E0      		ldi r25,hi8(.LC78)
- 2573 1298 90E0      		rcall System_WriteString
- 2574 129a 00D0      		ldi r24,lo8(.LC5)
- 2575 129c 80E0      		ldi r25,hi8(.LC5)
- 2576 129e 90E0      		rcall System_WriteString
- 2577 12a0 00D0      		ldi r24,lo8(.LC79)
- 2578 12a2 8091 0000 		ldi r25,hi8(.LC79)
- 2579 12a6 9091 0000 		rcall System_WriteString
- 2580 12aa 0196      		ldi r24,lo8(.LC7)
- 2581 12ac 9093 0000 		ldi r25,hi8(.LC7)
- 2582 12b0 8093 0000 		rcall System_WriteString
- 2583 12b4 00C0      		ldi r24,lo8(.LC80)
- 2584               		ldi r25,hi8(.LC80)
- 2585 12b6 8091 0000 		rcall System_WriteString
- 2586 12ba 9091 0000 		ldi r24,lo8(.LC9)
- 2587 12be 8230      		ldi r25,hi8(.LC9)
- 2588 12c0 9105      		rcall System_WriteString
- 2589 12c2 01F4      		lds r24,ucunit_checks_passed
- 2590 12c4 00D0      		lds r25,(ucunit_checks_passed)+1
- 2591               		adiw r24,1
- 2592 12c6 80E0      		sts (ucunit_checks_passed)+1,r25
- 2593 12c8 90E0      		sts ucunit_checks_passed,r24
- 2594 12ca 00D0      		rjmp .L69
- 2595 12cc 80E0      	.L68:
- 2596 12ce 90E0      		lds r24,ucunit_action
- 2597 12d0 00D0      		lds r25,(ucunit_action)+1
- 2598 12d2 80E0      		cpi r24,2
- 2599 12d4 90E0      		cpc r25,__zero_reg__
- 2600 12d6 00D0      		brne .L70
- 2601 12d8 80E0      		rcall System_Safestate
- 2602 12da 90E0      	.L70:
- 2603 12dc 00D0      		ldi r24,lo8(.LC2)
- 2604 12de 80E0      		ldi r25,hi8(.LC2)
- 2605 12e0 90E0      		rcall System_WriteString
- 2606 12e2 00D0      		ldi r24,lo8(.LC3)
- 2607 12e4 80E0      		ldi r25,hi8(.LC3)
- 2608 12e6 90E0      		rcall System_WriteString
- 2609 12e8 00D0      		ldi r24,lo8(.LC78)
- 2610 12ea 80E0      		ldi r25,hi8(.LC78)
- 2611 12ec 90E0      		rcall System_WriteString
- 2612 12ee 00D0      		ldi r24,lo8(.LC10)
- 2613 12f0 80E0      		ldi r25,hi8(.LC10)
- 2614 12f2 90E0      		rcall System_WriteString
- 2615 12f4 00D0      		ldi r24,lo8(.LC79)
- 2616 12f6 8091 0000 		ldi r25,hi8(.LC79)
- 2617 12fa 9091 0000 		rcall System_WriteString
- 2618 12fe 0196      		ldi r24,lo8(.LC7)
- 2619 1300 9093 0000 		ldi r25,hi8(.LC7)
- 2620 1304 8093 0000 		rcall System_WriteString
- 2621 1308 8091 0000 		ldi r24,lo8(.LC80)
- 2622 130c 9091 0000 		ldi r25,hi8(.LC80)
- 2623 1310 0196      		rcall System_WriteString
- 2624 1312 9093 0000 		ldi r24,lo8(.LC9)
- 2625 1316 8093 0000 		ldi r25,hi8(.LC9)
- 2626               		rcall System_WriteString
- 115:timetest.c    **** 
- 116:timetest.c    ****     UCUNIT_ResetTracepointCoverage();
- 2627               	riteString
- 2628               		lds r24,ucunit_checks_failed
- 2629 131a 1092 0000 		lds r25,(ucunit_checks_failed)+1
- 2630 131e 1092 0000 		adiw r24,1
- 2631 1322 00C0      		sts (ucunit_checks_failed)+1,r25
- 2632               		sts ucunit_checks_failed,r24
- 2633 1324 8091 0000 		lds r24,ucunit_checklist_failed_checks
- 2634 1328 9091 0000 		lds r25,(ucunit_checklist_failed_checks)+1
- 2635 132c 880F      		adiw r24,1
- 2636 132e 991F      		sts (ucunit_checklist_failed_checks)+1,r25
- 2637 1330 FC01      		sts ucunit_checklist_failed_checks,r24
- 2638 1332 E050      	.L69:
- 2640 1336 1182      	.LM67:
- 2641 1338 1082      		lds r24,ucunit_checkpoints+2
- 2642 133a 8091 0000 		lds r25,(ucunit_checkpoints+2)+1
- 2643 133e 9091 0000 		sbiw r24,0
- 2644 1342 0196      		breq .L71
- 2645 1344 9093 0000 		ldi r24,lo8(.LC2)
- 2646 1348 8093 0000 		ldi r25,hi8(.LC2)
- 2647               		rcall System_WriteString
- 2648 134c 8091 0000 		ldi r24,lo8(.LC3)
- 2649 1350 9091 0000 		ldi r25,hi8(.LC3)
- 2650 1354 8031      		rcall System_WriteString
- 2651 1356 9105      		ldi r24,lo8(.LC81)
- 2652 1358 04F0      		ldi r25,hi8(.LC81)
- 117:timetest.c    ****     for (i = 0; (i < 50) && (!found); i++)
- 2653               	i r25,hi8(.LC81)
- 2654               		rcall System_WriteString
- 2655 135a 1C82      		ldi r24,lo8(.LC5)
- 2656 135c 1B82      		ldi r25,hi8(.LC5)
- 2657 135e 00C0      		rcall System_WriteString
- 2658               		ldi r24,lo8(.LC79)
- 118:timetest.c    ****     {
- 119:timetest.c    ****         if (i == 25)
- 2659               	 r24,lo8(.LC79)
- 2660               		ldi r25,hi8(.LC79)
- 2661 1360 8B81      		rcall System_WriteString
- 2662 1362 9C81      		ldi r24,lo8(.LC7)
- 2663 1364 8931      		ldi r25,hi8(.LC7)
- 2664 1366 9105      		rcall System_WriteString
- 2665 1368 01F4      		ldi r24,lo8(.LC82)
- 120:timetest.c    ****         {
- 121:timetest.c    ****             UCUNIT_Tracepoint(0); /* Never executed */
- 2666               	i r24,lo8(.LC82)
- 2667               		ldi r25,hi8(.LC82)
- 2668 136a 89E7      		rcall System_WriteString
- 2669 136c 90E0      		ldi r24,lo8(.LC9)
- 2670 136e 9093 0000 		ldi r25,hi8(.LC9)
- 2671 1372 8093 0000 		rcall System_WriteString
- 2672 1376 00C0      		lds r24,ucunit_checks_passed
- 2673               		lds r25,(ucunit_checks_passed)+1
- 122:timetest.c    ****             break;
- 123:timetest.c    ****         }
- 124:timetest.c    **** 
- 125:timetest.c    ****         if (i == 10)
- 2674               	checks_passed)+1
- 2675               		adiw r24,1
- 2676 1378 8B81      		sts (ucunit_checks_passed)+1,r25
- 2677 137a 9C81      		sts ucunit_checks_passed,r24
- 2678 137c 8A30      		rjmp .L72
- 2679 137e 9105      	.L71:
- 2680 1380 01F4      		lds r24,ucunit_action
- 126:timetest.c    ****         {
- 127:timetest.c    ****             UCUNIT_Tracepoint(1); /* Executed */
- 2681               	r24,ucunit_action
- 2682               		lds r25,(ucunit_action)+1
- 2683 1382 8FE7      		cpi r24,2
- 2684 1384 90E0      		cpc r25,__zero_reg__
- 2685 1386 9093 0000 		brne .L73
- 2686 138a 8093 0000 		rcall System_Safestate
- 128:timetest.c    ****             found = TRUE;
- 2687               	l System_Safestate
- 2688               	.L73:
- 2689 138e 81E0      		ldi r24,lo8(.LC2)
- 2690 1390 90E0      		ldi r25,hi8(.LC2)
- 2691 1392 9E83      		rcall System_WriteString
- 2692 1394 8D83      		ldi r24,lo8(.LC3)
- 2693               		ldi r25,hi8(.LC3)
- 129:timetest.c    ****         }
- 130:timetest.c    **** 
- 131:timetest.c    ****         if (i == 15)
- 2694               	di r25,hi8(.LC3)
- 2695               		rcall System_WriteString
- 2696 1396 8B81      		ldi r24,lo8(.LC81)
- 2697 1398 9C81      		ldi r25,hi8(.LC81)
- 2698 139a 8F30      		rcall System_WriteString
- 2699 139c 9105      		ldi r24,lo8(.LC10)
- 2700 139e 01F4      		ldi r25,hi8(.LC10)
- 132:timetest.c    ****         {
- 133:timetest.c    ****             UCUNIT_Tracepoint(2); /* Never executed */
- 2701               	 r25,hi8(.LC10)
- 2702               		rcall System_WriteString
- 2703 13a0 85E8      		ldi r24,lo8(.LC79)
- 2704 13a2 90E0      		ldi r25,hi8(.LC79)
- 2705 13a4 9093 0000 		rcall System_WriteString
- 2706 13a8 8093 0000 		ldi r24,lo8(.LC7)
- 134:timetest.c    ****             found = TRUE;
- 2707               	r24,lo8(.LC7)
- 2708               		ldi r25,hi8(.LC7)
- 2709 13ac 81E0      		rcall System_WriteString
- 2710 13ae 90E0      		ldi r24,lo8(.LC82)
- 2711 13b0 9E83      		ldi r25,hi8(.LC82)
- 2712 13b2 8D83      		rcall System_WriteString
- 2713               		ldi r24,lo8(.LC9)
- 2714               		ldi r25,hi8(.LC9)
- 2715               		rcall System_WriteString
- 2716 13b4 8B81      		lds r24,ucunit_checks_failed
- 2717 13b6 9C81      		lds r25,(ucunit_checks_failed)+1
- 2718 13b8 0196      		adiw r24,1
- 2719 13ba 9C83      		sts (ucunit_checks_failed)+1,r25
- 2720 13bc 8B83      		sts ucunit_checks_failed,r24
- 2721               		lds r24,ucunit_checklist_failed_checks
- 2722 13be 8B81      		lds r25,(ucunit_checklist_failed_checks)+1
- 2723 13c0 9C81      		adiw r24,1
- 2724 13c2 8233      		sts (ucunit_checklist_failed_checks)+1,r25
- 2725 13c4 9105      		sts ucunit_checklist_failed_checks,r24
- 2726 13c6 04F4      	.L72:
- 2728 13ca 9E81      	.LM68:
- 2729 13cc 0097      		sts (ucunit_index)+1,__zero_reg__
- 2730 13ce 01F0      		sts ucunit_index,__zero_reg__
- 2731               		rjmp .L74
- 135:timetest.c    ****         }
- 136:timetest.c    ****     }
- 137:timetest.c    **** 
- 138:timetest.c    ****     UCUNIT_CheckTracepointCoverage(0); /* Fail  */
- 2732               	o_reg__
- 2733               		rjmp .L74
- 2734 13d0 8091 0000 	.L75:
- 2735 13d4 9091 0000 		lds r24,ucunit_index
- 2736 13d8 0097      		lds r25,(ucunit_index)+1
- 2737 13da 01F0      		lsl r24
- 2738 13dc 80E0      		rol r25
- 2739 13de 90E0      		movw r30,r24
- 2740 13e0 00D0      		subi r30,lo8(-(ucunit_checkpoints))
- 2741 13e2 80E0      		sbci r31,hi8(-(ucunit_checkpoints))
- 2742 13e4 90E0      		std Z+1,__zero_reg__
- 2743 13e6 00D0      		st Z,__zero_reg__
- 2744 13e8 80E0      		lds r24,ucunit_index
- 2745 13ea 90E0      		lds r25,(ucunit_index)+1
- 2746 13ec 00D0      		adiw r24,1
- 2747 13ee 80E0      		sts (ucunit_index)+1,r25
- 2748 13f0 90E0      		sts ucunit_index,r24
- 2749 13f2 00D0      	.L74:
- 2750 13f4 80E0      		lds r24,ucunit_index
- 2751 13f6 90E0      		lds r25,(ucunit_index)+1
- 2752 13f8 00D0      		cpi r24,16
- 2753 13fa 80E0      		cpc r25,__zero_reg__
- 2754 13fc 90E0      		brlt .L75
- 2756 1400 80E0      	.LM69:
- 2757 1402 90E0      		std Y+4,__zero_reg__
- 2758 1404 00D0      		std Y+3,__zero_reg__
- 2759 1406 80E0      		rjmp .L76
- 2760 1408 90E0      	.L81:
- 2762 140c 8091 0000 	.LM70:
- 2763 1410 9091 0000 		ldd r24,Y+3
- 2764 1414 0196      		ldd r25,Y+4
- 2765 1416 9093 0000 		cpi r24,25
- 2766 141a 8093 0000 		cpc r25,__zero_reg__
- 2767 141e 00C0      		brne .L77
- 2769 1420 8091 0000 	.LM71:
- 2770 1424 9091 0000 		ldi r24,lo8(121)
- 2771 1428 8230      		ldi r25,hi8(121)
- 2772 142a 9105      		sts (ucunit_checkpoints)+1,r25
- 2773 142c 01F4      		sts ucunit_checkpoints,r24
- 2774 142e 00D0      		rjmp .L78
- 2775               	.L77:
- 2777 1432 90E0      	.LM72:
- 2778 1434 00D0      		ldd r24,Y+3
- 2779 1436 80E0      		ldd r25,Y+4
- 2780 1438 90E0      		cpi r24,10
- 2781 143a 00D0      		cpc r25,__zero_reg__
- 2782 143c 80E0      		brne .L79
- 2784 1440 00D0      	.LM73:
- 2785 1442 80E0      		ldi r24,lo8(127)
- 2786 1444 90E0      		ldi r25,hi8(127)
- 2787 1446 00D0      		sts (ucunit_checkpoints+2)+1,r25
- 2788 1448 80E0      		sts ucunit_checkpoints+2,r24
- 2790 144c 00D0      	.LM74:
- 2791 144e 80E0      		ldi r24,lo8(1)
- 2792 1450 90E0      		ldi r25,hi8(1)
- 2793 1452 00D0      		std Y+6,r25
- 2794 1454 80E0      		std Y+5,r24
- 2795 1456 90E0      	.L79:
- 2797 145a 80E0      	.LM75:
- 2798 145c 90E0      		ldd r24,Y+3
- 2799 145e 00D0      		ldd r25,Y+4
- 2800 1460 8091 0000 		cpi r24,15
- 2801 1464 9091 0000 		cpc r25,__zero_reg__
- 2802 1468 0196      		brne .L80
- 2804 146e 8093 0000 	.LM76:
- 2805 1472 8091 0000 		ldi r24,lo8(133)
- 2806 1476 9091 0000 		ldi r25,hi8(133)
- 2807 147a 0196      		sts (ucunit_checkpoints+4)+1,r25
- 2808 147c 9093 0000 		sts ucunit_checkpoints+4,r24
- 2810               	.LM77:
- 139:timetest.c    ****     UCUNIT_CheckTracepointCoverage(1); /* Pass */
- 2811               	
- 2812               	.LM77:
- 2813 1484 8091 0000 		ldi r24,lo8(1)
- 2814 1488 9091 0000 		ldi r25,hi8(1)
- 2815 148c 0097      		std Y+6,r25
- 2816 148e 01F0      		std Y+5,r24
- 2817 1490 80E0      	.L80:
- 2819 1494 00D0      	.LM78:
- 2820 1496 80E0      		ldd r24,Y+3
- 2821 1498 90E0      		ldd r25,Y+4
- 2822 149a 00D0      		adiw r24,1
- 2823 149c 80E0      		std Y+4,r25
- 2824 149e 90E0      		std Y+3,r24
- 2825 14a0 00D0      	.L76:
- 2826 14a2 80E0      		ldd r24,Y+3
- 2827 14a4 90E0      		ldd r25,Y+4
- 2828 14a6 00D0      		cpi r24,50
- 2829 14a8 80E0      		cpc r25,__zero_reg__
- 2830 14aa 90E0      		brge .L78
- 2831 14ac 00D0      		ldd r24,Y+5
- 2832 14ae 80E0      		ldd r25,Y+6
- 2833 14b0 90E0      		sbiw r24,0
- 2834 14b2 00D0      		breq .L81
- 2835 14b4 80E0      	.L78:
- 2837 14b8 00D0      	.LM79:
- 2838 14ba 80E0      		lds r24,ucunit_checkpoints
- 2839 14bc 90E0      		lds r25,(ucunit_checkpoints)+1
- 2840 14be 00D0      		sbiw r24,0
- 2841 14c0 8091 0000 		breq .L82
- 2842 14c4 9091 0000 		ldi r24,lo8(.LC2)
- 2843 14c8 0196      		ldi r25,hi8(.LC2)
- 2844 14ca 9093 0000 		rcall System_WriteString
- 2845 14ce 8093 0000 		ldi r24,lo8(.LC3)
- 2846 14d2 00C0      		ldi r25,hi8(.LC3)
- 2847               		rcall System_WriteString
- 2848 14d4 8091 0000 		ldi r24,lo8(.LC83)
- 2849 14d8 9091 0000 		ldi r25,hi8(.LC83)
- 2850 14dc 8230      		rcall System_WriteString
- 2851 14de 9105      		ldi r24,lo8(.LC5)
- 2852 14e0 01F4      		ldi r25,hi8(.LC5)
- 2853 14e2 00D0      		rcall System_WriteString
- 2854               		ldi r24,lo8(.LC79)
- 2855 14e4 80E0      		ldi r25,hi8(.LC79)
- 2856 14e6 90E0      		rcall System_WriteString
- 2857 14e8 00D0      		ldi r24,lo8(.LC7)
- 2858 14ea 80E0      		ldi r25,hi8(.LC7)
- 2859 14ec 90E0      		rcall System_WriteString
- 2860 14ee 00D0      		ldi r24,lo8(.LC80)
- 2861 14f0 80E0      		ldi r25,hi8(.LC80)
- 2862 14f2 90E0      		rcall System_WriteString
- 2863 14f4 00D0      		ldi r24,lo8(.LC9)
- 2864 14f6 80E0      		ldi r25,hi8(.LC9)
- 2865 14f8 90E0      		rcall System_WriteString
- 2866 14fa 00D0      		lds r24,ucunit_checks_passed
- 2867 14fc 80E0      		lds r25,(ucunit_checks_passed)+1
- 2868 14fe 90E0      		adiw r24,1
- 2869 1500 00D0      		sts (ucunit_checks_passed)+1,r25
- 2870 1502 80E0      		sts ucunit_checks_passed,r24
- 2871 1504 90E0      		rjmp .L83
- 2872 1506 00D0      	.L82:
- 2873 1508 80E0      		lds r24,ucunit_action
- 2874 150a 90E0      		lds r25,(ucunit_action)+1
- 2875 150c 00D0      		cpi r24,2
- 2876 150e 80E0      		cpc r25,__zero_reg__
- 2877 1510 90E0      		brne .L84
- 2878 1512 00D0      		rcall System_Safestate
- 2879 1514 8091 0000 	.L84:
- 2880 1518 9091 0000 		ldi r24,lo8(.LC2)
- 2881 151c 0196      		ldi r25,hi8(.LC2)
- 2882 151e 9093 0000 		rcall System_WriteString
- 2883 1522 8093 0000 		ldi r24,lo8(.LC3)
- 2884 1526 8091 0000 		ldi r25,hi8(.LC3)
- 2885 152a 9091 0000 		rcall System_WriteString
- 2886 152e 0196      		ldi r24,lo8(.LC83)
- 2887 1530 9093 0000 		ldi r25,hi8(.LC83)
- 2888 1534 8093 0000 		rcall System_WriteString
- 2889               		ldi r24,lo8(.LC10)
- 140:timetest.c    ****     UCUNIT_CheckTracepointCoverage(2); /* Fail */
- 2890               	10)
- 2891               		ldi r25,hi8(.LC10)
- 2892 1538 8091 0000 		rcall System_WriteString
- 2893 153c 9091 0000 		ldi r24,lo8(.LC79)
- 2894 1540 0097      		ldi r25,hi8(.LC79)
- 2895 1542 01F0      		rcall System_WriteString
- 2896 1544 80E0      		ldi r24,lo8(.LC7)
- 2897 1546 90E0      		ldi r25,hi8(.LC7)
- 2898 1548 00D0      		rcall System_WriteString
- 2899 154a 80E0      		ldi r24,lo8(.LC80)
- 2900 154c 90E0      		ldi r25,hi8(.LC80)
- 2901 154e 00D0      		rcall System_WriteString
- 2902 1550 80E0      		ldi r24,lo8(.LC9)
- 2903 1552 90E0      		ldi r25,hi8(.LC9)
- 2904 1554 00D0      		rcall System_WriteString
- 2905 1556 80E0      		lds r24,ucunit_checks_failed
- 2906 1558 90E0      		lds r25,(ucunit_checks_failed)+1
- 2907 155a 00D0      		adiw r24,1
- 2908 155c 80E0      		sts (ucunit_checks_failed)+1,r25
- 2909 155e 90E0      		sts ucunit_checks_failed,r24
- 2910 1560 00D0      		lds r24,ucunit_checklist_failed_checks
- 2911 1562 80E0      		lds r25,(ucunit_checklist_failed_checks)+1
- 2912 1564 90E0      		adiw r24,1
- 2913 1566 00D0      		sts (ucunit_checklist_failed_checks)+1,r25
- 2914 1568 80E0      		sts ucunit_checklist_failed_checks,r24
- 2915 156a 90E0      	.L83:
- 2917 156e 80E0      	.LM80:
- 2918 1570 90E0      		lds r24,ucunit_checkpoints+2
- 2919 1572 00D0      		lds r25,(ucunit_checkpoints+2)+1
- 2920 1574 8091 0000 		sbiw r24,0
- 2921 1578 9091 0000 		breq .L85
- 2922 157c 0196      		ldi r24,lo8(.LC2)
- 2923 157e 9093 0000 		ldi r25,hi8(.LC2)
- 2924 1582 8093 0000 		rcall System_WriteString
- 2925 1586 00C0      		ldi r24,lo8(.LC3)
- 2926               		ldi r25,hi8(.LC3)
- 2927 1588 8091 0000 		rcall System_WriteString
- 2928 158c 9091 0000 		ldi r24,lo8(.LC84)
- 2929 1590 8230      		ldi r25,hi8(.LC84)
- 2930 1592 9105      		rcall System_WriteString
- 2931 1594 01F4      		ldi r24,lo8(.LC5)
- 2932 1596 00D0      		ldi r25,hi8(.LC5)
- 2933               		rcall System_WriteString
- 2934 1598 80E0      		ldi r24,lo8(.LC79)
- 2935 159a 90E0      		ldi r25,hi8(.LC79)
- 2936 159c 00D0      		rcall System_WriteString
- 2937 159e 80E0      		ldi r24,lo8(.LC7)
- 2938 15a0 90E0      		ldi r25,hi8(.LC7)
- 2939 15a2 00D0      		rcall System_WriteString
- 2940 15a4 80E0      		ldi r24,lo8(.LC82)
- 2941 15a6 90E0      		ldi r25,hi8(.LC82)
- 2942 15a8 00D0      		rcall System_WriteString
- 2943 15aa 80E0      		ldi r24,lo8(.LC9)
- 2944 15ac 90E0      		ldi r25,hi8(.LC9)
- 2945 15ae 00D0      		rcall System_WriteString
- 2946 15b0 80E0      		lds r24,ucunit_checks_passed
- 2947 15b2 90E0      		lds r25,(ucunit_checks_passed)+1
- 2948 15b4 00D0      		adiw r24,1
- 2949 15b6 80E0      		sts (ucunit_checks_passed)+1,r25
- 2950 15b8 90E0      		sts ucunit_checks_passed,r24
- 2951 15ba 00D0      		rjmp .L86
- 2952 15bc 80E0      	.L85:
- 2953 15be 90E0      		lds r24,ucunit_action
- 2954 15c0 00D0      		lds r25,(ucunit_action)+1
- 2955 15c2 80E0      		cpi r24,2
- 2956 15c4 90E0      		cpc r25,__zero_reg__
- 2957 15c6 00D0      		brne .L87
- 2958 15c8 8091 0000 		rcall System_Safestate
- 2959 15cc 9091 0000 	.L87:
- 2960 15d0 0196      		ldi r24,lo8(.LC2)
- 2961 15d2 9093 0000 		ldi r25,hi8(.LC2)
- 2962 15d6 8093 0000 		rcall System_WriteString
- 2963 15da 8091 0000 		ldi r24,lo8(.LC3)
- 2964 15de 9091 0000 		ldi r25,hi8(.LC3)
- 2965 15e2 0196      		rcall System_WriteString
- 2966 15e4 9093 0000 		ldi r24,lo8(.LC84)
- 2967 15e8 8093 0000 		ldi r25,hi8(.LC84)
- 2968               		rcall System_WriteString
- 141:timetest.c    **** 
- 142:timetest.c    ****     UCUNIT_TestcaseEnd(); /* Fail */
- 2969               	_WriteString
- 2970               		ldi r24,lo8(.LC10)
- 2971 15ec 80E0      		ldi r25,hi8(.LC10)
- 2972 15ee 90E0      		rcall System_WriteString
- 2973 15f0 00D0      		ldi r24,lo8(.LC79)
- 2974 15f2 2091 0000 		ldi r25,hi8(.LC79)
- 2975 15f6 3091 0000 		rcall System_WriteString
- 2976 15fa 8091 0000 		ldi r24,lo8(.LC7)
- 2977 15fe 9091 0000 		ldi r25,hi8(.LC7)
- 2978 1602 2817      		rcall System_WriteString
- 2979 1604 3907      		ldi r24,lo8(.LC82)
- 2980 1606 01F4      		ldi r25,hi8(.LC82)
- 2981 1608 80E0      		rcall System_WriteString
- 2982 160a 90E0      		ldi r24,lo8(.LC9)
- 2983 160c 00D0      		ldi r25,hi8(.LC9)
- 2984 160e 8091 0000 		rcall System_WriteString
- 2985 1612 9091 0000 		lds r24,ucunit_checks_failed
- 2986 1616 0196      		lds r25,(ucunit_checks_failed)+1
- 2987 1618 9093 0000 		adiw r24,1
- 2988 161c 8093 0000 		sts (ucunit_checks_failed)+1,r25
- 2989 1620 00C0      		sts ucunit_checks_failed,r24
- 2990               		lds r24,ucunit_checklist_failed_checks
- 2991 1622 80E0      		lds r25,(ucunit_checklist_failed_checks)+1
- 2992 1624 90E0      		adiw r24,1
- 2993 1626 00D0      		sts (ucunit_checklist_failed_checks)+1,r25
- 2994 1628 80E0      		sts ucunit_checklist_failed_checks,r24
- 2995 162a 90E0      	.L86:
- 2997 162e 80E0      	.LM81:
- 2998 1630 90E0      		lds r24,ucunit_checkpoints+4
- 2999 1632 00D0      		lds r25,(ucunit_checkpoints+4)+1
- 3000 1634 80E0      		sbiw r24,0
- 3001 1636 90E0      		breq .L88
- 3002 1638 00D0      		ldi r24,lo8(.LC2)
- 3003 163a 80E0      		ldi r25,hi8(.LC2)
- 3004 163c 90E0      		rcall System_WriteString
- 3005 163e 00D0      		ldi r24,lo8(.LC3)
- 3006 1640 80E0      		ldi r25,hi8(.LC3)
- 3007 1642 90E0      		rcall System_WriteString
- 3008 1644 00D0      		ldi r24,lo8(.LC85)
- 3009 1646 80E0      		ldi r25,hi8(.LC85)
- 3010 1648 90E0      		rcall System_WriteString
- 3011 164a 00D0      		ldi r24,lo8(.LC5)
- 3012 164c 80E0      		ldi r25,hi8(.LC5)
- 3013 164e 90E0      		rcall System_WriteString
- 3014 1650 00D0      		ldi r24,lo8(.LC79)
- 3015 1652 8091 0000 		ldi r25,hi8(.LC79)
- 3016 1656 9091 0000 		rcall System_WriteString
- 3017 165a 0196      		ldi r24,lo8(.LC7)
- 3018 165c 9093 0000 		ldi r25,hi8(.LC7)
- 3019 1660 8093 0000 		rcall System_WriteString
- 3020               		ldi r24,lo8(.LC86)
- 3021 1664 80E0      		ldi r25,hi8(.LC86)
- 3022 1666 90E0      		rcall System_WriteString
- 3023 1668 00D0      		ldi r24,lo8(.LC9)
- 3024               		ldi r25,hi8(.LC9)
- 143:timetest.c    **** }
- 3025               	,hi8(.LC9)
- 3026               		rcall System_WriteString
- 3027 166a 2696      		lds r24,ucunit_checks_passed
- 3028 166c 0FB6      		lds r25,(ucunit_checks_passed)+1
- 3029 166e F894      		adiw r24,1
- 3030 1670 DEBF      		sts (ucunit_checks_passed)+1,r25
- 3031 1672 0FBE      		sts ucunit_checks_passed,r24
- 3032 1674 CDBF      		rjmp .L89
- 3033 1676 CF91      	.L88:
- 3034 1678 DF91      		lds r24,ucunit_action
- 3035 167a 0895      		lds r25,(ucunit_action)+1
- 3036               		cpi r24,2
- 3037               		cpc r25,__zero_reg__
- 3038               		brne .L90
- 3039               		rcall System_Safestate
- 3040               	.L90:
- 3041               		ldi r24,lo8(.LC2)
- 3042               		ldi r25,hi8(.LC2)
- 3043               		rcall System_WriteString
- 3044               		ldi r24,lo8(.LC3)
- 3045 0299 0A2A 2A2A 		ldi r25,hi8(.LC3)
- 3045      2A2A 2A2A 
- 3045      2A2A 2A2A 
- 3045      2A2A 2A2A 
- 3045      2A2A 2A2A 
- 3046               		rcall System_WriteString
- 3047 02c1 0A54 6573 		ldi r24,lo8(.LC85)
- 3047      7463 6173 
- 3047      6573 3A20 
- 3047      6661 696C 
- 3047      6564 3A20 
- 3048               		ldi r25,hi8(.LC85)
- 3049 02d6 0A20 2020 		rcall System_WriteString
- 3049      2020 2020 
- 3049      2020 2020 
- 3049      7061 7373 
- 3049      6564 3A20 
- 3050               		ldi r24,lo8(.LC10)
- 3051 02eb 0A43 6865 		ldi r25,hi8(.LC10)
- 3051      636B 733A 
- 3051      2020 2020 
- 3051      6661 696C 
- 3051      6564 3A20 
- 3052               		rcall System_WriteString
- 3053 0300 0A2A 2A2A 		ldi r24,lo8(.LC79)
- 3053      2A2A 2A2A 
- 3053      2A2A 2A2A 
- 3053      2A2A 2A2A 
- 3053      2A2A 2A2A 
- 3054               		ldi r25,hi8(.LC79)
- 3055               		rcall System_WriteString
- 3056               		ldi r24,lo8(.LC7)
- 3057               		ldi r25,hi8(.LC7)
- 3058               		rcall System_WriteString
- 144:timetest.c    **** 
- 145:timetest.c    **** void Testsuite_RunTests(void)
- 146:timetest.c    **** {
- 3059               	WriteString
- 3060               		ldi r24,lo8(.LC86)
- 3061               		ldi r25,hi8(.LC86)
- 3062 167c DF93      		rcall System_WriteString
- 3063 167e CF93      		ldi r24,lo8(.LC9)
- 3064 1680 CDB7      		ldi r25,hi8(.LC9)
- 3065 1682 DEB7      		rcall System_WriteString
- 3066               		lds r24,ucunit_checks_failed
- 3067               		lds r25,(ucunit_checks_failed)+1
- 147:timetest.c    ****     Test_BasicChecksDemo();
- 3068               	_failed)+1
- 3069               		adiw r24,1
- 3070 1684 00D0      		sts (ucunit_checks_failed)+1,r25
- 148:timetest.c    ****     Test_PointersDemo();
- 3071               	_failed)+1,r25
- 3072               		sts ucunit_checks_failed,r24
- 3073 1686 00D0      		lds r24,ucunit_checklist_failed_checks
- 149:timetest.c    ****     Test_ChecklistDemo();
- 3074               	t_failed_checks
- 3075               		lds r25,(ucunit_checklist_failed_checks)+1
- 3076 1688 00D0      		adiw r24,1
- 150:timetest.c    ****     Test_BitChecksDemo();
- 3077               	s)+1
- 3078               		adiw r24,1
- 3079 168a 00D0      		sts (ucunit_checklist_failed_checks)+1,r25
- 151:timetest.c    ****     Test_CheckTracepointsDemo();
- 3080               	led_checks)+1,r25
- 3081               		sts ucunit_checklist_failed_checks,r24
- 3082 168c 00D0      	.L89:
- 152:timetest.c    **** 
- 153:timetest.c    ****     UCUNIT_WriteSummary();
- 3083               	_checks,r24
- 3084               	.L89:
- 3086 1690 90E0      	.LM82:
- 3087 1692 00D0      		ldi r24,lo8(.LC24)
- 3088 1694 80E0      		ldi r25,hi8(.LC24)
- 3089 1696 90E0      		rcall System_WriteString
- 3090 1698 00D0      		lds r18,ucunit_testcases_failed_checks
- 3091 169a 8091 0000 		lds r19,(ucunit_testcases_failed_checks)+1
- 3092 169e 9091 0000 		lds r24,ucunit_checks_failed
- 3093 16a2 00D0      		lds r25,(ucunit_checks_failed)+1
- 3094 16a4 80E0      		cp r18,r24
- 3095 16a6 90E0      		cpc r19,r25
- 3096 16a8 00D0      		brne .L91
- 3097 16aa 8091 0000 		ldi r24,lo8(.LC25)
- 3098 16ae 9091 0000 		ldi r25,hi8(.LC25)
- 3099 16b2 00D0      		rcall System_WriteString
- 3100 16b4 80E0      		lds r24,ucunit_testcases_passed
- 3101 16b6 90E0      		lds r25,(ucunit_testcases_passed)+1
- 3102 16b8 00D0      		adiw r24,1
- 3103 16ba 8091 0000 		sts (ucunit_testcases_passed)+1,r25
- 3104 16be 9091 0000 		sts ucunit_testcases_passed,r24
- 3105 16c2 00D0      		rjmp .L92
- 3106 16c4 80E0      	.L91:
- 3107 16c6 90E0      		ldi r24,lo8(.LC2)
- 3108 16c8 00D0      		ldi r25,hi8(.LC2)
- 3109 16ca 8091 0000 		rcall System_WriteString
- 3110 16ce 9091 0000 		ldi r24,lo8(.LC3)
- 3111 16d2 00D0      		ldi r25,hi8(.LC3)
- 3112 16d4 80E0      		rcall System_WriteString
- 3113 16d6 90E0      		ldi r24,lo8(.LC87)
- 3114 16d8 00D0      		ldi r25,hi8(.LC87)
- 3115               		rcall System_WriteString
- 154:timetest.c    **** }
- 3116               	_WriteString
- 3117               		ldi r24,lo8(.LC10)
- 3118 16da CF91      		ldi r25,hi8(.LC10)
- 3119 16dc DF91      		rcall System_WriteString
- 3120 16de 0895      		ldi r24,lo8(.LC27)
- 3121               		ldi r25,hi8(.LC27)
- 3122               		rcall System_WriteString
- 3123               		ldi r24,lo8(.LC7)
- 3124               		ldi r25,hi8(.LC7)
- 3125               		rcall System_WriteString
- 3126               		ldi r24,lo8(.LC28)
- 155:timetest.c    **** 
- 156:timetest.c    **** 
- 157:timetest.c    **** void setup(void)
- 158:timetest.c    **** {
- 3127               	lo8(.LC28)
- 3128               		ldi r25,hi8(.LC28)
- 3129               		rcall System_WriteString
- 3130 16e0 DF93      		ldi r24,lo8(.LC9)
- 3131 16e2 CF93      		ldi r25,hi8(.LC9)
- 3132 16e4 CDB7      		rcall System_WriteString
- 3133 16e6 DEB7      		lds r24,ucunit_testcases_failed
- 3134               		lds r25,(ucunit_testcases_failed)+1
- 3135               		adiw r24,1
- 159:timetest.c    ****   sbi(DEFAULTDDR, TASKAPIN);
- 3136               	+1
- 3137               		adiw r24,1
- 3138 16e8 A7E3      		sts (ucunit_testcases_failed)+1,r25
- 3139 16ea B0E0      		sts ucunit_testcases_failed,r24
- 3140 16ec E7E3      	.L92:
- 3141 16ee F0E0      		ldi r24,lo8(.LC24)
- 3142 16f0 8081      		ldi r25,hi8(.LC24)
- 3143 16f2 8160      		rcall System_WriteString
- 3144 16f4 8C93      	/* epilogue start */
- 160:timetest.c    ****   sbi(DEFAULTDDR, TASKBPIN);
- 3145               	logue start */
- 3147 16f6 A7E3      	.LM83:
- 3148 16f8 B0E0      		adiw r28,6
- 3149 16fa E7E3      		in __tmp_reg__,__SREG__
- 3150 16fc F0E0      		cli
- 3151 16fe 8081      		out __SP_H__,r29
- 3152 1700 8260      		out __SREG__,__tmp_reg__
- 3153 1702 8C93      		out __SP_L__,r28
- 161:timetest.c    ****   sbi(DEFAULTDDR, TASKCPIN);
- 3154               	t __SP_L__,r28
- 3155               		pop r28
- 3156 1704 A7E3      		pop r29
- 3157 1706 B0E0      		ret
- 162:timetest.c    ****   sbi(DEFAULTDDR, TASKDPIN);
- 3163               	LFBB5-.LFBB5
- 3165 1712 A7E3      	.Lscope5:
- 3166 1714 B0E0      		.data
- 3167 1716 E7E3      	.LC88:
- 3168 1718 F0E0      		.string	"\n**************************************"
- 3169 171a 8081      	.LC89:
- 3170 171c 8860      		.string	"\nTestcases: failed: "
- 3171 171e 8C93      	.LC90:
- 163:timetest.c    ****   sbi(DEFAULTDDR, TASKEPIN);
- 3172               	led: "
- 3173               	.LC90:
- 3174 1720 A7E3      		.string	"\n           passed: "
- 3175 1722 B0E0      	.LC91:
- 3176 1724 E7E3      		.string	"\nChecks:    failed: "
- 3177 1726 F0E0      	.LC92:
- 3178 1728 8081      		.string	"\n**************************************\n"
- 3179 172a 8061      		.text
- 3181               	.global	Testsuite_RunTests
- 164:timetest.c    **** }
- 3182               	uite_RunTests
- 3184 172e CF91      	Testsuite_RunTests:
- 3186 1732 0895      	.LM84:
- 3187               	.LFBB6:
- 3188               		push r29
- 3189               		push r28
- 3190               		in r28,__SP_L__
- 3191               		in r29,__SP_H__
- 3192               	/* prologue: function */
- 3193               	/* frame size = 0 */
- 3195 032f 0000 0000 	.LM85:
- 3195      0000 0000 
- 3195      0000 0000 
- 3195      0000 0000 
- 3195      0000 0000 
- 3196               		rcall Test_BasicChecksDemo
- 3198               	.LM86:
- 3199               		rcall Test_PointersDemo
- 3201 036d 0000      	.LM87:
- 3202 036f 0000      		rcall Test_ChecklistDemo
- 3204 0373 42        	.LM88:
- 3205 0374 00        		rcall Test_BitChecksDemo
- 3207 0376 00        	.LM89:
- 3208 0377 00        		rcall Test_CheckTracepointsDemo
- 3210               	.LM90:
- 3211               		ldi r24,lo8(.LC88)
- 3212               		ldi r25,hi8(.LC88)
- 3213               		rcall System_WriteString
- 3214               		ldi r24,lo8(.LC89)
- 165:timetest.c    **** 
- 166:timetest.c    **** u32 a;
- 167:timetest.c    **** TASK(A,32)
- 168:timetest.c    **** {
- 3215               	4,lo8(.LC89)
- 3216               		ldi r25,hi8(.LC89)
- 3217               		rcall System_WriteString
- 3218 1734 DF93      		lds r24,ucunit_testcases_failed
- 3219 1736 CF93      		lds r25,(ucunit_testcases_failed)+1
- 3220 1738 CDB7      		rcall System_WriteInt
- 3221 173a DEB7      		ldi r24,lo8(.LC90)
- 3222               		ldi r25,hi8(.LC90)
- 3223               		rcall System_WriteString
- 169:timetest.c    **** 	for(a=0;a < 100000;a++)
- 3224               	riteString
- 3225               		lds r24,ucunit_testcases_passed
- 3226 173c 1092 0000 		lds r25,(ucunit_testcases_passed)+1
- 3227 1740 1092 0000 		rcall System_WriteInt
- 3228 1744 1092 0000 		ldi r24,lo8(.LC91)
- 3229 1748 1092 0000 		ldi r25,hi8(.LC91)
- 3230 174c 00C0      		rcall System_WriteString
- 3231               		lds r24,ucunit_checks_failed
- 170:timetest.c    **** 	{
- 171:timetest.c    **** 		sbi(DEFAULTPORT, TASKAPIN);
- 3232               	ecks_failed
- 3233               		lds r25,(ucunit_checks_failed)+1
- 3234 174e A8E3      		rcall System_WriteInt
- 3235 1750 B0E0      		ldi r24,lo8(.LC90)
- 3236 1752 E8E3      		ldi r25,hi8(.LC90)
- 3237 1754 F0E0      		rcall System_WriteString
- 3238 1756 8081      		lds r24,ucunit_checks_passed
- 3239 1758 8160      		lds r25,(ucunit_checks_passed)+1
- 3240 175a 8C93      		rcall System_WriteInt
- 172:timetest.c    **** 		cbi(DEFAULTPORT, TASKAPIN);
- 3241               	ystem_WriteInt
- 3242               		ldi r24,lo8(.LC92)
- 3243 175c A8E3      		ldi r25,hi8(.LC92)
- 3244 175e B0E0      		rcall System_WriteString
- 3245 1760 E8E3      	/* epilogue start */
- 3247 1764 8081      	.LM91:
- 3248 1766 8E7F      		pop r28
- 3249 1768 8C93      		pop r29
- 3250               		ret
- 3252 176a 8091 0000 	.Lscope6:
- 3254 1772 A091 0000 	.global	setup
- 3256 177a 0196      	setup:
- 3258 177e B11D      	.LM92:
- 3259 1780 8093 0000 	.LFBB7:
- 3260 1784 9093 0000 		push r29
- 3261 1788 A093 0000 		push r28
- 3262 178c B093 0000 		in r28,__SP_L__
- 3263               		in r29,__SP_H__
- 3264 1790 8091 0000 	/* prologue: function */
- 3265 1794 9091 0000 	/* frame size = 0 */
- 3267 179c B091 0000 	.LM93:
- 3268 17a0 803A      		ldi r26,lo8(55)
- 3269 17a2 26E8      		ldi r27,hi8(55)
- 3270 17a4 9207      		ldi r30,lo8(55)
- 3271 17a6 21E0      		ldi r31,hi8(55)
- 3272 17a8 A207      		ld r24,Z
- 3273 17aa 20E0      		ori r24,lo8(1)
- 3274 17ac B207      		st X,r24
- 173:timetest.c    ****   	}
- 174:timetest.c    ****   	ENDTASK(A);
- 3276               	abn	68,0,160,.LM94-.LFBB7
- 3277               	.LM94:
- 3278 17b0 83E0      		ldi r26,lo8(55)
- 3279 17b2 8093 0000 		ldi r27,hi8(55)
- 3280               		ldi r30,lo8(55)
- 3281               		ldi r31,hi8(55)
- 3282               		ld r24,Z
- 3283 17b6 0000      		ori r24,lo8(2)
- 3284               		st X,r24
- 3286 17b8 00C0      	.LM95:
- 3287               		ldi r26,lo8(55)
- 3288               		ldi r27,hi8(55)
- 3289               		ldi r30,lo8(55)
- 3290               		ldi r31,hi8(55)
- 3291               		ld r24,Z
- 3292               		ori r24,lo8(4)
- 3293               		st X,r24
- 3295 037f 0000 0000 	.LM96:
- 3295      0000 0000 
- 3295      0000 0000 
- 3295      0000 0000 
- 3295      0000 0000 
- 3296               		ldi r26,lo8(55)
- 3297               		ldi r27,hi8(55)
- 3298               		ldi r30,lo8(55)
- 3299               		ldi r31,hi8(55)
- 3300 03bb 0000      		ld r24,Z
- 3301 03bd 0000      		ori r24,lo8(8)
- 3302 03bf 0000      		st X,r24
- 3304 03c3 42        	.LM97:
- 3305 03c4 00        		ldi r26,lo8(55)
- 3306 03c5 00        		ldi r27,hi8(55)
- 3307 03c6 00        		ldi r30,lo8(55)
- 3308 03c7 00        		ldi r31,hi8(55)
- 3309 03c8 00        		ld r24,Z
- 3310               		ori r24,lo8(16)
- 3311               		st X,r24
- 3312               	/* epilogue start */
- 3314               	.LM98:
- 175:timetest.c    **** }
- 176:timetest.c    **** 
- 177:timetest.c    **** u08 b;
- 178:timetest.c    **** TASK(B,32)
- 179:timetest.c    **** {
- 3315               	,0,164,.LM98-.LFBB7
- 3316               	.LM98:
- 3317               		pop r28
- 3318 17ba DF93      		pop r29
- 3319 17bc CF93      		ret
- 3321 17c0 CDB7      	.Lscope7:
- 3322 17c2 DEB7      	.global	taskstack_A
- 3323               		.data
- 180:timetest.c    ****    u08 i;
- 181:timetest.c    **** 	for(b=0;b<2;b++)
- 3325               	e	taskstack_A, @object
- 3327 17c4 1092 0000 	taskstack_A:
- 3328 17c8 00C0      		.string	"STACK"
- 3329               		.skip 60,0
- 182:timetest.c    **** 	{
- 183:timetest.c    **** 	   for(i=0; i < 100; i++)
- 3330               	tring	"STACK"
- 3331               		.skip 60,0
- 3332 17ca 1982      	.global	taskobj_A
- 184:timetest.c    **** 	   {
- 185:timetest.c    **** 			sbi(DEFAULTPORT, TASKBPIN);
- 3335               	ject
- 3337 17ce A8E3      	taskobj_A:
- 3338 17d0 B0E0      		.word	gs(task_A)
- 3339 17d2 E8E3      		.word	gs(task_A)
- 3340 17d4 F0E0      		.word	taskstack_A
- 3341 17d6 8081      		.word	taskstack_A+32
- 3342 17d8 8260      		.byte	66
- 3343 17da 8C93      		.byte	0
- 186:timetest.c    **** 			cbi(DEFAULTPORT, TASKBPIN);
- 3344               	32
- 3345               		.byte	66
- 3346 17dc A8E3      		.byte	0
- 3347 17de B0E0      		.byte	0
- 3348 17e0 E8E3      		.byte	0
- 3349 17e2 F0E0      		.byte	0
- 3350 17e4 8081      		.skip 1,0
- 3351 17e6 8D7F      		.text
- 3353               	.global	task_A
- 3355 17ea 8981      	task_A:
- 3357 17ee 8983      	.LM99:
- 3358               	.LFBB8:
- 3359 17f0 8981      		push r29
- 3360 17f2 8436      		push r28
- 3361 17f4 00F0      		in r28,__SP_L__
- 187:timetest.c    **** 		}
- 188:timetest.c    **** 		sleep(20000);
- 3362               	 r28,__SP_L__
- 3363               		in r29,__SP_H__
- 3364 17f6 60E2      	/* prologue: function */
- 3365 17f8 7EE4      	/* frame size = 0 */
- 3367 17fc 90E0      	.LM100:
- 3368 17fe 00D0      		sts a,__zero_reg__
- 3369               		sts (a)+1,__zero_reg__
- 3370               		sts (a)+2,__zero_reg__
- 3371 1800 8091 0000 		sts (a)+3,__zero_reg__
- 3372 1804 8F5F      		rjmp .L99
- 3373 1806 8093 0000 	.L100:
- 3375 180a 8091 0000 	.LM101:
- 3376 180e 8230      		ldi r26,lo8(56)
- 3377 1810 00F0      		ldi r27,hi8(56)
- 189:timetest.c    ****   	}
- 190:timetest.c    ****   	ENDTASK(B);
- 3378               	 r27,hi8(56)
- 3379               		ldi r30,lo8(56)
- 3380 1812 83E0      		ldi r31,hi8(56)
- 3381 1814 8093 0000 		ld r24,Z
- 3382               		ori r24,lo8(1)
- 3383               		st X,r24
- 3385 1818 0000      	.LM102:
- 3386               		ldi r26,lo8(56)
- 3387               		ldi r27,hi8(56)
- 3388 181a 00C0      		ldi r30,lo8(56)
- 3389               		ldi r31,hi8(56)
- 3390               		ld r24,Z
- 3391               		andi r24,lo8(-2)
- 3392               		st X,r24
- 3394               	.LM103:
- 3395               		lds r24,a
- 3396               		lds r25,(a)+1
- 3397               		lds r26,(a)+2
- 3398               		lds r27,(a)+3
- 3399 03c9 0000      		adiw r24,1
- 3400 03cb 0000      		adc r26,__zero_reg__
- 3401               		adc r27,__zero_reg__
- 3402 03cd 0A4E 616D 		sts a,r24
- 3402      653A 2020 
- 3402      2020 2000 
- 3403               		sts (a)+1,r25
- 3404 03d9 7543 556E 		sts (a)+2,r26
- 3404      6974 2064 
- 3404      656D 6F20 
- 3404      6170 706C 
- 3404      6963 6174 
- 3405               		sts (a)+3,r27
- 3406 03f1 0A43 6F6D 	.L99:
- 3406      7069 6C65 
- 3406      643A 2000 
- 3407               		lds r24,a
- 3408 03fd 4A75 6C20 		lds r25,(a)+1
- 3408      3137 2032 
- 3408      3031 3500 
- 3409               		lds r26,(a)+2
- 3410 0409 0A54 696D 		lds r27,(a)+3
- 3410      653A 2020 
- 3410      2020 2000 
- 3411               		cpi r24,lo8(100000)
- 3412 0415 3233 3A34 		ldi r18,hi8(100000)
- 3412      353A 3437 
- 3412      00
- 3413               		cpc r25,r18
- 3414 041e 0A56 6572 		ldi r18,hlo8(100000)
- 3414      7369 6F6E 
- 3414      3A20 2000 
- 3415               		cpc r26,r18
- 3416 042a 7631 2E30 		ldi r18,hhi8(100000)
- 3416      00
- 3417               		cpc r27,r18
- 3418               		brlo .L100
- 3420               	.LM104:
- 3421               		ldi r24,lo8(3)
- 191:timetest.c    **** }
- 192:timetest.c    **** 
- 193:timetest.c    **** 
- 194:timetest.c    **** //----- Begin Code ------------------------------------------------------------
- 195:timetest.c    **** 
- 196:timetest.c    **** #define TASK_AMOUNT 2
- 197:timetest.c    **** TASK *taskset[] = {&taskobj_A, &taskobj_B/*, &taskobj_C, &taskobj_D*/};
- 198:timetest.c    **** 
- 199:timetest.c    **** int main(void)
- 200:timetest.c    **** {
- 3422               	104:
- 3423               		ldi r24,lo8(3)
- 3424               		sts taskobj_A+13,r24
- 3425 181c DF93      	.L101:
- 3426 181e CF93      	/* #APP */
- 3427 1820 CDB7      	 ;  174 "timetest.c" 1
- 3428 1822 DEB7      		nop
- 3429               	 ;  0 "" 2
- 3430               	/* #NOAPP */
- 201:timetest.c    ****     UCUNIT_Init();
- 3431               	
- 3432               	 ;  0 "" 2
- 3433 1824 00D0      	/* #NOAPP */
- 202:timetest.c    ****     UCUNIT_WriteString("\n**************************************");
- 3434               		nop
- 3435               	 ;  0 "" 2
- 3436 1826 80E0      	/* #NOAPP */
- 3437 1828 90E0      		rjmp .L101
- 203:timetest.c    ****     UCUNIT_WriteString("\nName:     ");
- 3439               	01
- 3441 182c 80E0      	.Lscope8:
- 3442 182e 90E0      	.global	taskstack_B
- 3443 1830 00D0      		.data
- 204:timetest.c    ****     UCUNIT_WriteString("uCUnit demo application");
- 3444               	.global	taskstack_B
- 3445               		.data
- 3448 1836 00D0      	taskstack_B:
- 205:timetest.c    ****     UCUNIT_WriteString("\nCompiled: ");
- 3449               	skstack_B, 66
- 3450               	taskstack_B:
- 3451 1838 80E0      		.string	"STACK"
- 3452 183a 90E0      		.skip 60,0
- 3453 183c 00D0      	.global	taskobj_B
- 206:timetest.c    ****     UCUNIT_WriteString(__DATE__);
- 3454               	kip 60,0
- 3455               	.global	taskobj_B
- 3458 1842 00D0      	taskobj_B:
- 207:timetest.c    ****     UCUNIT_WriteString("\nTime:     ");
- 3459               		taskobj_B, 14
- 3460               	taskobj_B:
- 3461 1844 80E0      		.word	gs(task_B)
- 3462 1846 90E0      		.word	gs(task_B)
- 3463 1848 00D0      		.word	taskstack_B
- 208:timetest.c    ****     UCUNIT_WriteString(__TIME__);
- 3464               	task_B)
- 3465               		.word	taskstack_B
- 3466 184a 80E0      		.word	taskstack_B+32
- 3467 184c 90E0      		.byte	66
- 3468 184e 00D0      		.byte	0
- 209:timetest.c    ****     UCUNIT_WriteString("\nVersion:  ");
- 3469               	ck_B+32
- 3470               		.byte	66
- 3471 1850 80E0      		.byte	0
- 3472 1852 90E0      		.byte	0
- 3473 1854 00D0      		.byte	0
- 210:timetest.c    ****     UCUNIT_WriteString(UCUNIT_VERSION);
- 3474               		.byte	0
- 3475               		.byte	0
- 3476 1856 80E0      		.byte	0
- 3477 1858 90E0      		.byte	0
- 3478 185a 00D0      		.skip 1,0
- 211:timetest.c    ****     UCUNIT_WriteString("\n**************************************");
- 3479               	byte	0
- 3480               		.byte	0
- 3481 185c 80E0      		.skip 1,0
- 3482 185e 90E0      		.text
- 212:timetest.c    ****     Testsuite_RunTests();
- 3484               	_B:F(0,15)",36,0,0,task_B
- 3485               	.global	task_B
- 213:timetest.c    ****     UCUNIT_Shutdown();
- 3487               	B
- 3489 1864 00D0      	task_B:
- 214:timetest.c    **** 
- 215:timetest.c    ****    INIT_RTOS();
- 3490               	pe	task_B, @function
- 3491               	task_B:
- 3493 1868 F0E0      	.LM105:
- 3494 186a 8FE5      	.LFBB9:
- 3495 186c 94E0      		push r29
- 3496 186e 9183      		push r28
- 3497 1870 8083      		push __tmp_reg__
- 3498               		in r28,__SP_L__
- 3499               		in r29,__SP_H__
- 3500 1872 0024      	/* prologue: function */
- 3501               	/* frame size = 1 */
- 3503 1874 1124      	.LM106:
- 3504               		sts b,__zero_reg__
- 3505               		rjmp .L104
- 3506 1876 2224      	.L107:
- 3508               	.LM107:
- 3509 1878 3324      		std Y+1,__zero_reg__
- 3510               		rjmp .L105
- 3511               	.L106:
- 3513               	.LM108:
- 3514               		ldi r26,lo8(56)
- 3515 187c 5524      		ldi r27,hi8(56)
- 3516               		ldi r30,lo8(56)
- 3517               		ldi r31,hi8(56)
- 3518 187e 6624      		ld r24,Z
- 3519               		ori r24,lo8(2)
- 3520               		st X,r24
- 3522               	.LM109:
- 3523               		ldi r26,lo8(56)
- 3524 1882 8824      		ldi r27,hi8(56)
- 3525               		ldi r30,lo8(56)
- 3526               		ldi r31,hi8(56)
- 3527 1884 9924      		ld r24,Z
- 3528               		andi r24,lo8(-3)
- 3529               		st X,r24
- 3531               	.LM110:
- 3532               		ldd r24,Y+1
- 3533 1888 BB24      		subi r24,lo8(-(1))
- 3534               		std Y+1,r24
- 3535               	.L105:
- 3536 188a CC24      		ldd r24,Y+1
- 3537               		cpi r24,lo8(100)
- 3538               		brlo .L106
- 3540               	.LM111:
- 3541               		ldi r22,lo8(20000)
- 3542 188e EE24      		ldi r23,hi8(20000)
- 3543               		ldi r24,hlo8(20000)
- 3544               		ldi r25,hhi8(20000)
- 3545 1890 FF24      		rcall sleep
- 3547               	.LM112:
- 3548 1892 0027      		lds r24,b
- 3549               		subi r24,lo8(-(1))
- 3550               		sts b,r24
- 3551 1894 1127      	.L104:
- 3552               		lds r24,b
- 3553               		cpi r24,lo8(2)
- 3554 1896 2227      		brlo .L107
- 3556               	.LM113:
- 3557 1898 3327      		ldi r24,lo8(3)
- 3558               		sts taskobj_B+13,r24
- 3559               	.L108:
- 3560 189a 4427      	/* #APP */
- 3561               	 ;  190 "timetest.c" 1
- 3562               		nop
- 3563 189c 5527      	 ;  0 "" 2
- 3564               	/* #NOAPP */
- 3565               		rjmp .L108
- 3570               	.Lscope9:
- 3571               	.global	taskset
- 3572 18a2 8827      		.data
- 3575 18a4 9927      	taskset:
- 3576               		.word	taskobj_A
- 3577               		.word	taskobj_B
- 3578 18a6 AA27      	.LC93:
- 3579               		.string	"\nName:     "
- 3580               	.LC94:
- 3581 18a8 BB27      		.string	"uCUnit demo application"
- 3582               	.LC95:
- 3583               		.string	"\nCompiled: "
- 3584 18aa CC27      	.LC96:
- 3585               		.string	"Jul 17 2015"
- 3586               	.LC97:
- 3587 18ac DD27      		.string	"\nTime:     "
- 3588               	.LC98:
- 3589               		.string	"23:45:47"
- 3590 18ae EE27      	.LC99:
- 3591               		.string	"\nVersion:  "
- 3592               	.LC100:
- 3593 18b0 FF27      		.string	"v1.0"
- 3594               		.text
- 216:timetest.c    **** 
- 217:timetest.c    **** 	setup();
- 3595               	tring	"v1.0"
- 3596               		.text
- 3598 18b2 00D0      	.global	main
- 218:timetest.c    ****    	sbi(DEFAULTPORT, TASKDPIN);
- 3599               	,0,0,main
- 3600               	.global	main
- 3602 18b6 B0E0      	main:
- 3604 18ba F0E0      	.LM114:
- 3605 18bc 8081      	.LFBB10:
- 3606 18be 8860      		push r29
- 3607 18c0 8C93      		push r28
- 219:timetest.c    **** 	cbi(DEFAULTPORT, TASKDPIN);
- 3608               	push r29
- 3609               		push r28
- 3610 18c2 A8E3      		in r28,__SP_L__
- 3611 18c4 B0E0      		in r29,__SP_H__
- 3612 18c6 E8E3      	/* prologue: function */
- 3613 18c8 F0E0      	/* frame size = 0 */
- 3615 18cc 877F      	.LM115:
- 3616 18ce 8C93      		rcall System_Init
- 220:timetest.c    **** 
- 221:timetest.c    **** 	startRRScheduler(taskset, TASK_AMOUNT);
- 3617               	all System_Init
- 3619 18d0 80E0      	.LM116:
- 3620 18d2 90E0      		ldi r24,lo8(.LC88)
- 3621 18d4 62E0      		ldi r25,hi8(.LC88)
- 3622 18d6 00D0      		rcall System_WriteString
- 222:timetest.c    **** 	
- 223:timetest.c    **** 	while(1)
- 224:timetest.c    **** 	{
- 225:timetest.c    **** 		sbi(DEFAULTPORT, TASKDPIN);
- 3624               	3,.LM117-.LFBB10
- 3625               	.LM117:
- 3626 18d8 A8E3      		ldi r24,lo8(.LC93)
- 3627 18da B0E0      		ldi r25,hi8(.LC93)
- 3628 18dc E8E3      		rcall System_WriteString
- 3630 18e0 8081      	.LM118:
- 3631 18e2 8860      		ldi r24,lo8(.LC94)
- 3632 18e4 8C93      		ldi r25,hi8(.LC94)
- 226:timetest.c    **** 		cbi(DEFAULTPORT, TASKDPIN);
- 3633               	r25,hi8(.LC94)
- 3634               		rcall System_WriteString
- 3636 18e8 B0E0      	.LM119:
- 3637 18ea E8E3      		ldi r24,lo8(.LC95)
- 3638 18ec F0E0      		ldi r25,hi8(.LC95)
- 3639 18ee 8081      		rcall System_WriteString
- 3641 18f2 8C93      	.LM120:
- 3642 18f4 00C0      		ldi r24,lo8(.LC96)
- 3643               		ldi r25,hi8(.LC96)
- 3644               		rcall System_WriteString
- 3646               	.LM121:
- 3647               		ldi r24,lo8(.LC97)
- 3648               		ldi r25,hi8(.LC97)
- 3649               		rcall System_WriteString
- 3651               	.LM122:
- 3652               		ldi r24,lo8(.LC98)
- 3653               		ldi r25,hi8(.LC98)
- 3654               		rcall System_WriteString
- 3656               	.LM123:
- 3657               		ldi r24,lo8(.LC99)
- 3658               		ldi r25,hi8(.LC99)
- 3659               		rcall System_WriteString
- 3661               	.LM124:
- 3662               		ldi r24,lo8(.LC100)
- 3663               		ldi r25,hi8(.LC100)
- 3664               		rcall System_WriteString
- 3666               	.LM125:
- 3667               		ldi r24,lo8(.LC88)
+  63:timetest.c    **** #ifdef UNITTEST_TESTS
+  64:timetest.c    **** TEST(assertionsFailure)
+  65:timetest.c    **** {
+  66:timetest.c    ****    checkTracepoint(0);
+  67:timetest.c    **** 	assertEquals(0,0);
+  68:timetest.c    **** 	setTracepoint(1);
+  69:timetest.c    **** 	checkTracepoint(1);
+  70:timetest.c    **** 	assertEquals(0,-1);
+  71:timetest.c    **** 	setTracepoint(2);
+  72:timetest.c    **** 	assertEquals(10000,10000);
+  73:timetest.c    **** 	setTracepoint(3);
+  74:timetest.c    **** }
+  75:timetest.c    **** 
+  76:timetest.c    **** TEST(assertionsFailure2)
+  77:timetest.c    **** {
+  78:timetest.c    **** 	setTracepoint(4);
+  79:timetest.c    **** 	assertLower(0,0);
+  80:timetest.c    ****    setTracepoint(5);
+  81:timetest.c    **** }
+  82:timetest.c    **** 
+  83:timetest.c    **** TEST(assertionsNoFailure)
+  84:timetest.c    **** {
+  85:timetest.c    ****    setTracepoint(6);
+  86:timetest.c    **** 	assertLower(-1, 0);
+  87:timetest.c    **** 	assertLower(0, 1);
+  88:timetest.c    **** 	assertLowerEqual(-1, 0);
+  89:timetest.c    **** 	assertLowerEqual(0, 1);
+  90:timetest.c    **** 	assertLowerEqual(-1, -1);
+  91:timetest.c    **** 	assertEquals(10000, 10000);
+  92:timetest.c    **** 	assertGreaterEqual(10000, 10000);
+  93:timetest.c    **** 	assertGreaterEqual(10001, 10000);
+  94:timetest.c    **** 	assertGreater(0, -1);
+  95:timetest.c    **** 	assertGreater(1, 0);
+  96:timetest.c    **** 	setTracepoint(7);
+  97:timetest.c    **** 	
+  98:timetest.c    **** }
+  99:timetest.c    **** 
+ 100:timetest.c    **** TEST(tracepointFailure)
+ 101:timetest.c    **** {
+ 102:timetest.c    ****    checkTracepoint(0);
+ 103:timetest.c    **** }
+ 104:timetest.c    **** #endif
+ 105:timetest.c    **** 
+ 106:timetest.c    **** int main(void)
+ 107:timetest.c    **** {
+ 482               	"timetest.c" 1
+ 483               		nop
+ 484               	 ;  0 "" 2
+ 485 0184 0F93      	/* #NOAPP */
+ 486 0186 DF93      		rjmp .L15
+ 491               	.Lscope3:
+ 108:timetest.c    ****    INIT_RTOS();
+ 492               	.LFBB3
+ 493               	.Lscope3:
+ 494 018e EDE5      	.global	taskset
+ 495 0190 F0E0      		.data
+ 498 0196 9183      	taskset:
+ 499 0198 8083      		.word	taskobj_A
+ 500               		.word	taskobj_B
+ 501               		.section	.progmem.data,"a",@progbits
+ 504               	__c.1596:
+ 505 019c 1124      		.string	"timetest.c"
+ 508 019e 2224      	__c.1594:
+ 509               		.string	"timetest.c"
+ 512               	__c.1592:
+ 513               		.string	"timetest.c"
+ 516               	__c.1590:
+ 517 01a4 5524      		.string	"timetest.c"
+ 520 01a6 6624      	__c.1588:
+ 521               		.string	"timetest.c"
+ 522               		.text
+ 524               	.global	main
+ 526 01aa 8824      	main:
+ 528               	.LM25:
+ 529 01ac 9924      	.LFBB4:
+ 530               		push r16
+ 531               		push r29
+ 532 01ae AA24      		push r28
+ 533               		in r28,__SP_L__
+ 534               		in r29,__SP_H__
+ 535 01b0 BB24      	/* prologue: function */
+ 536               	/* frame size = 0 */
+ 538 01b2 CC24      	.LM26:
+ 539               		ldi r30,lo8(93)
+ 540               		ldi r31,hi8(93)
+ 541 01b4 DD24      		ldi r24,lo8(2143)
+ 542               		ldi r25,hi8(2143)
+ 543               		std Z+1,r25
+ 544 01b6 EE24      		st Z,r24
+ 545               	/* #APP */
+ 546               	 ;  108 "timetest.c" 1
+ 547 01b8 FF24      		clr    r0
+ 548               	 ;  0 "" 2
+ 549               	 ;  108 "timetest.c" 1
+ 550 01ba 0027      		clr    r1
+ 551               	 ;  0 "" 2
+ 552               	 ;  108 "timetest.c" 1
+ 553 01bc 1127      		clr    r2
+ 554               	 ;  0 "" 2
+ 555               	 ;  108 "timetest.c" 1
+ 556 01be 2227      		clr    r3
+ 557               	 ;  0 "" 2
+ 558               	 ;  108 "timetest.c" 1
+ 559 01c0 3327      		clr    r4
+ 560               	 ;  0 "" 2
+ 561               	 ;  108 "timetest.c" 1
+ 562 01c2 4427      		clr    r5
+ 563               	 ;  0 "" 2
+ 564               	 ;  108 "timetest.c" 1
+ 565 01c4 5527      		clr    r6
+ 566               	 ;  0 "" 2
+ 567               	 ;  108 "timetest.c" 1
+ 568 01c6 6627      		clr    r7
+ 569               	 ;  0 "" 2
+ 570               	 ;  108 "timetest.c" 1
+ 571 01c8 7727      		clr    r8
+ 572               	 ;  0 "" 2
+ 573               	 ;  108 "timetest.c" 1
+ 574 01ca 8827      		clr    r9
+ 575               	 ;  0 "" 2
+ 576               	 ;  108 "timetest.c" 1
+ 577 01cc 9927      		clr    r10
+ 578               	 ;  0 "" 2
+ 579               	 ;  108 "timetest.c" 1
+ 580 01ce AA27      		clr    r11
+ 581               	 ;  0 "" 2
+ 582               	 ;  108 "timetest.c" 1
+ 583 01d0 BB27      		clr    r12
+ 584               	 ;  0 "" 2
+ 585               	 ;  108 "timetest.c" 1
+ 586 01d2 CC27      		clr    r13
+ 587               	 ;  0 "" 2
+ 588               	 ;  108 "timetest.c" 1
+ 589 01d4 DD27      		clr    r14
+ 590               	 ;  0 "" 2
+ 591               	 ;  108 "timetest.c" 1
+ 592 01d6 EE27      		clr    r15
+ 593               	 ;  0 "" 2
+ 594               	 ;  108 "timetest.c" 1
+ 595 01d8 FF27      		clr    r16
+ 596               	 ;  0 "" 2
+ 597               	 ;  108 "timetest.c" 1
+ 598 01da 0E94 0000 		clr    r17
+ 109:timetest.c    **** 
+ 110:timetest.c    **** #ifdef UNITTEST_TESTS	
+ 111:timetest.c    **** 	suite();
+ 112:timetest.c    **** 	RUN(assertionsFailure);
+ 113:timetest.c    **** 	checkTracepoint(1);
+ 114:timetest.c    **** 	RUN(tracepointFailure);
+ 115:timetest.c    **** 	RUN(assertionsFailure2);
+ 116:timetest.c    **** 	checkTracepoint(4);
+ 117:timetest.c    **** 	RUN(assertionsNoFailure);
+ 118:timetest.c    **** 	checkTracepoint(7);
+ 119:timetest.c    **** 	suiteend();
+ 120:timetest.c    **** #endif
+ 121:timetest.c    **** 
+ 122:timetest.c    ****    suite();
+ 599               	st.c" 1
+ 600               		clr    r17
+ 601 01de 0E94 0000 	 ;  0 "" 2
+ 602               	 ;  108 "timetest.c" 1
+ 123:timetest.c    ****    assertEquals(0,a);
+ 603               	 "" 2
+ 604               	 ;  108 "timetest.c" 1
+ 605 01e2 20E0      		clr    r18
+ 606 01e4 30E0      	 ;  0 "" 2
+ 607               	 ;  108 "timetest.c" 1
+ 608 01e6 8091 0000 		clr    r19
+ 609 01ea 9091 0000 	 ;  0 "" 2
+ 610 01ee A091 0000 	 ;  108 "timetest.c" 1
+ 611 01f2 B091 0000 		clr    r20
+ 612 01f6 FC01      	 ;  0 "" 2
+ 613 01f8 C901      	 ;  108 "timetest.c" 1
+ 614 01fa 6BE7      		clr    r21
+ 615 01fc 70E0      	 ;  0 "" 2
+ 616 01fe 40E0      	 ;  108 "timetest.c" 1
+ 617 0200 50E0      		clr    r22
+ 618 0202 9F01      	 ;  0 "" 2
+ 619 0204 02E0      	 ;  108 "timetest.c" 1
+ 620 0206 0E94 0000 		clr    r23
+ 621               	 ;  0 "" 2
+ 124:timetest.c    ****    assertEquals(0,b);
+ 622               	r23
+ 623               	 ;  0 "" 2
+ 624 020a 20E0      	 ;  108 "timetest.c" 1
+ 625 020c 30E0      		clr    r24
+ 626               	 ;  0 "" 2
+ 627 020e 8091 0000 	 ;  108 "timetest.c" 1
+ 628 0212 E82F      		clr    r25
+ 629 0214 F0E0      	 ;  0 "" 2
+ 630 0216 C901      	 ;  108 "timetest.c" 1
+ 631 0218 6CE7      		clr    r26
+ 632 021a 70E0      	 ;  0 "" 2
+ 633 021c 40E0      	 ;  108 "timetest.c" 1
+ 634 021e 50E0      		clr    r27
+ 635 0220 9F01      	 ;  0 "" 2
+ 636 0222 02E0      	 ;  108 "timetest.c" 1
+ 637 0224 0E94 0000 		clr    r28
+ 125:timetest.c    **** 	setup();
+ 638               	.c" 1
+ 639               		clr    r28
+ 640 0228 0E94 0000 	 ;  0 "" 2
+ 126:timetest.c    **** 	checkTracepoint(1);
+ 641               	st.c" 1
+ 642               		clr    r28
+ 643 022c 81E0      	 ;  0 "" 2
+ 644 022e 0E94 0000 	 ;  108 "timetest.c" 1
+ 127:timetest.c    **** 	startRRScheduler(taskset, TASK_AMOUNT);
+ 645               	0 "" 2
+ 646               	 ;  108 "timetest.c" 1
+ 647 0232 80E0      		clr    r29
+ 648 0234 90E0      	 ;  0 "" 2
+ 649 0236 62E0      	 ;  108 "timetest.c" 1
+ 650 0238 0E94 0000 		clr		r30
+ 651               	 ;  0 "" 2
+ 128:timetest.c    **** 	assertEquals(a, 1000);
+ 652               	c" 1
+ 653               		clr		r30
+ 654 023c 20E0      	 ;  0 "" 2
+ 655 023e 30E0      	 ;  108 "timetest.c" 1
+ 656               		clr		r31
+ 657 0240 8091 0000 	 ;  0 "" 2
+ 658 0244 9091 0000 	/* #NOAPP */
+ 659 0248 A091 0000 		call uart_init
+ 661 0250 AC01      	.LM27:
+ 662 0252 C901      		call suite
+ 663 0254 60E8      	.LBB2:
+ 665 0258 28EE      	.LM28:
+ 666 025a 33E0      		ldi r18,lo8(__c.1588)
+ 667 025c 02E0      		ldi r19,hi8(__c.1588)
+ 668 025e 0E94 0000 	.LBE2:
+ 669               		lds r24,a
+ 129:timetest.c    ****    assertEquals(b,2);
+ 670               	BE2:
+ 671               		lds r24,a
+ 672 0262 20E0      		lds r25,(a)+1
+ 673 0264 30E0      		lds r26,(a)+2
+ 674               		lds r27,(a)+3
+ 675 0266 8091 0000 		movw r30,r24
+ 676 026a 482F      		movw r24,r18
+ 677 026c 50E0      		ldi r22,lo8(123)
+ 678 026e C901      		ldi r23,hi8(123)
+ 679 0270 61E8      		ldi r20,lo8(0)
+ 680 0272 70E0      		ldi r21,hi8(0)
+ 681 0274 22E0      		movw r18,r30
+ 682 0276 30E0      		ldi r16,lo8(2)
+ 683 0278 02E0      		call assertion
+ 684 027a 0E94 0000 	.LBB3:
+ 130:timetest.c    ****    assertEquals(c,2);
+ 686               	124,.LM29-.LFBB4
+ 687               	.LM29:
+ 688 027e 20E0      		ldi r18,lo8(__c.1590)
+ 689 0280 30E0      		ldi r19,hi8(__c.1590)
+ 690               	.LBE3:
+ 691 0282 8091 0000 		lds r24,b
+ 692 0286 9091 0000 		mov r30,r24
+ 693 028a A091 0000 		ldi r31,lo8(0)
+ 694 028e B091 0000 		movw r24,r18
+ 695 0292 AC01      		ldi r22,lo8(124)
+ 696 0294 C901      		ldi r23,hi8(124)
+ 697 0296 62E8      		ldi r20,lo8(0)
+ 698 0298 70E0      		ldi r21,hi8(0)
+ 699 029a 22E0      		movw r18,r30
+ 700 029c 30E0      		ldi r16,lo8(2)
+ 701 029e 02E0      		call assertion
+ 131:timetest.c    ****    checkTracepoint(2);
+ 703               	.LM30-.LFBB4
+ 704               	.LM30:
+ 705 02a4 82E0      		call setup
+ 132:timetest.c    **** 	suiteend();	
+ 707               	abn	68,0,126,.LM31-.LFBB4
+ 708               	.LM31:
+ 709 02aa 0E94 0000 		ldi r24,lo8(1)
+ 710               		call checkTracepoint
+ 133:timetest.c    **** 	
+ 134:timetest.c    **** 	do{
+ 135:timetest.c    **** 	  nop();
+ 711               	1)
+ 712               		call checkTracepoint
+ 714               	.LM32:
+ 715 02ae 0000      		ldi r24,lo8(taskset)
+ 716               		ldi r25,hi8(taskset)
+ 717               		ldi r22,lo8(2)
+ 718 02b0 00C0      		call startRRScheduler
+ 719               	.LBB4:
+ 721               	.LM33:
+ 722               		ldi r18,lo8(__c.1592)
+ 723               		ldi r19,hi8(__c.1592)
+ 724               	.LBE4:
+ 725               		lds r24,a
+ 726               		lds r25,(a)+1
+ 727               		lds r26,(a)+2
+ 728               		lds r27,(a)+3
+ 729               		movw r20,r24
+ 730               		movw r24,r18
+ 731               		ldi r22,lo8(128)
+ 732               		ldi r23,hi8(128)
+ 733               		ldi r18,lo8(1000)
+ 734               		ldi r19,hi8(1000)
+ 735               		ldi r16,lo8(2)
+ 736               		call assertion
+ 737               	.LBB5:
+ 739               	.LM34:
+ 740               		ldi r18,lo8(__c.1594)
+ 741               		ldi r19,hi8(__c.1594)
+ 742               	.LBE5:
+ 743               		lds r24,b
+ 744               		mov r20,r24
+ 745               		ldi r21,lo8(0)
+ 746               		movw r24,r18
+ 747               		ldi r22,lo8(129)
+ 748               		ldi r23,hi8(129)
+ 749               		ldi r18,lo8(2)
+ 750               		ldi r19,hi8(2)
+ 751               		ldi r16,lo8(2)
+ 752               		call assertion
 DEFINED SYMBOLS
                             *ABS*:00000000 timetest.c
-/tmp/user/501/ccS2EG2Z.s:2      *ABS*:0000003f __SREG__
-/tmp/user/501/ccS2EG2Z.s:3      *ABS*:0000003e __SP_H__
-/tmp/user/501/ccS2EG2Z.s:4      *ABS*:0000003d __SP_L__
-/tmp/user/501/ccS2EG2Z.s:5      *ABS*:00000034 __CCP__
-/tmp/user/501/ccS2EG2Z.s:6      *ABS*:00000000 __tmp_reg__
-/tmp/user/501/ccS2EG2Z.s:7      *ABS*:00000001 __zero_reg__
-                             .bss:00000000 ucunit_checks_failed
-/tmp/user/501/ccS2EG2Z.s:27     .bss:00000002 ucunit_checks_passed
-/tmp/user/501/ccS2EG2Z.s:28     .bss:00000004 ucunit_testcases_failed
-/tmp/user/501/ccS2EG2Z.s:29     .bss:00000006 ucunit_testcases_passed
-/tmp/user/501/ccS2EG2Z.s:30     .bss:00000008 ucunit_testcases_failed_checks
-/tmp/user/501/ccS2EG2Z.s:31     .bss:0000000a ucunit_checklist_failed_checks
-/tmp/user/501/ccS2EG2Z.s:32     .bss:0000000c ucunit_action
-/tmp/user/501/ccS2EG2Z.s:33     .bss:0000000e ucunit_index
-/tmp/user/501/ccS2EG2Z.s:187    .text:00000000 Test_BasicChecksDemo
-/tmp/user/501/ccS2EG2Z.s:744    .text:0000045c Test_PointersDemo
-/tmp/user/501/ccS2EG2Z.s:1281   .text:00000898 Test_ChecklistDemo
-/tmp/user/501/ccS2EG2Z.s:1858   .text:00000cf6 Test_BitChecksDemo
-/tmp/user/501/ccS2EG2Z.s:2239   .text:00000fd8 Test_CheckTracepointsDemo
-/tmp/user/501/ccS2EG2Z.s:34     .bss:00000010 ucunit_checkpoints
-/tmp/user/501/ccS2EG2Z.s:3058   .text:0000167c Testsuite_RunTests
-/tmp/user/501/ccS2EG2Z.s:3126   .text:000016e0 setup
-/tmp/user/501/ccS2EG2Z.s:3193   .data:00000329 taskstack_A
-/tmp/user/501/ccS2EG2Z.s:3199   .data:0000036b taskobj_A
-/tmp/user/501/ccS2EG2Z.s:3214   .text:00001734 task_A
-                            *COM*:00000004 a
-/tmp/user/501/ccS2EG2Z.s:3293   .data:00000379 taskstack_B
-/tmp/user/501/ccS2EG2Z.s:3299   .data:000003bb taskobj_B
-/tmp/user/501/ccS2EG2Z.s:3314   .text:000017ba task_B
-                            *COM*:00000001 b
-/tmp/user/501/ccS2EG2Z.s:3398   .data:000003c9 taskset
-/tmp/user/501/ccS2EG2Z.s:3421   .text:0000181c main
+/tmp/user/501/ccjpmqwE.s:2      *ABS*:0000003f __SREG__
+/tmp/user/501/ccjpmqwE.s:3      *ABS*:0000003e __SP_H__
+/tmp/user/501/ccjpmqwE.s:4      *ABS*:0000003d __SP_L__
+/tmp/user/501/ccjpmqwE.s:5      *ABS*:00000034 __CCP__
+/tmp/user/501/ccjpmqwE.s:6      *ABS*:00000000 __tmp_reg__
+/tmp/user/501/ccjpmqwE.s:7      *ABS*:00000001 __zero_reg__
+/tmp/user/501/ccjpmqwE.s:132    .text:00000000 setup
+/tmp/user/501/ccjpmqwE.s:204    .bss:00000000 a
+/tmp/user/501/ccjpmqwE.s:210    .bss:00000004 c
+/tmp/user/501/ccjpmqwE.s:216    .data:00000000 taskstack_A
+/tmp/user/501/ccjpmqwE.s:222    .data:000000a2 taskobj_A
+/tmp/user/501/ccjpmqwE.s:237    .text:0000005a task_A
+/tmp/user/501/ccjpmqwE.s:338    .bss:00000008 b
+/tmp/user/501/ccjpmqwE.s:344    .data:000000b0 taskstack_B
+/tmp/user/501/ccjpmqwE.s:350    .data:00000152 taskobj_B
+/tmp/user/501/ccjpmqwE.s:365    .text:0000011a task_B
+/tmp/user/501/ccjpmqwE.s:453    .data:00000160 taskset
+/tmp/user/501/ccjpmqwE.s:459    .progmem.data:00000000 __c.1596
+/tmp/user/501/ccjpmqwE.s:463    .progmem.data:0000000b __c.1594
+/tmp/user/501/ccjpmqwE.s:467    .progmem.data:00000016 __c.1592
+/tmp/user/501/ccjpmqwE.s:471    .progmem.data:00000021 __c.1590
+/tmp/user/501/ccjpmqwE.s:475    .progmem.data:0000002c __c.1588
+/tmp/user/501/ccjpmqwE.s:481    .text:00000184 main
 
 UNDEFINED SYMBOLS
-System_WriteString
-System_Safestate
-System_Shutdown
-System_WriteInt
+tracepoint
 sleep
-System_Init
+uart_init
+suite
+assertion
+checkTracepoint
 startRRScheduler
+suiteend
 __do_copy_data
 __do_clear_bss

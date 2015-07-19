@@ -11,10 +11,38 @@
 #include <avr/io.h>			// include I/O definitions (port names, pin names, etc)
 #include <avr/interrupt.h>	// include interrupt support
 #include <avr/pgmspace.h>
+#include "libdefs.h"
+#include "global.h"
+#include "uartavr.h"
 
 #define INIT_STACK() \
 	SP = RAMEND \
 	
+#ifdef USE_TERMINAL
+#define INIT_TERM() \
+	uart_init(); \
+
+#define PUTC(UC) \
+	uart_putc(UC); \
+
+#define PUTS(C) \
+	uart_puts(C); \
+
+#define PUTSP(CP) \
+	uart_puts_p(PSTR(CP)); \
+		
+#else
+#define INIT_TERM()
+
+#define PUTC(UC)
+
+#define PUTS(C)
+
+#define PUTSP(CP)
+
+#endif
+
+
 #define CLEAR_REGISTERS() \
   asm volatile ("clr    r0"); \
   asm volatile ("clr    r1"); \
@@ -53,6 +81,7 @@
 #define INIT_RTOS() \
 	INIT_STACK(); \
 	CLEAR_REGISTERS(); \
+	INIT_TERM(); \
 
 
 #define set_stackpointer(STACKPOINTER) SP = STACKPOINTER
@@ -159,6 +188,9 @@
 
 
 #endif /* HALAVR_H_ */
+
+
+
 
 
 

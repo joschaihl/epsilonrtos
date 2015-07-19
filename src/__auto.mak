@@ -43,7 +43,7 @@ DIRINC = .
 DIRLIB = $(DIRAVR)/avr/lib
 
 # MCU name
-MCU = atmega8
+MCU = atmega32
 
 # Output format. (can be srec, ihex, binary)
 FORMAT = ihex
@@ -57,7 +57,7 @@ OPT = s
 
 
 # List C source files here. (C dependencies are automatically generated.)
-SRC = timetest.c kernel.c halavr.c system.c usart.c 
+SRC = timetest.c kernel.c halavr.c uartavr.c test.c 
 
 # If there is more than one source file, append them above, or modify and
 # uncomment the following:

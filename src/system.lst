@@ -7,16 +7,16 @@
    7               	__zero_reg__ = 1
    9               		.text
   10               	.Ltext0:
-  86               		.data
-  87               	.LC0:
-  88 0000 496E 6974 		.string	"Init of hardware finished."
-  88      206F 6620 
-  88      6861 7264 
-  88      7761 7265 
-  88      2066 696E 
-  89               		.text
-  91               	.global	System_Init
-  93               	System_Init:
+ 101               		.section	.progmem.data,"a",@progbits
+ 104               	__c.1606:
+ 105 0000 496E 6974 		.string	"Init of hardware finished.\n"
+ 105      206F 6620 
+ 105      6861 7264 
+ 105      7761 7265 
+ 105      2066 696E 
+ 106               		.text
+ 108               	.global	System_Init
+ 110               	System_Init:
    1:system.c      **** /*****************************************************************************
    2:system.c      ****  *                                                                           *
    3:system.c      ****  *  uCUnit - A unit testing framework for microcontrollers                   *
@@ -59,160 +59,311 @@
   40:system.c      **** #include <stdio.h>
   41:system.c      **** #include <stdlib.h>
   42:system.c      **** #include "System.h"
-  43:system.c      **** 
-  44:system.c      **** /* Stub: Initialize your hardware here */
-  45:system.c      **** void System_Init(void)
-  46:system.c      **** {
-  95               	.LM0:
-  96               	.LFBB1:
-  97 0000 DF93      		push r29
-  98 0002 CF93      		push r28
-  99 0004 CDB7      		in r28,__SP_L__
- 100 0006 DEB7      		in r29,__SP_H__
- 101               	/* prologue: function */
- 102               	/* frame size = 0 */
-  47:system.c      **** 	printf("Init of hardware finished.\n");
- 103               	* frame size = 0 */
- 105 0008 80E0      	.LM1:
- 106 000a 90E0      		ldi r24,lo8(.LC0)
- 107 000c 00D0      		ldi r25,hi8(.LC0)
- 108               		rcall puts
-  48:system.c      **** }
- 109               	,hi8(.LC0)
- 110               		rcall puts
- 111 000e CF91      	/* epilogue start */
- 113 0012 0895      	.LM2:
- 114               		pop r28
- 115               		pop r29
- 116               		ret
- 118 001b 5379 7374 	.Lscope1:
- 118      656D 2073 
- 118      6875 7464 
- 118      6F77 6E2E 
- 118      00
- 119               		.data
- 120               	.LC1:
- 121               		.string	"System shutdown."
- 122               		.text
-  49:system.c      **** 
-  50:system.c      **** /* Stub: Shutdown your hardware here */
-  51:system.c      **** void System_Shutdown(void)
-  52:system.c      **** {
- 124               	stem_Shutdown
- 125               	.global	System_Shutdown
- 127 0014 DF93      	System_Shutdown:
- 129 0018 CDB7      	.LM3:
- 130 001a DEB7      	.LFBB2:
- 131               		push r29
- 132               		push r28
-  53:system.c      **** 
-  54:system.c      **** 	/* asm("\tSTOP"); */
-  55:system.c      **** 	printf("System shutdown.\n");
- 133               		push r29
- 134               		push r28
- 135 001c 80E0      		in r28,__SP_L__
- 136 001e 90E0      		in r29,__SP_H__
- 137 0020 00D0      	/* prologue: function */
-  56:system.c      **** 	exit(0);
- 138               	 prologue: function */
- 139               	/* frame size = 0 */
- 141 0024 90E0      	.LM4:
- 142 0026 00D0      		ldi r24,lo8(.LC1)
- 143               		ldi r25,hi8(.LC1)
- 144               		rcall puts
- 146               	.LM5:
- 147 002c 5379 7374 		ldi r24,lo8(0)
- 147      656D 2072 
- 147      6573 6574 
- 147      2E00 
- 148               		ldi r25,hi8(0)
- 149               		rcall exit
- 151               	.Lscope2:
- 152               		.data
-  57:system.c      **** }
-  58:system.c      **** 
-  59:system.c      **** /* Stub: Resets the system */
-  60:system.c      **** void System_Reset(void)
-  61:system.c      **** {
- 153               	ope2:
- 154               		.data
- 155               	.LC2:
- 156 0028 DF93      		.string	"System reset."
- 157 002a CF93      		.text
- 159 002e DEB7      	.global	System_Reset
- 161               	System_Reset:
-  62:system.c      **** 	/* Stub: Reset the hardware */
-  63:system.c      **** 	/* asm("\tRESET"); */
-  64:system.c      **** 	printf("System reset.\n");
- 162               	ction
- 163               	System_Reset:
- 165 0032 90E0      	.LM6:
- 166 0034 00D0      	.LFBB3:
-  65:system.c      **** 	exit(0);
- 167               	M6-.LFBB3
- 168               	.LM6:
- 169 0036 80E0      	.LFBB3:
- 170 0038 90E0      		push r29
- 171 003a 00D0      		push r28
- 172               		in r28,__SP_L__
- 173               		in r29,__SP_H__
- 174               	/* prologue: function */
- 175               	/* frame size = 0 */
- 177               	.LM7:
- 178               		ldi r24,lo8(.LC2)
- 179               		ldi r25,hi8(.LC2)
- 180               		rcall puts
-  66:system.c      **** }
-  67:system.c      **** 
-  68:system.c      **** /* Stub: Put system in a safe state */
-  69:system.c      **** void System_Safestate(void)
-  70:system.c      **** {
- 182               	,.LM8-.LFBB3
- 183               	.LM8:
- 184               		ldi r24,lo8(0)
- 185 003c DF93      		ldi r25,hi8(0)
- 186 003e CF93      		rcall exit
- 188 0042 DEB7      	.Lscope3:
- 189               		.data
- 190               	.LC3:
-  71:system.c      **** 	/* Disable all port pins */
-  72:system.c      **** 	/* PORTA = 0x0000; */
-  73:system.c      **** 	/* PORTB = 0x0000; */
-  74:system.c      **** 	/* PORTC = 0x0000; */
-  75:system.c      **** 
-  76:system.c      **** 	/* Disable interrupts */
-  77:system.c      **** 	/* DIE(); */
-  78:system.c      **** 
-  79:system.c      **** 	/* Put processor into idle state */
-  80:system.c      **** 	/* asm("\tIDLE"); */
-  81:system.c      **** 	printf("System safe state.\n");
- 191               	ope3:
- 192               		.data
- 193 0044 80E0      	.LC3:
- 194 0046 90E0      		.string	"System safe state."
- 195 0048 00D0      		.text
-  82:system.c      **** 	exit(0);
- 196               	em safe state."
- 197               		.text
- 199 004c 90E0      	.global	System_Safestate
- 201               	System_Safestate:
- 203               	.LM9:
- 204               	.LFBB4:
- 205               		push r29
+  43:system.c      **** #include "uart.h"
+  44:system.c      **** 
+  45:system.c      **** /* Stub: Initialize your hardware here */
+  46:system.c      **** void System_Init(void)
+  47:system.c      **** {
+ 111               	ion
+ 112               	System_Init:
+ 114 0000 DF93      	.LM0:
+ 115 0002 CF93      	.LFBB1:
+ 116 0004 CDB7      		push r29
+ 117 0006 DEB7      		push r28
+ 118               		in r28,__SP_L__
+ 119               		in r29,__SP_H__
+ 120               	/* prologue: function */
+  48:system.c      **** 	System_WriteString_p(PSTR("Init of hardware finished.\n"));
+ 121               	gue: function */
+ 122               	/* frame size = 0 */
+ 123 0008 80E0      	.LBB2:
+ 125               	.LM1:
+ 126 000c 0E94 0000 		ldi r24,lo8(__c.1606)
+ 127               		ldi r25,hi8(__c.1606)
+  49:system.c      **** }
+ 128               	25,hi8(__c.1606)
+ 129               	.LBE2:
+ 130 0010 CF91      		call System_WriteString_p
+ 131 0012 DF91      	/* epilogue start */
+ 133               	.LM2:
+ 134               		pop r28
+ 135               		pop r29
+ 136               		ret
+ 141               	.Lscope1:
+ 142 001c 5379 7374 		.section	.progmem.data
+ 142      656D 2073 
+ 142      6875 7464 
+ 142      6F77 6E2E 
+ 142      0A00 
+ 145               	__c.1611:
+ 146               		.string	"System shutdown.\n"
+ 147               		.text
+  50:system.c      **** 
+  51:system.c      **** /* Stub: Shutdown your hardware here */
+  52:system.c      **** void System_Shutdown(void)
+  53:system.c      **** {
+ 148               	t
+ 150               	.global	System_Shutdown
+ 152 0018 CF93      	System_Shutdown:
+ 154 001c DEB7      	.LM3:
+ 155               	.LFBB2:
+ 156               		push r29
+ 157               		push r28
+  54:system.c      **** 
+  55:system.c      **** 	/* asm("\tSTOP"); */
+  56:system.c      **** 	System_WriteString_p(PSTR("System shutdown.\n"));
+ 158               	h r29
+ 159               		push r28
+ 160 001e 80E0      		in r28,__SP_L__
+ 161 0020 90E0      		in r29,__SP_H__
+ 162               	/* prologue: function */
+ 163 0022 0E94 0000 	/* frame size = 0 */
+  57:system.c      **** 	exit(0);
+ 164               	 frame size = 0 */
+ 165               	.LBB3:
+ 167 0028 90E0      	.LM4:
+ 168 002a 0E94 0000 		ldi r24,lo8(__c.1611)
+ 169               		ldi r25,hi8(__c.1611)
+ 170               	.LBE3:
+ 171               		call System_WriteString_p
+ 173               	.LM5:
+ 174               		ldi r24,lo8(0)
+ 175               		ldi r25,hi8(0)
+ 176               		call exit
+ 181               	.Lscope2:
+ 182               		.section	.progmem.data
+  58:system.c      **** }
+  59:system.c      **** 
+  60:system.c      **** /* Stub: Resets the system */
+  61:system.c      **** void System_Reset(void)
+  62:system.c      **** {
+ 184               	ect
+ 186               	__c.1616:
+ 187 002e DF93      		.string	"System reset.\n"
+ 188 0030 CF93      		.text
+ 190 0034 DEB7      	.global	System_Reset
+ 192               	System_Reset:
+  63:system.c      **** 	/* Stub: Reset the hardware */
+  64:system.c      **** 	/* asm("\tRESET"); */
+  65:system.c      **** 	System_WriteString_p(PSTR("System reset.\n"));
+ 194               	,0,62,.LM6-.LFBB3
+ 195               	.LM6:
+ 196 0036 80E0      	.LFBB3:
+ 197 0038 90E0      		push r29
+ 198               		push r28
+ 199 003a 0E94 0000 		in r28,__SP_L__
+  66:system.c      **** 	exit(0);
+ 200               	28
+ 201               		in r28,__SP_L__
+ 202 003e 80E0      		in r29,__SP_H__
+ 203 0040 90E0      	/* prologue: function */
+ 204 0042 0E94 0000 	/* frame size = 0 */
+ 205               	.LBB4:
+ 207               	.LM7:
+ 208               		ldi r24,lo8(__c.1616)
+ 209               		ldi r25,hi8(__c.1616)
+ 210               	.LBE4:
+ 211               		call System_WriteString_p
+ 213               	.LM8:
+ 214 003d 5379 7374 		ldi r24,lo8(0)
+ 214      656D 2073 
+ 214      6166 6520 
+ 214      7374 6174 
+ 214      652E 0A00 
+ 215               		ldi r25,hi8(0)
+ 216               		call exit
+  67:system.c      **** }
+  68:system.c      **** 
+  69:system.c      **** /* Stub: Put system in a safe state */
+  70:system.c      **** void System_Safestate(void)
+  71:system.c      **** {
+ 220               	FBB3
+ 222               	.Lscope3:
+ 223 0046 DF93      		.section	.progmem.data
+ 226 004c DEB7      	__c.1621:
+ 227               		.string	"System safe state.\n"
+ 228               		.text
+  72:system.c      **** 	/* Disable all port pins */
+  73:system.c      **** 	/* PORTA = 0x0000; */
+  74:system.c      **** 	/* PORTB = 0x0000; */
+  75:system.c      **** 	/* PORTC = 0x0000; */
+  76:system.c      **** 
+  77:system.c      **** 	/* Disable interrupts */
+  78:system.c      **** 	/* DIE(); */
+  79:system.c      **** 
+  80:system.c      **** 	/* Put processor into idle state */
+  81:system.c      **** 	/* asm("\tIDLE"); */
+  82:system.c      **** 	System_WriteString_p(PSTR("System safe state.\n"));
+ 230               	ystem_Safestate
+ 231               	.global	System_Safestate
+ 233 0050 90E0      	System_Safestate:
+ 235 0052 0E94 0000 	.LM9:
+  83:system.c      **** 	exit(0);
+ 236               	1,.LM9-.LFBB4
+ 237               	.LM9:
+ 238 0056 80E0      	.LFBB4:
+ 239 0058 90E0      		push r29
+ 240 005a 0E94 0000 		push r28
+ 241               		in r28,__SP_L__
+ 242               		in r29,__SP_H__
+ 243               	/* prologue: function */
+ 244               	/* frame size = 0 */
+ 245               	.LBB5:
+ 247               	.LM10:
+ 248               		ldi r24,lo8(__c.1621)
+ 249               		ldi r25,hi8(__c.1621)
+ 250               	.LBE5:
+  84:system.c      **** }
+  85:system.c      **** 
+  86:system.c      **** 
+  87:system.c      **** 
+  88:system.c      **** /* Stub: Transmit a string to the host/debugger/simulator */
+  89:system.c      **** void System_WriteString(char * s)
+  90:system.c      **** {
+ 251               	21)
+ 252               	.LBE5:
+ 253               		call System_WriteString_p
+ 255 0060 CF93      	.LM11:
+ 256 0062 00D0      		ldi r24,lo8(0)
+ 257 0064 CDB7      		ldi r25,hi8(0)
+ 258 0066 DEB7      		call exit
+  91:system.c      **** 	uart_puts(s);
+ 263               	5-.LFBB4
+ 264               	.Lscope4:
+ 267 0070 0E94 0000 	.global	System_WriteString
+  92:system.c      **** }
+ 269               	iteString, @function
+ 270               	System_WriteString:
+ 272 0076 0F90      	.LM12:
+ 273 0078 CF91      	.LFBB5:
+ 274 007a DF91      		push r29
+ 275 007c 0895      		push r28
+ 276               		rcall .
+ 277               		in r28,__SP_L__
+ 278               		in r29,__SP_H__
+ 279               	/* prologue: function */
+ 280               	/* frame size = 2 */
+ 281               		std Y+2,r25
+ 282               		std Y+1,r24
+  93:system.c      **** 
+  94:system.c      **** /* Stub: Transmit a string to the host/debugger/simulator */
+  95:system.c      **** void System_WriteString_p(const char * progmem_s)
+  96:system.c      **** {
+ 283               	5
+ 284               		std Y+1,r24
+ 286 007e DF93      	.LM13:
+ 287 0080 CF93      		ldd r24,Y+1
+ 288 0082 00D0      		ldd r25,Y+2
+ 289 0084 00D0      		call uart_puts
+ 290 0086 00D0      	/* epilogue start */
+ 292 008a DEB7      	.LM14:
+ 293               		pop __tmp_reg__
+ 294               		pop __tmp_reg__
+ 295 008c 9D83      		pop r28
+ 296 008e 8C83      		pop r29
+ 297 0090 00C0      		ret
+  97:system.c      ****     register char c;
+  98:system.c      **** 
+  99:system.c      ****     while ( (c = pgm_read_byte(progmem_s++)) )
+ 100:system.c      ****       uart_putc(c);
+ 299               	teString
+ 300               	.Lscope5:
+ 303 0096 90E0      	.global	System_WriteString_p
+ 305               	System_WriteString_p:
+ 307               	.LM15:
+ 308               	.LFBB6:
+ 309 009c 8C81      		push r29
+ 310 009e 9D81      		push r28
+ 311 00a0 9B83      		rcall .
+ 312 00a2 8A83      		rcall .
+ 313 00a4 8C81      		rcall .
+ 314 00a6 9D81      		in r28,__SP_L__
+ 315 00a8 0196      		in r29,__SP_H__
+ 316 00aa 9D83      	/* prologue: function */
+ 317 00ac 8C83      	/* frame size = 6 */
+ 318 00ae EA81      		std Y+5,r25
+ 319 00b0 FB81      		std Y+4,r24
+ 320               		rjmp .L12
+ 321               	.L13:
+ 323               	.LM16:
+ 324               		ldd r18,Y+6
+ 325               		mov r24,r18
+ 326 00b4 8983      		ldi r25,lo8(0)
+ 327 00b6 8981      		call uart_putc
+ 328               	.L12:
+ 329 00b8 8E83      	.LBB6:
+ 331 00bc 8823      	.LM17:
+ 332 00be 01F4      		ldd r24,Y+4
+ 333               		ldd r25,Y+5
+ 101:system.c      **** }
+ 334               	17:
+ 335               		ldd r24,Y+4
+ 336 00c0 2696      		ldd r25,Y+5
+ 337 00c2 0FB6      		std Y+3,r25
+ 338 00c4 F894      		std Y+2,r24
+ 339 00c6 DEBF      		ldd r24,Y+4
+ 340 00c8 0FBE      		ldd r25,Y+5
+ 341 00ca CDBF      		adiw r24,1
+ 342 00cc CF91      		std Y+5,r25
+ 343 00ce DF91      		std Y+4,r24
+ 344 00d0 0895      		ldd r30,Y+2
+ 345               		ldd r31,Y+3
+ 346               	/* #APP */
+ 347               	 ;  99 "system.c" 1
+ 348               		lpm r24, Z
+ 349               		
+ 350               	 ;  0 "" 2
+ 351               	/* #NOAPP */
+ 352               		std Y+1,r24
+ 353               		ldd r24,Y+1
+ 354               	.LBE6:
+ 355               		std Y+6,r24
+ 356               		ldd r24,Y+6
+ 357               		tst r24
+ 358               		brne .L13
+ 102:system.c      **** 
+ 103:system.c      **** void System_WriteInt(int n)
+ 104:system.c      **** {
+ 359               	
+ 360               		brne .L13
+ 361               	/* epilogue start */
+ 363 00d4 CF93      	.LM18:
+ 364 00d6 00D0      		adiw r28,6
+ 365 00d8 CDB7      		in __tmp_reg__,__SREG__
+ 366 00da DEB7      		cli
+ 367               		out __SP_H__,r29
+ 368               		out __SREG__,__tmp_reg__
+ 369 00dc 9A83      		out __SP_L__,r28
+ 370 00de 8983      		pop r28
+ 371               		pop r29
+ 105:system.c      **** 	/* printf("%i", n); */
+ 106:system.c      **** }
+ 372               	
+ 373               		pop r29
+ 374 00e0 0F90      		ret
+ 383               	.Lscope6:
+ 386               	.global	System_WriteInt
 DEFINED SYMBOLS
                             *ABS*:00000000 system.c
-/tmp/user/501/ccKe1K4W.s:2      *ABS*:0000003f __SREG__
-/tmp/user/501/ccKe1K4W.s:3      *ABS*:0000003e __SP_H__
-/tmp/user/501/ccKe1K4W.s:4      *ABS*:0000003d __SP_L__
-/tmp/user/501/ccKe1K4W.s:5      *ABS*:00000034 __CCP__
-/tmp/user/501/ccKe1K4W.s:6      *ABS*:00000000 __tmp_reg__
-/tmp/user/501/ccKe1K4W.s:7      *ABS*:00000001 __zero_reg__
-/tmp/user/501/ccKe1K4W.s:93     .text:00000000 System_Init
-/tmp/user/501/ccKe1K4W.s:123    .text:00000014 System_Shutdown
-/tmp/user/501/ccKe1K4W.s:152    .text:00000028 System_Reset
-/tmp/user/501/ccKe1K4W.s:181    .text:0000003c System_Safestate
+/tmp/user/501/cci414AB.s:2      *ABS*:0000003f __SREG__
+/tmp/user/501/cci414AB.s:3      *ABS*:0000003e __SP_H__
+/tmp/user/501/cci414AB.s:4      *ABS*:0000003d __SP_L__
+/tmp/user/501/cci414AB.s:5      *ABS*:00000034 __CCP__
+/tmp/user/501/cci414AB.s:6      *ABS*:00000000 __tmp_reg__
+/tmp/user/501/cci414AB.s:7      *ABS*:00000001 __zero_reg__
+/tmp/user/501/cci414AB.s:104    .progmem.data:00000000 __c.1606
+/tmp/user/501/cci414AB.s:110    .text:00000000 System_Init
+/tmp/user/501/cci414AB.s:282    .text:0000007e System_WriteString_p
+/tmp/user/501/cci414AB.s:141    .progmem.data:0000001c __c.1611
+/tmp/user/501/cci414AB.s:147    .text:00000016 System_Shutdown
+/tmp/user/501/cci414AB.s:177    .progmem.data:0000002e __c.1616
+/tmp/user/501/cci414AB.s:183    .text:0000002e System_Reset
+/tmp/user/501/cci414AB.s:213    .progmem.data:0000003d __c.1621
+/tmp/user/501/cci414AB.s:219    .text:00000046 System_Safestate
+/tmp/user/501/cci414AB.s:250    .text:0000005e System_WriteString
+/tmp/user/501/cci414AB.s:358    .text:000000d2 System_WriteInt
 
 UNDEFINED SYMBOLS
-puts
 exit
-__do_copy_data
+uart_puts
+uart_putc

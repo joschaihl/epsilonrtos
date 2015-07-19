@@ -19,8 +19,8 @@
 //*****************************************************************************
 
 
-#ifndef AVRLIBTYPES_H
-#define AVRLIBTYPES_H
+#ifndef LIBTYPES_H
+#define LIBTYPES_H
 
 // datatype definitions macros
 typedef unsigned char  u08;

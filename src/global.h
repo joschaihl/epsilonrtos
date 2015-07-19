@@ -1,4 +1,4 @@
-/*************************************************************
+/**
  *  @file global.h
  *  @brief Globale Objekte, Einstellungen bzw. Makro-Definitionen
  *  	   für epsilonRTOS
@@ -9,7 +9,7 @@
  *
  *  This code is distributed under the GNU Public License
  *  which can be found at http://www.gnu.org/licenses/gpl.txt
- *************************************************************/
+ */
 
 #ifndef GLOBAL_H
 #define GLOBAL_H

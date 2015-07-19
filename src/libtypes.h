@@ -1,23 +1,16 @@
-/*! \file avrlibtypes.h \brief AVRlib global types and typedefines. */
-//*****************************************************************************
-//
-// File Name	: 'avrlibtypes.h'
-// Title		: AVRlib global types and typedefines include file
-// Author		: Pascal Stang
-// Created		: 7/12/2001
-// Revised		: 9/30/2002
-// Version		: 1.0
-// Target MCU	: Atmel AVR series
-// Editor Tabs	: 4
-//
-//	Description : Type-defines required and used by AVRlib.  Most types are also
-//						generally useful.
-//
-// This code is distributed under the GNU Public License
-//		which can be found at http://www.gnu.org/licenses/gpl.txt
-//
-//*****************************************************************************
-
+/**
+ *  @file avrlibtypes.h
+ *  @brief AVRlib global types and typedefines include file
+ *  @author Joscha Ihl vision.josh@gmail.com
+ *  @author Pascal Stang
+ *  @version 0.1
+ *  @date 27.04.2015
+ *
+ *  Projekt     : EpsilonRTOS
+ *
+ *  This code is distributed under the GNU Public License
+ *  which can be found at http://www.gnu.org/licenses/gpl.txt
+ */
 
 #ifndef LIBTYPES_H
 #define LIBTYPES_H

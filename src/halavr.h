@@ -1,4 +1,4 @@
-/*************************************************************
+/**
  *  @file halavr.h
  *  @brief Konkrete AVR-Implementierung für die Hardware-Abstraktions-Schicht
  *  	   für epsilonRTOS
@@ -10,7 +10,7 @@
  *
  *  This code is distributed under the GNU Public License
  *  which can be found at http://www.gnu.org/licenses/gpl.txt
- *************************************************************/
+ */
 
 #ifndef HALAVR_H_
 #define HALAVR_H_

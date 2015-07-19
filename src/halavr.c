@@ -1,10 +1,17 @@
-/*
- * halavr.c
+/**
+ *  @file halavr.c
+ *  @brief Hardware Abstraktions Schicht für epsilon RTOS,
+ *  	   um von mikrocontrollerspezifischen Funktionen
+ *  	   zu abstrahieren.
+ *  @author Joscha Ihl vision.josh@gmail.com
+ *  @version 0.1
+ *  @date 27.04.2015
  *
- *  Created on: 27.04.2015
- *      Author: joscha
+ *  Projekt     : EpsilonRTOS
+ *
+ *  This code is distributed under the GNU Public License
+ *  which can be found at http://www.gnu.org/licenses/gpl.txt
  */
-
 #include "halavr.h"
 #include <stdint.h>
 #include <avr/eeprom.h>

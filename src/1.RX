@@ -1,0 +1,133 @@
+
+----- Simulation started -----
+---===### Testsuite ###===---<LF>
+ * Running Test assertionsFailure<LF>
+Checking Tracepoint 0... OK<LF>
+ * timetest.c:59 assertEquals(0,0)... OK<LF>
+Checking Tracepoint 1... OK<LF>
+ * timetest.c:62 assertEquals(0,-1)... Failure<LF>
+Tests aborted because of 1 ERRORS<LF>
+ * Running Test tracepointFailure<LF>
+Checking Tracepoint 3... Failure<LF>
+ * Running Test assertionsFailure2<LF>
+ * timetest.c:71 assertLower(0,0)... Failure<LF>
+Tests aborted because of 1 ERRORS<LF>
+ * Running Test assertionsNoFailure<LF>
+ * timetest.c:78 assertLower(-1,0)... OK<LF>
+ * timetest.c:79 assertLower(0,1)... OK<LF>
+ * timetest.c:80 assertLowerEqual(-1,0)... OK<LF>
+ * timetest.c:81 assertLowerEqual(0,1)... OK<LF>
+ * timetest.c:82 assertLowerEqual(-1,-1)... OK<LF>
+ * timetest.c:83 assertEquals(10000,10000)... OK<LF>
+ * timetest.c:84 assertGreaterEqual(10000,10000)... OK<LF>
+ * timetest.c:85 assertGreaterEqual(10001,10000)... OK<LF>
+ * timetest.c:86 assertGreater(0,-1)... OK<LF>
+ * timetest.c:87 assertGreater(1,0)... OK<LF>
+Checking Tracepoint 7... OK<LF>
+---===#### RESULTS ####===---<LF>
+Errors=3<LF>
+Expected 20 runs of 13<LF>
+----- Finished Testsuite ----<LF>
+
+----- Simulation started -----
+---===### Testsuite ###===---<LF>
+ * Running Test assertionsFailure<LF>
+Checking Tracepoint 0... OK<LF>
+ * timetest.c:59 assertEquals(0,0)... OK<LF>
+Checking Tracepoint 1... OK<LF>
+ * timetest.c:62 assertEquals(0,-1)... Failure<LF>
+Tests aborted because of 1 ERRORS<LF>
+ * Running Test tracepointFailure<LF>
+Checking Tracepoint 3... Failure<LF>
+ * Running Test assertionsFailure2<LF>
+ * timetest.c:71 assertLower(0,0)... Failure<LF>
+Tests aborted because of 1 ERRORS<LF>
+ * Running Test assertionsNoFailure<LF>
+ * timetest.c:78 assertLower(-1,0)... OK<LF>
+ * timetest.c:79 assertLower(0,1)... OK<LF>
+ * timetest.c:80 assertLowerEqual(-1,0)... OK<LF>
+ * timetest.c:81 assertLowerEqual(0,1)... OK<LF>
+ * timetest.c:82 assertLowerEqual(-1,-1)... OK<LF>
+ * timetest.c:83 assertEquals(10000,10000)... OK<LF>
+ * timetest.c:84 assertGreaterEqual(10000,10000)... OK<LF>
+ * timetest.c:85 assertGreaterEqual(10001,10000)... OK<LF>
+ * timetest.c:86 assertGreater(0,-1)... OK<LF>
+ * timetest.c:87 assertGreater(1,0)... OK<LF>
+Checking Tracepoint 7... OK<LF>
+---===#### RESULTS ####===---<LF>
+Errors=3<LF>
+Expected 20 runs of 17<LF>
+----- Finished Testsuite ----<LF>
+
+----- Simulation started -----
+---===### Testsuite ###===---<LF>
+ * Running Test assertionsFailure<LF>
+Checking Tracepoint 0... OK<LF>
+ * timetest.c:59 assertEquals(0,0)... OK<LF>
+Checking Tracepoint 1... OK<LF>
+ * timetest.c:62 assertEquals(0,-1)... Failure<LF>
+Tests aborted because of 1 ERRORS<LF>
+ * Running Test tracepointFailure<LF>
+Checking Tracepoint 3... Failure<LF>
+ * Running Test assertionsFailure2<LF>
+ * timetest.c:71 assertLower(0,0)... Failure<LF>
+Tests aborted because of 1 ERRORS<LF>
+ * Running Test assertionsNoFailure<LF>
+ * timetest.c:78 assertLower(-1,0)... OK<LF>
+ * timetest.c:79 assertLower(0,1)... OK<LF>
+ * timetest.c:80 assertLowerEqual(-1,0)... OK<LF>
+ * timetest.c:81 assertLowerEqual(0,1)... OK<LF>
+ * timetest.c:82 assertLowerEqual(-1,-1)... OK<LF>
+ * timetest.c:83 assertEquals(10000,10000)... OK<LF>
+ * timetest.c:84 assertGreaterEqual(10000,10000)... OK<LF>
+ * timetest.c:85 assertGreaterEqual(10001,10000)... OK<LF>
+ * timetest.c:86 assertGreater(0,-1)... OK<LF>
+ * timetest.c:87 assertGreater(1,0)... OK<LF>
+Checking Tracepoint 7... OK<LF>
+---===#### RESULTS ####===---<LF>
+Errors=3<LF>
+Expected 20 runs of 17<LF>
+----- Finished Testsuite ----<LF>
+---===### Testsuite ###===---<LF>
+---===#### RESULTS ####===---<LF>
+Errors=0<LF>
+Expected 0 runs of 0<LF>
+----- Finished Testsuite ----<LF>
+
+----- Simulation started -----
+---===### Testsuite ###===---<LF>
+ * Running Test assertionsFailure<LF>
+Checking Tracepoint 0... OK<LF>
+ * timetest.c:61 assertEquals(0,0)... OK<LF>
+Checking Tracepoint 1... OK<LF>
+ * timetest.c:64 assertEquals(0,-1)... Failure<LF>
+Tests aborted because of 1 ERRORS<LF>
+ * Running Test tracepointFailure<LF>
+Checking Tracepoint 3... Failure<LF>
+ * Running Test assertionsFailure2<LF>
+ * timetest.c:73 assertLower(0,0)... Failure<LF>
+Tests aborted because of 1 ERRORS<LF>
+ * Running Test assertionsNoFailure<LF>
+ * timetest.c:80 assertLower(-1,0)... OK<LF>
+ * timetest.c:81 assertLower(0,1)... OK<LF>
+ * timetest.c:82 assertLowerEqual(-1,0)... OK<LF>
+ * timetest.c:83 assertLowerEqual(0,1)... OK<LF>
+ * timetest.c:84 assertLowerEqual(-1,-1)... OK<LF>
+ * timetest.c:85 assertEquals(10000,10000)... OK<LF>
+ * timetest.c:86 assertGreaterEqual(10000,10000)... OK<LF>
+ * timetest.c:87 assertGreaterEqual(10001,10000)... OK<LF>
+ * timetest.c:88 assertGreater(0,-1)... OK<LF>
+ * timetest.c:89 assertGreater(1,0)... OK<LF>
+Checking Tracepoint 7... OK<LF>
+---===#### RESULTS ####===---<LF>
+Errors=3<LF>
+Expected 20 runs of 17<LF>
+----- Finished Testsuite ----<LF>
+---===### Testsuite ###===---<LF>
+ * timetest.c:114 assertEquals(0,0)... OK<LF>
+ * timetest.c:115 assertEquals(0,0)... OK<LF>
+Checking Tracepoint 1... OK<LF>
+---===#### RESULTS ####===---<LF>
+Errors=0<LF>
+Expected 3 runs of 3<LF>
+----- Finished Testsuite ----<LF>

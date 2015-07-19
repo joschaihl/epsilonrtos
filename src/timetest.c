@@ -1,3 +1,16 @@
+/**
+ *  @file timetest.c
+ *  @brief Mini-Test-Suite für epsilonRTOS.
+ *  @author Joscha Ihl vision.josh@gmail.com
+ *  @version 0.1
+ *  @date 18.07.2015
+ *
+ *  Projekt     : EpsilonRTOS
+ *
+ *  This code is distributed under the GNU Public License
+ *  which can be found at http://www.gnu.org/licenses/gpl.txt
+ */
+
 #include "kernel.h"
 #include "test.h"
 #include <stdlib.h>

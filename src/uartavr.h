@@ -1,3 +1,17 @@
+/**
+ *  @file uartavr.h
+ *  @brief Einfaches UART für Testing- und Debugging Ausgaben bei epsilonRTOS.
+ *  	   Implementierungsbeispiele von mikrocontroller.net.
+ *  @author Joscha Ihl vision.josh@gmail.com
+ *  @version 0.1
+ *  @date 18.07.2015
+ *
+ *  Projekt     : EpsilonRTOS
+ *
+ *  This code is distributed under the GNU Public License
+ *  which can be found at http://www.gnu.org/licenses/gpl.txt
+ */
+
 #ifndef UART_H
 #define UART_H
 

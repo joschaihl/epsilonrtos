@@ -1,4 +1,4 @@
-/*************************************************************
+/**
  *  @file hal.h
  *  @brief Hardware Abstraktions Schicht für epsilon RTOS,
  *  	   um von mikrocontrollerspezifischen Funktionen
@@ -10,13 +10,6 @@
  *
  *  This code is distributed under the GNU Public License
  *  which can be found at http://www.gnu.org/licenses/gpl.txt
- *************************************************************/
-
-/*
- * hal.h
- *
- *  Created on: 27.04.2015
- *      Author: joscha
  */
 
 #ifndef HAL_H_

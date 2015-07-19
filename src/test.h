@@ -1,9 +1,16 @@
-/*
- * test.h
+/**
+ *  @file test.c
+ *  @brief Mini-Testing-Framework für epsilonRTOS.
+ *  @author Joscha Ihl vision.josh@gmail.com
+ *  @version 0.1
+ *  @date 18.07.2015
  *
- *  Created on: 18.07.2015
- *      Author: joscha
+ *  Projekt     : EpsilonRTOS
+ *
+ *  This code is distributed under the GNU Public License
+ *  which can be found at http://www.gnu.org/licenses/gpl.txt
  */
+
 
 #ifndef TEST_H_
 #define TEST_H_

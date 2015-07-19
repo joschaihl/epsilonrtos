@@ -5,6 +5,8 @@
 *.lst
 *.lss
 *.eep
+*.bak
+*.RX
 /halavr.d
 /halavr.lst
 /kernel.d

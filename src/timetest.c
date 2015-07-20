@@ -35,18 +35,20 @@ void setup(void)
   setTracepoint(1);
 }
 
-u32 a = 0, c=0;
+   u08 a = 0, c=0;
 TASK(A,128)
 {
-	for(a=0;a < 1000;a++)
+
+	for(a=0;a < 100;a++)
 	{
-	   for(c=0; c<2;c++)
-	   {
-	   	nop();
-	   }
-	//	sbi(DEFAULTPORT, TASKAPIN);
-	//	cbi(DEFAULTPORT, TASKAPIN);
+      for(c=0;c<100;c++)
+      {
+       		sbi(DEFAULTPORT, TASKAPIN);
+				cbi(DEFAULTPORT, TASKAPIN);
+      }
+
   	}
+  	setTracepoint(2);
   	ENDTASK(A);
 }
 
@@ -63,7 +65,7 @@ TASK(B,128)
 		}
 		sleep(20000);
   	}
-  	setTracepoint(2);
+  	setTracepoint(3);
   	ENDTASK(B);
 }
 
@@ -71,7 +73,7 @@ TASK(B,128)
 //----- Begin Code ------------------------------------------------------------
 
 #define TASK_AMOUNT 2
-TASK *taskset[] = {&taskobj_A, &taskobj_B/*, &taskobj_C, &taskobj_D*/};
+TASK *taskset[] = {&taskobj_A, &taskobj_B};
 
 #ifdef UNITTEST_TESTS
 TEST(assertionsFailure)
@@ -137,10 +139,11 @@ int main(void)
    assertEquals(0,b);
 	setup();
 	checkTracepoint(1);
-	startRRScheduler(taskset, TASK_AMOUNT);
-	assertEquals(a, 1000);
+
+   startRRScheduler(taskset, TASK_AMOUNT);
+	assertEquals(a, 100);
    assertEquals(b,2);
-   assertEquals(c,2);
+   assertEquals(c,100);
    checkTracepoint(2);
 	suiteend();	
 	
@@ -149,6 +152,9 @@ int main(void)
 	} while(1);
 	return 0;
 }
+
+
+
 
 
 

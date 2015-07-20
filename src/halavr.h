@@ -169,6 +169,14 @@
   asm volatile ("pop     r1");\
   asm volatile ("pop     r0");\
 
+
+/*
+
+
+
+
+*/
+
 #define return_interrupt() \
 	asm volatile("reti");
 
@@ -195,6 +203,8 @@
 
 
 #endif /* HALAVR_H_ */
+
+
 
 
 

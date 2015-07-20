@@ -12,12 +12,12 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 Size before:
 ertos.elf  :
 section     size      addr
-.text       3758         0
+.text       3628         0
 .data        356   8388704
-.bss          28   8389060
-.stab       7944         0
-.stabstr    5335         0
-Total      17421
+.bss          22   8389060
+.stab       7968         0
+.stabstr    5327         0
+Total      17301
 
 
 
@@ -52,12 +52,12 @@ c:\winavr\bin\avr-objcopy.exe: --change-section-lma .noinit+0xff800000 never use
 Size after:
 ertos.elf  :
 section     size      addr
-.text       3752         0
+.text       3628         0
 .data        356   8388704
-.bss          28   8389060
-.stab       7932         0
-.stabstr    5335         0
-Total      17403
+.bss          22   8389060
+.stab       7968         0
+.stabstr    5327         0
+Total      17301
 
 
 

@@ -16,36 +16,44 @@
  126               		.text
  129               	.global	initTask
  131               	initTask:
-   1:kernel.c      **** /*
-   2:kernel.c      ****  * kernel.c
-   3:kernel.c      ****  *
-   4:kernel.c      ****  *  Created on: 24.04.2015
-   5:kernel.c      ****  *      Author: joscha
-   6:kernel.c      ****  */
-   7:kernel.c      **** 
-   8:kernel.c      **** #include "kernel.h"
-   9:kernel.c      **** 
-  10:kernel.c      **** typedef struct {
-  11:kernel.c      **** 	TASK **tasks;
-  12:kernel.c      **** 	u08 current_task;
-  13:kernel.c      **** 	u08 tasks_length;
-  14:kernel.c      **** 	u16 stackPointer;
-  15:kernel.c      **** } SCHEDULER;
+   1:kernel.c      **** /**
+   2:kernel.c      ****  *  @file kernel.c
+   3:kernel.c      ****  *  @brief Betriebssystemkern
+   4:kernel.c      ****  *  	   für epsilonRTOS
+   5:kernel.c      ****  *  @author Joscha Ihl vision.josh@gmail.com
+   6:kernel.c      ****  *  @version 0.1
+   7:kernel.c      ****  *
+   8:kernel.c      ****  *  Projekt     : EpsilonRTOS
+   9:kernel.c      ****  *  @date 27.04.2015
+  10:kernel.c      ****  *
+  11:kernel.c      ****  *  This code is distributed under the GNU Public License
+  12:kernel.c      ****  *  which can be found at http://www.gnu.org/licenses/gpl.txt
+  13:kernel.c      ****  */
+  14:kernel.c      **** 
+  15:kernel.c      **** #include "kernel.h"
   16:kernel.c      **** 
   17:kernel.c      **** typedef struct {
-  18:kernel.c      ****    u08 hours;
-  19:kernel.c      ****    u08 minutes;
-  20:kernel.c      ****    u08 seconds;
-  21:kernel.c      ****    u16 ms;
-  22:kernel.c      ****    u16 us;
-  23:kernel.c      **** } TIME;
-  24:kernel.c      **** 
-  25:kernel.c      **** TIME currentTime = {0, 0, 0, 0, 0};
-  26:kernel.c      **** 
-  27:kernel.c      **** SCHEDULER currentScheduler;
-  28:kernel.c      **** 
-  29:kernel.c      **** void initTask(TASK *task)
-  30:kernel.c      **** {
+  18:kernel.c      **** 	TASK **tasks;
+  19:kernel.c      **** 	u08 current_task;
+  20:kernel.c      **** 	u08 tasks_length;
+  21:kernel.c      **** 	u16 stackPointer;
+  22:kernel.c      **** } SCHEDULER;
+  23:kernel.c      **** 
+  24:kernel.c      **** typedef struct {
+  25:kernel.c      ****    u08 hours;
+  26:kernel.c      ****    u08 minutes;
+  27:kernel.c      ****    u08 seconds;
+  28:kernel.c      ****    u16 ms;
+  29:kernel.c      ****    u16 us;
+  30:kernel.c      **** } TIME;
+  31:kernel.c      **** 
+  32:kernel.c      **** TIME currentTime = {0, 0, 0, 0, 0};
+  33:kernel.c      **** 
+  34:kernel.c      **** SCHEDULER currentScheduler;
+  35:kernel.c      **** 
+  36:kernel.c      **** 
+  37:kernel.c      **** void initTask(TASK *task)
+  38:kernel.c      **** {
  132               	tTask:
  134               	.LM0:
  135 0000 DF93      	.LFBB1:
@@ -59,9 +67,9 @@
  143               	/* prologue: function */
  144 000e 9D83      	/* frame size = 5 */
  145 0010 8C83      		std Y+5,r25
-  31:kernel.c      ****    u08 i, pc_high, pc_low;
-  32:kernel.c      **** 	
-  33:kernel.c      **** 	if(task->taskState == TASK_UNINITIALIZED)
+  39:kernel.c      ****    u08 i, pc_high, pc_low;
+  40:kernel.c      **** 	
+  41:kernel.c      **** 	if(task->taskState == TASK_UNINITIALIZED)
  146               	e = 5 */
  147               		std Y+5,r25
  148 0012 EC81      		std Y+4,r24
@@ -69,16 +77,16 @@
  151 0018 8823      		ldd r30,Y+4
  152 001a 01F0      		ldd r31,Y+5
  153 001c 00C0      		ldd r24,Z+13
-  34:kernel.c      **** 	{
-  35:kernel.c      **** 		 // Set Stack Address
-  36:kernel.c      ****        for(i = 0; i < (task->stackSize -2); i++)
+  42:kernel.c      **** 	{
+  43:kernel.c      **** 		 // Set Stack Address
+  44:kernel.c      ****        for(i = 0; i < (task->stackSize -2); i++)
  154               	4
  155               		ldd r31,Y+5
  156 001e 1B82      		ldd r24,Z+13
  157 0020 00C0      		tst r24
  158               		breq .+2
-  37:kernel.c      ****        {
-  38:kernel.c      ****           task->stack[i] = 0;
+  45:kernel.c      ****        {
+  46:kernel.c      ****           task->stack[i] = 0;
  159               		ldd r24,Z+13
  160               		tst r24
  161 0022 EC81      		breq .+2
@@ -107,8 +115,8 @@
  187 0050 2817      		ldd r24,Y+3
  188 0052 3907      		mov r18,r24
  189 0054 04F0      		ldi r19,lo8(0)
-  39:kernel.c      ****        }
-  40:kernel.c      ****        pc_high = (task->programmCounter >> 8);
+  47:kernel.c      ****        }
+  48:kernel.c      ****        pc_high = (task->programmCounter >> 8);
  190               	o8(0)
  191               		ldd r30,Y+4
  192 0056 EC81      		ldd r31,Y+5
@@ -118,20 +126,20 @@
  196 005e 892F      		sbiw r24,2
  197 0060 9927      		cp r18,r24
  198 0062 8A83      		cpc r19,r25
-  41:kernel.c      ****        pc_low =  0xff & task->programmCounter;
+  49:kernel.c      ****        pc_low =  0xff & task->programmCounter;
  199               	,2
  200               		cp r18,r24
  201 0064 EC81      		cpc r19,r25
  202 0066 FD81      		brlt .L4
  204 006a 9381      	.LM5:
  205 006c 8983      		ldd r30,Y+4
-  42:kernel.c      ****        i++;
+  50:kernel.c      ****        i++;
  206               	LM5-.LFBB1
  207               	.LM5:
  208 006e 8B81      		ldd r30,Y+4
  209 0070 8F5F      		ldd r31,Y+5
  210 0072 8B83      		ldd r24,Z+2
-  43:kernel.c      ****        task->stack[i] = pc_high;
+  51:kernel.c      ****        task->stack[i] = pc_high;
  211               	0,Y+4
  212               		ldd r31,Y+5
  213 0074 EC81      		ldd r24,Z+2
@@ -145,12 +153,12 @@
  222 0086 F91F      		ldd r24,Z+2
  223 0088 8A81      		ldd r25,Z+3
  224 008a 8083      		std Y+1,r24
-  44:kernel.c      ****        i++;
+  52:kernel.c      ****        i++;
  225               	 r25,Z+3
  226               		std Y+1,r24
  228 008e 8F5F      	.LM7:
  229 0090 8B83      		ldd r24,Y+3
-  45:kernel.c      ****        task->stack[i] = pc_low;
+  53:kernel.c      ****        task->stack[i] = pc_low;
  230               	LM7-.LFBB1
  231               	.LM7:
  232 0092 EC81      		ldd r24,Y+3
@@ -164,8 +172,8 @@
  241 00a4 F91F      		ldd r24,Y+3
  242 00a6 8981      		mov r24,r24
  243 00a8 8083      		ldi r25,lo8(0)
-  46:kernel.c      **** 		 // Set Task Ready
-  47:kernel.c      **** 		 task->taskState = TASK_RUNNING;		
+  54:kernel.c      **** 		 // Set Task Ready
+  55:kernel.c      **** 		 task->taskState = TASK_RUNNING;		
  244               	4,r24
  245               		ldi r25,lo8(0)
  246 00aa EC81      		movw r30,r18
@@ -173,8 +181,8 @@
  248 00ae 81E0      		adc r31,r25
  249 00b0 8587      		ldd r24,Y+2
  250               		st Z,r24
-  48:kernel.c      **** 	}
-  49:kernel.c      **** }
+  56:kernel.c      **** 	}
+  57:kernel.c      **** }
  253               	.LM9:
  254 00b2 0F90      		ldd r24,Y+3
  255 00b4 0F90      		subi r24,lo8(-(1))
@@ -194,9 +202,9 @@
  270               		st Z,r24
  272               	.LM11:
  273               		ldd r30,Y+4
-  50:kernel.c      **** 
-  51:kernel.c      **** void sleep(u32 pause_us)
-  52:kernel.c      **** {
+  58:kernel.c      **** 
+  59:kernel.c      **** void sleep(u32 pause_us)
+  60:kernel.c      **** {
  274               	ldd r30,Y+4
  275               		ldd r31,Y+5
  276               		ldi r24,lo8(1)
@@ -212,10 +220,10 @@
  287               		pop r28
  288               		pop r29
  289 00d6 6C83      		ret
-  53:kernel.c      **** 	TASK *task;
-  54:kernel.c      **** 	BOOL pause = 0;
+  61:kernel.c      **** 	TASK *task;
+  62:kernel.c      **** 	BOOL pause = 0;
  293               	,0,0,2
-  55:kernel.c      **** 	task = currentScheduler.tasks[currentScheduler.current_task];
+  63:kernel.c      **** 	task = currentScheduler.tasks[currentScheduler.current_task];
  296               	n	192,0,0,.LFBB1-.LFBB1
  298 00e0 2091 0000 	.Lscope1:
  301 00ec 882F      	.global	sleep
@@ -227,10 +235,10 @@
  309 00fc 9181      		in r28,__SP_L__
  310 00fe 9B83      		in r29,__SP_H__
  311 0100 8A83      		sbiw r28,7
-  56:kernel.c      **** 	//if(task->taskState == TASK_RUNNING)
-  57:kernel.c      **** 	//{
-  58:kernel.c      **** 	  // cli();
-  59:kernel.c      **** 		task->pause_us = pause_us;
+  64:kernel.c      **** 	//if(task->taskState == TASK_RUNNING)
+  65:kernel.c      **** 	//{
+  66:kernel.c      **** 	  // cli();
+  67:kernel.c      **** 		task->pause_us = pause_us;
  312               	sbiw r28,7
  313               		in __tmp_reg__,__SREG__
  314 0102 EA81      		cli
@@ -243,18 +251,18 @@
  321 0110 9287      		std Y+5,r23
  322 0112 A387      		std Y+6,r24
  323 0114 B487      		std Y+7,r25
-  60:kernel.c      **** 		task->taskState = TASK_PAUSE;
+  68:kernel.c      **** 		task->taskState = TASK_PAUSE;
  324               	,r24
  325               		std Y+7,r25
  327 0118 FB81      	.LM14:
  328 011a 82E0      		std Y+1,__zero_reg__
  330               	.LM15:
-  61:kernel.c      **** 	//	sei();
-  62:kernel.c      **** 		
-  63:kernel.c      **** 		do
-  64:kernel.c      **** 		{
-  65:kernel.c      **** 			pause = (currentScheduler.tasks[currentScheduler.current_task]->taskState == TASK_PAUSE);
- 331               	,0,55,.LM15-.LFBB2
+  69:kernel.c      **** 	//	sei();
+  70:kernel.c      **** 		
+  71:kernel.c      **** 		do
+  72:kernel.c      **** 		{
+  73:kernel.c      **** 			pause = (currentScheduler.tasks[currentScheduler.current_task]->taskState == TASK_PAUSE);
+ 331               	,0,63,.LM15-.LFBB2
  332               	.LM15:
  333 011e 2091 0000 		lds r18,currentScheduler
  334 0122 3091 0000 		lds r19,(currentScheduler)+1
@@ -275,15 +283,15 @@
  350 0146 81E0      		ldd r31,Y+3
  351 0148 8983      		ldd r24,Y+4
  352               		ldd r25,Y+5
-  66:kernel.c      **** 		} while(pause);
+  74:kernel.c      **** 		} while(pause);
  353               		ldd r25,Y+5
  354               		ldd r26,Y+6
  355 014a 8981      		ldd r27,Y+7
  356 014c 8823      		std Z+9,r24
  357 014e 01F4      		std Z+10,r25
  358               		std Z+11,r26
-  67:kernel.c      **** 	//}
-  68:kernel.c      **** }
+  75:kernel.c      **** 	//}
+  76:kernel.c      **** }
  359               	std Z+10,r25
  360               		std Z+11,r26
  361 0150 2796      		std Z+12,r27
@@ -303,9 +311,9 @@
  377               		rol r25
  378               		movw r30,r18
  379               		add r30,r24
-  69:kernel.c      **** 
-  70:kernel.c      **** void decrementPause(void)
-  71:kernel.c      **** {
+  77:kernel.c      **** 
+  78:kernel.c      **** void decrementPause(void)
+  79:kernel.c      **** {
  380               	dd r30,r24
  381               		adc r31,r25
  382               		ld __tmp_reg__,Z+
@@ -317,16 +325,16 @@
  388 016c DEB7      		brne .L7
  389               		ldi r24,lo8(1)
  390               		std Y+1,r24
-  72:kernel.c      ****    u08 i;
-  73:kernel.c      ****    TASK *task;
-  74:kernel.c      **** 	for(i = 0;	i < currentScheduler.tasks_length; i++)
+  80:kernel.c      ****    u08 i;
+  81:kernel.c      ****    TASK *task;
+  82:kernel.c      **** 	for(i = 0;	i < currentScheduler.tasks_length; i++)
  391               	,lo8(1)
  392               		std Y+1,r24
  393 016e 1B82      	.L7:
  395               	.LM19:
-  75:kernel.c      **** 	{
-  76:kernel.c      **** 		task = currentScheduler.tasks[i];
- 396               	6,.LM19-.LFBB2
+  83:kernel.c      **** 	{
+  84:kernel.c      **** 		task = currentScheduler.tasks[i];
+ 396               	4,.LM19-.LFBB2
  397               	.LM19:
  398 0172 2091 0000 		ldd r24,Y+1
  399 0176 3091 0000 		tst r24
@@ -341,12 +349,12 @@
  409 018c 9181      		out __SP_L__,r28
  410 018e 9A83      		pop r28
  411 0190 8983      		pop r29
-  77:kernel.c      **** 		if(task->taskState == TASK_PAUSE)
+  85:kernel.c      **** 		if(task->taskState == TASK_PAUSE)
  412               	
  413               		pop r29
  414 0192 E981      		ret
-  78:kernel.c      **** 		{
-  79:kernel.c      ****       	if(task->pause_us <= TIMER_DELAY_US)
+  86:kernel.c      **** 		{
+  87:kernel.c      ****       	if(task->pause_us <= TIMER_DELAY_US)
  419               	,0,0,.LFBB2-.LFBB2
  421 019c E981      	.Lscope2:
  423 01a0 8185      	.global	decrementPause
@@ -356,8 +364,8 @@
  429 01ac A105      		push r29
  430 01ae B105      		push r28
  431 01b0 00F4      		rcall .
-  80:kernel.c      ****       	{
-  81:kernel.c      ****       		task->pause_us = 0;
+  88:kernel.c      ****       	{
+  89:kernel.c      ****       		task->pause_us = 0;
  432               	r28
  433               		rcall .
  434 01b2 E981      		push __tmp_reg__
@@ -365,18 +373,18 @@
  436 01b6 1186      		in r29,__SP_H__
  437 01b8 1286      	/* prologue: function */
  438 01ba 1386      	/* frame size = 3 */
-  82:kernel.c      ****       		task->taskState = TASK_RUNNING;
- 440               	abn	68,0,74,.LM22-.LFBB3
+  90:kernel.c      ****       		task->taskState = TASK_RUNNING;
+ 440               	abn	68,0,82,.LM22-.LFBB3
  441               	.LM22:
  442 01be E981      		std Y+3,__zero_reg__
  443 01c0 FA81      		rjmp .L11
  444 01c2 81E0      	.L14:
  446 01c6 00C0      	.LM23:
  447               		lds r18,currentScheduler
-  83:kernel.c      ****       	}
-  84:kernel.c      ****       	else
-  85:kernel.c      ****       	{
-  86:kernel.c      ****       		task->pause_us -= TIMER_DELAY_US;
+  91:kernel.c      ****       	}
+  92:kernel.c      ****       	else
+  93:kernel.c      ****       	{
+  94:kernel.c      ****       		task->pause_us -= TIMER_DELAY_US;
  448               		lds r18,currentScheduler
  449               		lds r19,(currentScheduler)+1
  450 01c8 E981      		ldd r24,Y+3
@@ -406,10 +414,10 @@
  476 01f6 00F4      		ldd r27,Z+12
  477 01f8 00C0      		cpi r24,lo8(251)
  478               		cpc r25,__zero_reg__
-  87:kernel.c      ****       	}
-  88:kernel.c      ****       }
-  89:kernel.c      **** 	}
-  90:kernel.c      **** }
+  95:kernel.c      ****       	}
+  96:kernel.c      ****       }
+  97:kernel.c      **** 	}
+  98:kernel.c      **** }
  479               	_
  480               		cpc r26,__zero_reg__
  481 01fa 0F90      		cpc r27,__zero_reg__
@@ -426,9 +434,9 @@
  494               		ldd r31,Y+2
  495               		ldi r24,lo8(1)
  496               		std Z+13,r24
-  91:kernel.c      **** 
-  92:kernel.c      **** BOOL allTasksFinished(void)
-  93:kernel.c      **** {
+  99:kernel.c      **** 
+ 100:kernel.c      **** u08 allTasksFinished(void)
+ 101:kernel.c      **** {
  497               	std Z+13,r24
  498               		rjmp .L12
  499               	.L13:
@@ -439,21 +447,21 @@
  505 0210 DEB7      		ldd r25,Z+10
  506               		ldd r26,Z+11
  507               		ldd r27,Z+12
-  94:kernel.c      ****    u08 i;
-  95:kernel.c      ****    TASK *task;
-  96:kernel.c      ****    BOOL result = 1;
+ 102:kernel.c      ****    u08 i;
+ 103:kernel.c      ****    TASK *task;
+ 104:kernel.c      ****    u08 result = 1;
  508               	r26,Z+11
  509               		ldd r27,Z+12
  510 0212 81E0      		subi r24,lo8(-(-250))
  511 0214 8983      		sbci r25,hi8(-(-250))
-  97:kernel.c      **** 	for(i = 0;	i < currentScheduler.tasks_length; i++)
+ 105:kernel.c      **** 	for(i = 0;	i < currentScheduler.tasks_length; i++)
  512               	250))
  513               		sbci r25,hi8(-(-250))
  514 0216 1C82      		sbci r26,hlo8(-(-250))
  515 0218 00C0      		sbci r27,hhi8(-(-250))
  516               		ldd r30,Y+1
-  98:kernel.c      **** 	{
-  99:kernel.c      **** 		task = currentScheduler.tasks[i];
+ 106:kernel.c      **** 	{
+ 107:kernel.c      **** 		task = currentScheduler.tasks[i];
  517               	hhi8(-(-250))
  518               		ldd r30,Y+1
  519 021a 2091 0000 		ldd r31,Y+2
@@ -469,16 +477,16 @@
  530 0234 9181      	.L11:
  531 0236 9B83      		lds r25,currentScheduler+3
  532 0238 8A83      		ldd r24,Y+3
- 100:kernel.c      **** 		if(task->taskState != TASK_FINISHED)
+ 108:kernel.c      **** 		if(task->taskState != TASK_FINISHED)
  533               	3
  534               		ldd r24,Y+3
  535 023a EA81      		cp r24,r25
  536 023c FB81      		brsh .+2
  537 023e 8585      		rjmp .L14
  538 0240 8330      	/* epilogue start */
- 101:kernel.c      **** 		{
- 102:kernel.c      **** 			result = 0;
- 540               	,90,.LM30-.LFBB3
+ 109:kernel.c      **** 		{
+ 110:kernel.c      **** 			result = 0;
+ 540               	,98,.LM30-.LFBB3
  541               	.LM30:
  542 0244 1982      		pop __tmp_reg__
  543 0246 00C0      		pop __tmp_reg__
@@ -488,14 +496,14 @@
  547 0248 8C81      		ret
  553 0254 8917      	.Lscope3:
  555               	.global	allTasksFinished
- 103:kernel.c      **** 			break;
- 104:kernel.c      **** 		}
- 105:kernel.c      **** 	}
- 106:kernel.c      **** 	return (result);
+ 111:kernel.c      **** 			break;
+ 112:kernel.c      **** 		}
+ 113:kernel.c      **** 	}
+ 114:kernel.c      **** 	return (result);
  556               	sFinished
  558 0258 8981      	allTasksFinished:
- 107:kernel.c      **** }
- 560               	stabn	68,0,93,.LM31-.LFBB4
+ 115:kernel.c      **** }
+ 560               	tabn	68,0,101,.LM31-.LFBB4
  561               	.LM31:
  562 025a 0F90      	.LFBB4:
  563 025c 0F90      		push r29
@@ -514,9 +522,9 @@
  578               		rjmp .L17
  579               	.L20:
  581               	.LM34:
- 108:kernel.c      **** 
- 109:kernel.c      **** void startRRScheduler(TASK **tasks, u08 tasks_length)
- 110:kernel.c      **** {
+ 116:kernel.c      **** 
+ 117:kernel.c      **** void startRRScheduler(TASK **tasks, u08 tasks_length)
+ 118:kernel.c      **** {
  582               	BB4
  583               	.LM34:
  584               		lds r18,currentScheduler
@@ -532,8 +540,8 @@
  594 0276 9C83      		ld r24,Z
  595 0278 8B83      		ldd r25,Z+1
  596 027a 6D83      		std Y+3,r25
- 111:kernel.c      **** 	currentScheduler.stackPointer = SP + 7;
- 597               	25,Z+1
+ 119:kernel.c      **** 	currentScheduler.stackPointer = SP + 7;
+ 597               	5,Z+1
  598               		std Y+3,r25
  599 027c EDE5      		std Y+2,r24
  601 0280 8081      	.LM35:
@@ -541,34 +549,34 @@
  603 0284 0796      		ldd r31,Y+3
  604 0286 9093 0000 		ldd r24,Z+13
  605 028a 8093 0000 		cpi r24,lo8(3)
- 112:kernel.c      ****    TASK *task;
- 113:kernel.c      **** 	currentScheduler.current_task = 0;
+ 120:kernel.c      ****    TASK *task;
+ 121:kernel.c      **** 	currentScheduler.current_task = 0;
  606               	24,Z+13
  607               		cpi r24,lo8(3)
  608 028e 1092 0000 		breq .L18
- 114:kernel.c      **** 	currentScheduler.tasks = tasks;
- 609               	13
+ 122:kernel.c      **** 	currentScheduler.tasks = tasks;
+ 609               	3
  610               		cpi r24,lo8(3)
  611 0292 8B81      		breq .L18
  613 0296 9093 0000 	.LM36:
  614 029a 8093 0000 		std Y+1,__zero_reg__
- 115:kernel.c      **** 	currentScheduler.tasks_length = tasks_length;
+ 123:kernel.c      **** 	currentScheduler.tasks_length = tasks_length;
  615               	M36:
  616               		std Y+1,__zero_reg__
  617 029e 8D81      		rjmp .L19
  618 02a0 8093 0000 	.L18:
- 116:kernel.c      **** 
- 117:kernel.c      **** 	// Inititalize Tasks
- 118:kernel.c      **** 	for(currentScheduler.current_task = 0;
+ 124:kernel.c      **** 
+ 125:kernel.c      **** 	// Inititalize Tasks
+ 126:kernel.c      **** 	for(currentScheduler.current_task = 0;
  619               	ero_reg__
  620               		rjmp .L19
  621 02a4 1092 0000 	.L18:
  623               	.LM37:
- 119:kernel.c      **** 			currentScheduler.current_task < currentScheduler.tasks_length;
- 120:kernel.c      **** 			currentScheduler.current_task++)
- 121:kernel.c      **** 	{
- 122:kernel.c      **** 		task = currentScheduler.tasks[currentScheduler.current_task];
- 624               	0,97,.LM37-.LFBB4
+ 127:kernel.c      **** 			currentScheduler.current_task < currentScheduler.tasks_length;
+ 128:kernel.c      **** 			currentScheduler.current_task++)
+ 129:kernel.c      **** 	{
+ 130:kernel.c      **** 		task = currentScheduler.tasks[currentScheduler.current_task];
+ 624               	,105,.LM37-.LFBB4
  625               	.LM37:
  626 02aa 2091 0000 		ldd r24,Y+4
  627 02ae 3091 0000 		subi r24,lo8(-(1))
@@ -582,7 +590,7 @@
  636 02c4 8081      	.LM38:
  637 02c6 9181      		ldd r24,Y+1
  638 02c8 9A83      	/* epilogue start */
- 123:kernel.c      ****       initTask(task);
+ 131:kernel.c      ****       initTask(task);
  640               	LM39-.LFBB4
  641               	.LM39:
  642 02cc 8981      		pop __tmp_reg__
@@ -593,17 +601,17 @@
  647 02d4 8091 0000 		pop r29
  648 02d8 8F5F      		ret
  655 02e6 9817      	.Lscope4:
- 124:kernel.c      **** 	}
- 125:kernel.c      **** 	currentScheduler.current_task = 0;
+ 132:kernel.c      **** 	}
+ 133:kernel.c      **** 	currentScheduler.current_task = 0;
  657               	ler
- 126:kernel.c      ****    task = currentScheduler.tasks[0];
+ 134:kernel.c      ****    task = currentScheduler.tasks[0];
  660               	length:p(3,1)",160,0,0,5
  661               	.global	startRRScheduler
  663 02f2 F091 0000 	startRRScheduler:
  665 02f8 9181      	.LM40:
  666 02fa 9A83      	.LFBB5:
  667 02fc 8983      		push r29
- 127:kernel.c      **** 	initTimer();
+ 135:kernel.c      **** 	initTimer();
  668               	:
  669               	.LFBB5:
  670 02fe E3E5      		push r29
@@ -618,8 +626,8 @@
  679               		std Y+4,r25
  680 030e 7894      		std Y+3,r24
  681               		std Y+5,r22
- 128:kernel.c      **** 
- 129:kernel.c      **** 	set_stackpointer(task->stackPointer + WORKING_REGISTERS);
+ 136:kernel.c      **** 
+ 137:kernel.c      **** 	set_stackpointer(task->stackPointer + WORKING_REGISTERS);
  682               	24
  683               		std Y+5,r22
  685 0310 ADE5      	.LM41:
@@ -631,7 +639,7 @@
  691 031c 8096      		sts (currentScheduler+4)+1,r25
  692 031e 1196      		sts currentScheduler+4,r24
  694 0322 8E93      	.LM42:
- 130:kernel.c      **** 	task->taskFunction();
+ 138:kernel.c      **** 	task->taskFunction();
  695               	LFBB5
  696               	.LM42:
  697 0324 E981      		sts currentScheduler+2,__zero_reg__
@@ -640,7 +648,7 @@
  701 032c E02D      		ldd r25,Y+4
  702 032e 0995      		sts (currentScheduler)+1,r25
  703               		sts currentScheduler,r24
- 131:kernel.c      **** }
+ 139:kernel.c      **** }
  704               	rentScheduler,r24
  706 0330 0F90      	.LM44:
  707 0332 0F90      		ldd r24,Y+5
@@ -657,9 +665,9 @@
  720               		ldi r25,lo8(0)
  721               		lsl r24
  722               		rol r25
- 132:kernel.c      **** 
- 133:kernel.c      **** void nextScheduleItem(void)
- 134:kernel.c      **** {
+ 140:kernel.c      **** 
+ 141:kernel.c      **** void nextScheduleItem(void)
+ 142:kernel.c      **** {
  723               	4
  724               		rol r25
  725               		movw r30,r18
@@ -669,19 +677,7 @@
  729 0346 DEB7      		ldd r25,Z+1
  730               		std Y+2,r25
  731               		std Y+1,r24
- 135:kernel.c      **** /*	TASK *task;
- 136:kernel.c      **** 	u08 i;
- 137:kernel.c      **** 	highest_task = currentScheduler.current_task;
- 138:kernel.c      **** 	// Search for a running Task
- 139:kernel.c      **** 	for(i=currentScheduler.current_task+1; i < currentScheduler.tasks_length -1; i++)
- 140:kernel.c      **** 	{
- 141:kernel.c      **** 	   task = currentScheduler.tasks[i];
- 142:kernel.c      **** 	}
- 143:kernel.c      **** 	for(i=0; i < currentScheduler.current_task; i++)
- 144:kernel.c      **** 	{
- 145:kernel.c      **** 		task = currentScheduler.tasks[i];
- 146:kernel.c      **** 	}           */
- 147:kernel.c      **** 	if (currentScheduler.current_task < (currentScheduler.tasks_length -1))
+ 143:kernel.c      **** 	if (currentScheduler.current_task < (currentScheduler.tasks_length -1))
  732               	+2,r25
  733               		std Y+1,r24
  735 034c 282F      	.LM47:
@@ -692,26 +688,25 @@
  741 035a 2817      		lds r24,currentScheduler+2
  742 035c 3907      		subi r24,lo8(-(1))
  743 035e 04F4      		sts currentScheduler+2,r24
- 148:kernel.c      **** 	{
- 149:kernel.c      **** 		currentScheduler.current_task++;
+ 144:kernel.c      **** 	{
+ 145:kernel.c      **** 		currentScheduler.current_task++;
  744               	cheduler+2,r24
  745               	.L23:
  747 0364 8F5F      	.LM49:
  748 0366 8093 0000 		lds r25,currentScheduler+2
  749 036a 00C0      		lds r24,currentScheduler+3
  750               		cp r25,r24
- 150:kernel.c      **** 	}
- 151:kernel.c      **** 	else
- 152:kernel.c      **** 	{
- 153:kernel.c      **** 		currentScheduler.current_task = 0;
+ 146:kernel.c      **** 	}
+ 147:kernel.c      **** 	else
+ 148:kernel.c      **** 	{
+ 149:kernel.c      **** 		currentScheduler.current_task = 0;
  751               	heduler+3
  752               		cp r25,r24
  753 036c 1092 0000 		brlo .L24
  755               	.LM50:
- 154:kernel.c      **** 	}
- 155:kernel.c      **** 	// (pop) reset task specific registers
- 156:kernel.c      **** }
- 756               	0,125,.LM50-.LFBB5
+ 150:kernel.c      **** 	}
+ 151:kernel.c      **** }
+ 756               	0,133,.LM50-.LFBB5
  757               	.LM50:
  758 0370 CF91      		sts currentScheduler+2,__zero_reg__
  760 0374 0895      	.LM51:
@@ -721,9 +716,9 @@
  764               		ldd r25,Z+1
  765               		std Y+2,r25
  766               		std Y+1,r24
- 157:kernel.c      **** 
- 158:kernel.c      **** void incrementTime(void)
- 159:kernel.c      **** {
+ 152:kernel.c      **** 
+ 153:kernel.c      **** void incrementTime(void)
+ 154:kernel.c      **** {
  767               	+2,r25
  768               		std Y+1,r24
  770 0376 DF93      	.LM52:
@@ -732,18 +727,18 @@
  773 037c DEB7      		ldi r24,lo8(2)
  774               		st Z,r24
  775               		ldi r30,lo8(89)
- 160:kernel.c      ****    if((currentTime.us+TIMER_DELAY_US)==1000)
+ 155:kernel.c      ****    if((currentTime.us+TIMER_DELAY_US)==1000)
  776               	st Z,r24
  777               		ldi r30,lo8(89)
  778 037e 8091 0000 		ldi r31,hi8(89)
  779 0382 9091 0000 		ldi r24,lo8(1)
  780 0386 22E0      		st Z,r24
  781 0388 8E3E      	/* #APP */
- 782 038a 9207      	 ;  127 "kernel.c" 1
+ 782 038a 9207      	 ;  135 "kernel.c" 1
  783 038c 01F0      		sei
  784 038e 00C0      	 ;  0 "" 2
- 161:kernel.c      ****    {
- 162:kernel.c      ****    	if((currentTime.ms+1)==1000)
+ 156:kernel.c      ****    {
+ 157:kernel.c      ****    	if((currentTime.ms+1)==1000)
  785               	rnel.c" 1
  786               		sei
  787 0390 8091 0000 	 ;  0 "" 2
@@ -751,22 +746,22 @@
  790 039a 873E      	/* #NOAPP */
  791 039c 9207      		ldi r26,lo8(93)
  792 039e 01F4      		ldi r27,hi8(93)
- 163:kernel.c      ****    	{
- 164:kernel.c      ****    	   if((currentTime.seconds+1)==60)
+ 158:kernel.c      ****    	{
+ 159:kernel.c      ****    	   if((currentTime.seconds+1)==60)
  793               	6,lo8(93)
  794               		ldi r27,hi8(93)
  795 03a0 8091 0000 		ldd r30,Y+1
  796 03a4 8B33      		ldd r31,Y+2
  797 03a6 01F4      		ldd r24,Z+6
- 165:kernel.c      ****    	   {
- 166:kernel.c      ****    	   	if((currentTime.minutes+1)==60)
+ 160:kernel.c      ****    	   {
+ 161:kernel.c      ****    	   	if((currentTime.minutes+1)==60)
  798               		ldd r31,Y+2
  799               		ldd r24,Z+6
  800 03a8 8091 0000 		ldd r25,Z+7
  801 03ac 8B33      		adiw r24,32
  802 03ae 01F4      		adiw r26,1
- 167:kernel.c      ****    	   	{
- 168:kernel.c      ****    	   		currentTime.hours = (currentTime.hours+1) % 24;
+ 162:kernel.c      ****    	   	{
+ 163:kernel.c      ****    	   		currentTime.hours = (currentTime.hours+1) % 24;
  803               		adiw r24,32
  804               		adiw r26,1
  805 03b0 8091 0000 		st X,r25
@@ -778,8 +773,8 @@
  812 03c0 0E94 0000 		ld r31,Z
  813 03c4 8093 0000 		mov r30,__tmp_reg__
  814               		icall
- 169:kernel.c      ****    	   	}
- 170:kernel.c      ****    	   	currentTime.minutes = (currentTime.minutes+1) % 60;
+ 164:kernel.c      ****    	   	}
+ 165:kernel.c      ****    	   	currentTime.minutes = (currentTime.minutes+1) % 60;
  815               	mp_reg__
  816               		icall
  817 03c8 8091 0000 	/* epilogue start */
@@ -791,16 +786,16 @@
  824 03d8 0E94 0000 		pop __tmp_reg__
  825 03dc 8093 0000 		pop r28
  826               		pop r29
- 171:kernel.c      ****    	   }
- 172:kernel.c      ****    	   currentTime.seconds = (currentTime.seconds+1) % 60;
+ 166:kernel.c      ****    	   }
+ 167:kernel.c      ****    	   currentTime.seconds = (currentTime.seconds+1) % 60;
  827               	r28
  828               		pop r29
  829 03e0 8091 0000 		ret
  834 03ec 30E0      	.Lscope5:
  836 03f0 0E94 0000 	.global	nextScheduleItem
  838               	nextScheduleItem:
- 173:kernel.c      ****    	}
- 174:kernel.c      ****    	currentTime.ms = (currentTime.ms+1) % 1000;
+ 168:kernel.c      ****    	}
+ 169:kernel.c      ****    	currentTime.ms = (currentTime.ms+1) % 1000;
  839               	eduleItem:
  841 03f8 8091 0000 	.LM56:
  842 03fc 9091 0000 	.LFBB6:
@@ -811,8 +806,8 @@
  847 0408 0E94 0000 	/* prologue: function */
  848 040c 9093 0000 	/* frame size = 0 */
  850               	.LM57:
- 175:kernel.c      ****    }
- 176:kernel.c      ****    currentTime.us = (currentTime.us+TIMER_DELAY_US) % 1000;
+ 170:kernel.c      ****    }
+ 171:kernel.c      ****    currentTime.us = (currentTime.us+TIMER_DELAY_US) % 1000;
  851               	57-.LFBB6
  852               	.LM57:
  853 0414 8091 0000 		lds r24,currentScheduler+2
@@ -825,8 +820,8 @@
  860 0426 0E94 0000 		cp r18,r24
  861 042a 9093 0000 		cpc r19,r25
  862 042e 8093 0000 		brge .L27
- 177:kernel.c      **** }
- 864               	49,.LM58-.LFBB6
+ 172:kernel.c      **** }
+ 864               	45,.LM58-.LFBB6
  865               	.LM58:
  866 0432 CF91      		lds r24,currentScheduler+2
  867 0434 DF91      		subi r24,lo8(-(1))
@@ -836,339 +831,344 @@
  872               	.LM59:
  873               		sts currentScheduler+2,__zero_reg__
  874               	.L29:
- 178:kernel.c      **** 
- 179:kernel.c      **** SCHEDULER_TIMER()
- 180:kernel.c      **** {  // Testen ob nicht alle Tasks beendet worden sind
+ 173:kernel.c      **** 
+ 174:kernel.c      **** SCHEDULER_TIMER()
+ 175:kernel.c      **** {
  875               	ero_reg__
  876               	.L29:
  877               	/* epilogue start */
  879               	.LM60:
- 181:kernel.c      **** 	// falls ja:
- 182:kernel.c      **** 	if(!allTasksFinished())
- 880               	6,.LM60-.LFBB6
+ 176:kernel.c      **** 	// Testen ob nicht alle Tasks beendet worden sind
+ 177:kernel.c      **** 	// falls ja:
+ 178:kernel.c      **** 	//if(!allTasksFinished())
+ 179:kernel.c      **** 	//{
+ 180:kernel.c      ****    	save_registers();
+ 880               	1,.LM60-.LFBB6
  881               	.LM60:
- 882 0438 0E94 0000 		pop r28
- 883 043c 8823      		pop r29
- 884 043e 01F0      		ret
+ 882               		pop r28
+ 883               		pop r29
+ 884 0438 0F92      		ret
  886               	.Lscope6:
- 183:kernel.c      **** 	{
- 184:kernel.c      ****    	save_registers();
- 887               	heduleItem
- 888               	.Lscope6:
- 890               	.global	incrementTime
- 892               	incrementTime:
- 894 0444 1F92      	.LM61:
- 895               	.LFBB7:
- 896               		push r29
- 897 0446 2F92      		push r28
- 898               		in r28,__SP_L__
- 899               		in r29,__SP_H__
- 900 0448 3F92      	/* prologue: function */
- 901               	/* frame size = 0 */
- 903 044a 4F92      	.LM62:
- 904               		lds r24,currentTime+5
- 905               		lds r25,(currentTime+5)+1
- 906 044c 5F92      		ldi r18,hi8(750)
- 907               		cpi r24,lo8(750)
- 908               		cpc r25,r18
- 909 044e 6F92      		breq .+2
- 910               		rjmp .L31
- 912 0450 7F92      	.LM63:
- 913               		lds r24,currentTime+3
- 914               		lds r25,(currentTime+3)+1
- 915 0452 8F92      		ldi r18,hi8(999)
- 916               		cpi r24,lo8(999)
- 917               		cpc r25,r18
- 918 0454 9F92      		brne .L32
- 920               	.LM64:
- 921 0456 AF92      		lds r24,currentTime+2
- 922               		cpi r24,lo8(59)
- 923               		brne .L33
- 925               	.LM65:
- 926               		lds r24,currentTime+1
- 927 045a CF92      		cpi r24,lo8(59)
- 928               		brne .L34
- 930 045c DF92      	.LM66:
- 931               		lds r24,currentTime
- 932               		mov r24,r24
- 933 045e EF92      		ldi r25,lo8(0)
- 934               		adiw r24,1
- 935               		ldi r18,lo8(24)
- 936 0460 FF92      		ldi r19,hi8(24)
- 937               		movw r22,r18
- 938               		call __divmodhi4
- 939 0462 0F93      		sts currentTime,r24
- 940               	.L34:
- 942 0464 1F93      	.LM67:
- 943               		lds r24,currentTime+1
- 944               		mov r24,r24
- 945 0466 2F93      		ldi r25,lo8(0)
- 946               		adiw r24,1
- 947               		ldi r18,lo8(60)
- 948 0468 3F93      		ldi r19,hi8(60)
- 949               		movw r22,r18
- 950               		call __divmodhi4
- 951 046a 4F93      		sts currentTime+1,r24
- 952               	.L33:
- 954 046c 5F93      	.LM68:
- 955               		lds r24,currentTime+2
- 956               		mov r24,r24
- 957 046e 6F93      		ldi r25,lo8(0)
- 958               		adiw r24,1
- 959               		ldi r18,lo8(60)
- 960 0470 7F93      		ldi r19,hi8(60)
- 961               		movw r22,r18
- 962               		call __divmodhi4
- 963 0472 8F93      		sts currentTime+2,r24
- 964               	.L32:
- 966 0474 9F93      	.LM69:
- 967               		lds r24,currentTime+3
- 968               		lds r25,(currentTime+3)+1
- 969 0476 AF93      		adiw r24,1
- 970               		ldi r18,lo8(1000)
- 971               		ldi r19,hi8(1000)
- 972 0478 BF93      		movw r22,r18
- 973               		call __udivmodhi4
- 974               		sts (currentTime+3)+1,r25
- 975 047a CF93      		sts currentTime+3,r24
- 976               	.L31:
- 978 047c DF93      	.LM70:
- 979               		lds r24,currentTime+5
- 980               		lds r25,(currentTime+5)+1
- 981 047e EF93      		subi r24,lo8(-(250))
- 982               		sbci r25,hi8(-(250))
- 983               		ldi r18,lo8(1000)
- 984 0480 FF93      		ldi r19,hi8(1000)
- 985               		movw r22,r18
- 185:kernel.c      **** 		TASK *task;
- 186:kernel.c      **** 		task = currentScheduler.tasks[currentScheduler.current_task];
- 986               	movw r22,r18
- 987               		call __udivmodhi4
- 988               		sts (currentTime+5)+1,r25
- 989 0482 2091 0000 		sts currentTime+5,r24
- 990 0486 3091 0000 	/* epilogue start */
- 992 048e 882F      	.LM71:
- 993 0490 90E0      		pop r28
- 994 0492 880F      		pop r29
- 995 0494 991F      		ret
- 997 0498 E80F      	.Lscope7:
- 999 049c 8081      	.global	__vector_11
- 1001 04a0 9A83      	__vector_11:
- 187:kernel.c      **** 
- 188:kernel.c      **** 	// Stackpointer vom letzten task sichern
- 189:kernel.c      **** 		task->stackPointer = get_stackpointer();
- 1003               	M72-.LFBB8
- 1004               	.LM72:
- 1005 04a4 EDE5      	.LFBB8:
- 1006 04a6 F0E0      	/* prologue: naked */
- 1007 04a8 8081      	/* frame size = 2 */
- 1009 04ac E981      	.LM73:
- 1010 04ae FA81      		call allTasksFinished
- 1011 04b0 9783      		tst r24
- 1012 04b2 8683      		breq .+2
- 190:kernel.c      **** 		incrementTime();
- 1013               	ished
- 1014               		tst r24
- 1015 04b4 0E94 0000 		breq .+2
- 191:kernel.c      **** 		decrementPause();
- 1016               	TasksFinished
- 1017               		tst r24
- 1018 04b8 0E94 0000 		breq .+2
- 192:kernel.c      **** 
- 193:kernel.c      **** 	
- 194:kernel.c      **** 		nextScheduleItem();
- 1019               	asksFinished
- 1020               		tst r24
- 1021 04bc 0E94 0000 		breq .+2
- 195:kernel.c      ****   		task = currentScheduler.tasks[currentScheduler.current_task];
- 1022               	asksFinished
- 1023               		tst r24
- 1024 04c0 2091 0000 		breq .+2
- 1025 04c4 3091 0000 		rjmp .L37
- 1026 04c8 8091 0000 	.LBB2:
- 1028 04ce 90E0      	.LM74:
- 1029 04d0 880F      	/* #APP */
- 1030 04d2 991F      	 ;  184 "kernel.c" 1
- 1031 04d4 F901      		push    r0
- 1032 04d6 E80F      	 ;  0 "" 2
- 1033 04d8 F91F      	 ;  184 "kernel.c" 1
- 1034 04da 8081      		push    r1
- 1035 04dc 9181      	 ;  0 "" 2
- 1036 04de 9A83      	 ;  184 "kernel.c" 1
- 1037 04e0 8983      		push    r2
- 196:kernel.c      **** 		set_stackpointer(task->stackPointer);
- 1038               	l.c" 1
- 1039               		push    r2
- 1040 04e2 ADE5      	 ;  0 "" 2
- 1041 04e4 B0E0      	 ;  184 "kernel.c" 1
- 1042 04e6 E981      		push    r3
- 1043 04e8 FA81      	 ;  0 "" 2
- 1044 04ea 8681      	 ;  184 "kernel.c" 1
- 1045 04ec 9781      		push    r4
- 1046 04ee 1196      	 ;  0 "" 2
- 1047 04f0 9C93      	 ;  184 "kernel.c" 1
- 1048 04f2 8E93      		push    r5
- 197:kernel.c      **** 		load_registers();
- 1049               	kernel.c" 1
- 1050               		push    r5
- 1051               	 ;  0 "" 2
- 1052               	 ;  184 "kernel.c" 1
- 1053 04f4 FF91      		push    r6
- 1054               	 ;  0 "" 2
- 1055               	 ;  184 "kernel.c" 1
- 1056 04f6 EF91      		push    r7
- 1057               	 ;  0 "" 2
- 1058               	 ;  184 "kernel.c" 1
- 1059 04f8 DF91      		push    r8
- 1060               	 ;  0 "" 2
- 1061               	 ;  184 "kernel.c" 1
- 1062 04fa CF91      		push    r9
- 1063               	 ;  0 "" 2
- 1064               	 ;  184 "kernel.c" 1
- 1065 04fc BF91      		push    r10
- 1066               	 ;  0 "" 2
- 1067               	 ;  184 "kernel.c" 1
- 1068 04fe AF91      		push    r11
- 1069               	 ;  0 "" 2
- 1070               	 ;  184 "kernel.c" 1
- 1071 0500 9F91      		push    r12
- 1072               	 ;  0 "" 2
- 1073               	 ;  184 "kernel.c" 1
- 1074 0502 8F91      		push    r13
- 1075               	 ;  0 "" 2
- 1076               	 ;  184 "kernel.c" 1
- 1077 0504 7F91      		push    r14
- 1078               	 ;  0 "" 2
- 1079               	 ;  184 "kernel.c" 1
- 1080 0506 6F91      		push    r15
- 1081               	 ;  0 "" 2
- 1082               	 ;  184 "kernel.c" 1
- 1083 0508 5F91      		push    r16
- 1084               	 ;  0 "" 2
- 1085               	 ;  184 "kernel.c" 1
- 1086 050a 4F91      		push    r17
- 1087               	 ;  0 "" 2
- 1088               	 ;  184 "kernel.c" 1
- 1089 050c 3F91      		push    r18
- 1090               	 ;  0 "" 2
- 1091               	 ;  184 "kernel.c" 1
- 1092 050e 2F91      		push    r19
- 1093               	 ;  0 "" 2
- 1094               	 ;  184 "kernel.c" 1
- 1095 0510 1F91      		push    r20
- 1096               	 ;  0 "" 2
- 1097               	 ;  184 "kernel.c" 1
- 1098 0512 0F91      		push    r21
- 1099               	 ;  0 "" 2
- 1100               	 ;  184 "kernel.c" 1
- 1101 0514 FF90      		push    r22
- 1102               	 ;  0 "" 2
- 1103               	 ;  184 "kernel.c" 1
- 1104 0516 EF90      		push    r23
- 1105               	 ;  0 "" 2
- 1106               	 ;  184 "kernel.c" 1
- 1107 0518 DF90      		push    r24
- 1108               	 ;  0 "" 2
- 1109               	 ;  184 "kernel.c" 1
- 1110 051a CF90      		push    r25
- 1111               	 ;  0 "" 2
- 1112               	 ;  184 "kernel.c" 1
- 1113 051c BF90      		push    r26
- 1114               	 ;  0 "" 2
- 1115               	 ;  184 "kernel.c" 1
- 1116 051e AF90      		push    r27
- 1117               	 ;  0 "" 2
- 1118               	 ;  184 "kernel.c" 1
- 1119 0520 9F90      		push    r28
- 1120               	 ;  0 "" 2
- 1121               	 ;  184 "kernel.c" 1
- 1122 0522 8F90      		push    r29
- 1123               	 ;  0 "" 2
- 1124               	 ;  184 "kernel.c" 1
- 1125 0524 7F90      		push    r30
- 1126               	 ;  0 "" 2
- 1127               	 ;  184 "kernel.c" 1
- 1128 0526 6F90      		push    r31
- 1129               	 ;  0 "" 2
- 1131 0528 5F90      	.LM75:
- 1132               	/* #NOAPP */
- 1133               		lds r18,currentScheduler
- 1134 052a 4F90      		lds r19,(currentScheduler)+1
- 1135               		lds r24,currentScheduler+2
- 1136               		mov r24,r24
- 1137 052c 3F90      		ldi r25,lo8(0)
- 1138               		lsl r24
- 1139               		rol r25
- 1140 052e 2F90      		movw r30,r18
- 1141               		add r30,r24
- 1142               		adc r31,r25
- 1143 0530 1F90      		ld r24,Z
- 1144               		ldd r25,Z+1
- 1145               		std Y+2,r25
- 1146 0532 0F90      		std Y+1,r24
- 1148               	.LM76:
- 1149 0534 00C0      		ldi r30,lo8(93)
- 1150               		ldi r31,hi8(93)
- 1151               		ld r24,Z
- 198:kernel.c      **** 	}
- 199:kernel.c      **** 	else
- 200:kernel.c      **** 	{ /* Kein Task mehr da */
- 201:kernel.c      **** 	 	// Stackpointer setzen
- 202:kernel.c      **** 		set_stackpointer(currentScheduler.stackPointer);
- 1152               	)
- 1153               		ldi r31,hi8(93)
- 1154 0536 EDE5      		ld r24,Z
- 1155 0538 F0E0      		ldd r25,Z+1
- 1156 053a 8091 0000 		ldd r30,Y+1
- 1157 053e 9091 0000 		ldd r31,Y+2
- 1158 0542 9183      		std Z+7,r25
- 1159 0544 8083      		std Z+6,r24
- 203:kernel.c      **** 		// Timer deaktivieren
- 204:kernel.c      **** 		disableTimer();
- 1160               	d Z+7,r25
- 1161               		std Z+6,r24
- 1163 0548 F0E0      	.LM77:
- 1164 054a 1082      		call incrementTime
- 205:kernel.c      **** 	}
- 206:kernel.c      ****    return_interrupt();
- 1166               	n	68,0,191,.LM78-.LFBB8
- 1167               	.LM78:
- 1168               		call decrementPause
- 1170 054c 1895      	.LM79:
- 1171               		call nextScheduleItem
- 207:kernel.c      **** }
- 1173               	n	68,0,195,.LM80-.LFBB8
+ 888               	.global	incrementTime
+ 890 043c 2F92      	incrementTime:
+ 892               	.LM61:
+ 893 043e 3F92      	.LFBB7:
+ 894               		push r29
+ 895               		push r28
+ 896 0440 4F92      		in r28,__SP_L__
+ 897               		in r29,__SP_H__
+ 898               	/* prologue: function */
+ 899 0442 5F92      	/* frame size = 0 */
+ 901               	.LM62:
+ 902 0444 6F92      		lds r24,currentTime+5
+ 903               		lds r25,(currentTime+5)+1
+ 904               		ldi r18,hi8(750)
+ 905 0446 7F92      		cpi r24,lo8(750)
+ 906               		cpc r25,r18
+ 907               		breq .+2
+ 908 0448 8F92      		rjmp .L31
+ 910               	.LM63:
+ 911 044a 9F92      		lds r24,currentTime+3
+ 912               		lds r25,(currentTime+3)+1
+ 913               		ldi r18,hi8(999)
+ 914 044c AF92      		cpi r24,lo8(999)
+ 915               		cpc r25,r18
+ 916               		brne .L32
+ 918               	.LM64:
+ 919               		lds r24,currentTime+2
+ 920 0450 CF92      		cpi r24,lo8(59)
+ 921               		brne .L33
+ 923 0452 DF92      	.LM65:
+ 924               		lds r24,currentTime+1
+ 925               		cpi r24,lo8(59)
+ 926 0454 EF92      		brne .L34
+ 928               	.LM66:
+ 929 0456 FF92      		lds r24,currentTime
+ 930               		mov r24,r24
+ 931               		ldi r25,lo8(0)
+ 932 0458 0F93      		adiw r24,1
+ 933               		ldi r18,lo8(24)
+ 934               		ldi r19,hi8(24)
+ 935 045a 1F93      		movw r22,r18
+ 936               		call __divmodhi4
+ 937               		sts currentTime,r24
+ 938 045c 2F93      	.L34:
+ 940               	.LM67:
+ 941 045e 3F93      		lds r24,currentTime+1
+ 942               		mov r24,r24
+ 943               		ldi r25,lo8(0)
+ 944 0460 4F93      		adiw r24,1
+ 945               		ldi r18,lo8(60)
+ 946               		ldi r19,hi8(60)
+ 947 0462 5F93      		movw r22,r18
+ 948               		call __divmodhi4
+ 949               		sts currentTime+1,r24
+ 950 0464 6F93      	.L33:
+ 952               	.LM68:
+ 953 0466 7F93      		lds r24,currentTime+2
+ 954               		mov r24,r24
+ 955               		ldi r25,lo8(0)
+ 956 0468 8F93      		adiw r24,1
+ 957               		ldi r18,lo8(60)
+ 958               		ldi r19,hi8(60)
+ 959 046a 9F93      		movw r22,r18
+ 960               		call __divmodhi4
+ 961               		sts currentTime+2,r24
+ 962 046c AF93      	.L32:
+ 964               	.LM69:
+ 965 046e BF93      		lds r24,currentTime+3
+ 966               		lds r25,(currentTime+3)+1
+ 967               		adiw r24,1
+ 968 0470 CF93      		ldi r18,lo8(1000)
+ 969               		ldi r19,hi8(1000)
+ 970               		movw r22,r18
+ 971 0472 DF93      		call __udivmodhi4
+ 972               		sts (currentTime+3)+1,r25
+ 973               		sts currentTime+3,r24
+ 974 0474 EF93      	.L31:
+ 976               	.LM70:
+ 977 0476 FF93      		lds r24,currentTime+5
+ 978               		lds r25,(currentTime+5)+1
+ 181:kernel.c      **** 		TASK *task;
+ 182:kernel.c      **** 		task = currentScheduler.tasks[currentScheduler.current_task];
+ 979               	urrentTime+5)+1
+ 980               		subi r24,lo8(-(250))
+ 981               		sbci r25,hi8(-(250))
+ 982 0478 2091 0000 		ldi r18,lo8(1000)
+ 983 047c 3091 0000 		ldi r19,hi8(1000)
+ 984 0480 8091 0000 		movw r22,r18
+ 985 0484 882F      		call __udivmodhi4
+ 986 0486 90E0      		sts (currentTime+5)+1,r25
+ 987 0488 880F      		sts currentTime+5,r24
+ 988 048a 991F      	/* epilogue start */
+ 990 048e E80F      	.LM71:
+ 991 0490 F91F      		pop r28
+ 992 0492 8081      		pop r29
+ 993 0494 9181      		ret
+ 995 0498 8983      	.Lscope7:
+ 183:kernel.c      **** 
+ 184:kernel.c      **** 	// Stackpointer vom letzten task sichern
+ 185:kernel.c      **** 		task->stackPointer = get_stackpointer();
+ 996               	Lscope7:
+ 998 049a EDE5      	.global	__vector_11
+ 1000 049e 8081      	__vector_11:
+ 1002 04a2 E981      	.LM72:
+ 1003 04a4 FA81      	.LFBB8:
+ 1004 04a6 9783      	/* prologue: naked */
+ 1005 04a8 8683      	/* frame size = 2 */
+ 186:kernel.c      **** 		incrementTime();
+ 1006               	* frame size = 2 */
+ 1008 04aa 0E94 0000 	.LM73:
+ 187:kernel.c      **** 		decrementPause();
+ 1009               	n	68,0,180,.LM73-.LFBB8
+ 1010               	.LM73:
+ 1011 04ae 0E94 0000 	/* #APP */
+ 188:kernel.c      **** 
+ 189:kernel.c      **** 		if(allTasksFinished())
+ 1012               	.LM73-.LFBB8
+ 1013               	.LM73:
+ 1014 04b2 0E94 0000 	/* #APP */
+ 1015 04b6 8823      	 ;  180 "kernel.c" 1
+ 1016 04b8 01F0      		push    r0
+ 190:kernel.c      **** 		{
+ 191:kernel.c      **** 		 	set_stackpointer(currentScheduler.stackPointer);
+ 1017               	 180 "kernel.c" 1
+ 1018               		push    r0
+ 1019 04ba EDE5      	 ;  0 "" 2
+ 1020 04bc F0E0      	 ;  180 "kernel.c" 1
+ 1021 04be 8091 0000 		push    r1
+ 1022 04c2 9091 0000 	 ;  0 "" 2
+ 1023 04c6 9183      	 ;  180 "kernel.c" 1
+ 1024 04c8 8083      		push    r2
+ 192:kernel.c      **** 		 	disableTimer();
+ 1025               	 "kernel.c" 1
+ 1026               		push    r2
+ 1027 04ca E9E5      	 ;  0 "" 2
+ 1028 04cc F0E0      	 ;  180 "kernel.c" 1
+ 1029 04ce 1082      		push    r3
+ 193:kernel.c      **** 		 	return_interrupt();
+ 1030               	180 "kernel.c" 1
+ 1031               		push    r3
+ 1032               	 ;  0 "" 2
+ 1033               	 ;  180 "kernel.c" 1
+ 1034 04d0 1895      		push    r4
+ 1035               	 ;  0 "" 2
+ 1036               	 ;  180 "kernel.c" 1
+ 1037               		push    r5
+ 194:kernel.c      **** 		}
+ 195:kernel.c      **** 	
+ 196:kernel.c      **** 		nextScheduleItem();
+ 1038               	 "kernel.c" 1
+ 1039               		push    r5
+ 1040 04d2 0E94 0000 	 ;  0 "" 2
+ 197:kernel.c      ****   		task = currentScheduler.tasks[currentScheduler.current_task];
+ 1041               	el.c" 1
+ 1042               		push    r5
+ 1043 04d6 2091 0000 	 ;  0 "" 2
+ 1044 04da 3091 0000 	 ;  180 "kernel.c" 1
+ 1045 04de 8091 0000 		push    r6
+ 1046 04e2 882F      	 ;  0 "" 2
+ 1047 04e4 90E0      	 ;  180 "kernel.c" 1
+ 1048 04e6 880F      		push    r7
+ 1049 04e8 991F      	 ;  0 "" 2
+ 1050 04ea F901      	 ;  180 "kernel.c" 1
+ 1051 04ec E80F      		push    r8
+ 1052 04ee F91F      	 ;  0 "" 2
+ 1053 04f0 8081      	 ;  180 "kernel.c" 1
+ 1054 04f2 9181      		push    r9
+ 1055 04f4 9A83      	 ;  0 "" 2
+ 1056 04f6 8983      	 ;  180 "kernel.c" 1
+ 198:kernel.c      **** 		set_stackpointer(task->stackPointer);
+ 1057               	  180 "kernel.c" 1
+ 1058               		push    r10
+ 1059 04f8 ADE5      	 ;  0 "" 2
+ 1060 04fa B0E0      	 ;  180 "kernel.c" 1
+ 1061 04fc E981      		push    r11
+ 1062 04fe FA81      	 ;  0 "" 2
+ 1063 0500 8681      	 ;  180 "kernel.c" 1
+ 1064 0502 9781      		push    r12
+ 1065 0504 1196      	 ;  0 "" 2
+ 1066 0506 9C93      	 ;  180 "kernel.c" 1
+ 1067 0508 8E93      		push    r13
+ 199:kernel.c      **** 		load_registers();
+ 1068               	nel.c" 1
+ 1069               		push    r13
+ 1070               	 ;  0 "" 2
+ 1071               	 ;  180 "kernel.c" 1
+ 1072 050a FF91      		push    r14
+ 1073               	 ;  0 "" 2
+ 1074               	 ;  180 "kernel.c" 1
+ 1075 050c EF91      		push    r15
+ 1076               	 ;  0 "" 2
+ 1077               	 ;  180 "kernel.c" 1
+ 1078 050e DF91      		push    r16
+ 1079               	 ;  0 "" 2
+ 1080               	 ;  180 "kernel.c" 1
+ 1081 0510 CF91      		push    r17
+ 1082               	 ;  0 "" 2
+ 1083               	 ;  180 "kernel.c" 1
+ 1084 0512 BF91      		push    r18
+ 1085               	 ;  0 "" 2
+ 1086               	 ;  180 "kernel.c" 1
+ 1087 0514 AF91      		push    r19
+ 1088               	 ;  0 "" 2
+ 1089               	 ;  180 "kernel.c" 1
+ 1090 0516 9F91      		push    r20
+ 1091               	 ;  0 "" 2
+ 1092               	 ;  180 "kernel.c" 1
+ 1093 0518 8F91      		push    r21
+ 1094               	 ;  0 "" 2
+ 1095               	 ;  180 "kernel.c" 1
+ 1096 051a 7F91      		push    r22
+ 1097               	 ;  0 "" 2
+ 1098               	 ;  180 "kernel.c" 1
+ 1099 051c 6F91      		push    r23
+ 1100               	 ;  0 "" 2
+ 1101               	 ;  180 "kernel.c" 1
+ 1102 051e 5F91      		push    r24
+ 1103               	 ;  0 "" 2
+ 1104               	 ;  180 "kernel.c" 1
+ 1105 0520 4F91      		push    r25
+ 1106               	 ;  0 "" 2
+ 1107               	 ;  180 "kernel.c" 1
+ 1108 0522 3F91      		push    r26
+ 1109               	 ;  0 "" 2
+ 1110               	 ;  180 "kernel.c" 1
+ 1111 0524 2F91      		push    r27
+ 1112               	 ;  0 "" 2
+ 1113               	 ;  180 "kernel.c" 1
+ 1114 0526 1F91      		push    r28
+ 1115               	 ;  0 "" 2
+ 1116               	 ;  180 "kernel.c" 1
+ 1117 0528 0F91      		push    r29
+ 1118               	 ;  0 "" 2
+ 1119               	 ;  180 "kernel.c" 1
+ 1120 052a FF90      		push    r30
+ 1121               	 ;  0 "" 2
+ 1122               	 ;  180 "kernel.c" 1
+ 1123 052c EF90      		push    r31
+ 1124               	 ;  0 "" 2
+ 1126 052e DF90      	.LM74:
+ 1127               	/* #NOAPP */
+ 1128               		lds r18,currentScheduler
+ 1129 0530 CF90      		lds r19,(currentScheduler)+1
+ 1130               		lds r24,currentScheduler+2
+ 1131               		mov r24,r24
+ 1132 0532 BF90      		ldi r25,lo8(0)
+ 1133               		lsl r24
+ 1134               		rol r25
+ 1135 0534 AF90      		movw r30,r18
+ 1136               		add r30,r24
+ 1137               		adc r31,r25
+ 1138 0536 9F90      		ld r24,Z
+ 1139               		ldd r25,Z+1
+ 1140               		std Y+2,r25
+ 1141 0538 8F90      		std Y+1,r24
+ 1143               	.LM75:
+ 1144 053a 7F90      		ldi r30,lo8(93)
+ 1145               		ldi r31,hi8(93)
+ 1146               		ld r24,Z
+ 1147 053c 6F90      		ldd r25,Z+1
+ 1148               		ldd r30,Y+1
+ 1149               		ldd r31,Y+2
+ 1150 053e 5F90      		std Z+7,r25
+ 1151               		std Z+6,r24
+ 1153 0540 4F90      	.LM76:
+ 1154               		call incrementTime
+ 1156 0542 3F90      	.LM77:
+ 1157               		call decrementPause
+ 1159 0544 2F90      	.LM78:
+ 1160               		call allTasksFinished
+ 1161               		tst r24
+ 1162 0546 1F90      		breq .L37
+ 1164               	.LM79:
+ 1165 0548 0F90      		ldi r30,lo8(93)
+ 1166               		ldi r31,hi8(93)
+ 200:kernel.c      **** 	/*}
+ 201:kernel.c      **** 	else
+ 202:kernel.c      **** 	{ // Kein Task mehr da
+ 203:kernel.c      **** 	 	// Stackpointer setzen
+ 204:kernel.c      **** 		set_stackpointer(currentScheduler.stackPointer);
+ 205:kernel.c      **** 		// Timer deaktivieren
+ 206:kernel.c      **** 		disableTimer();
+ 207:kernel.c      **** 	}  */
+ 208:kernel.c      ****    return_interrupt();
+ 1167               		lds r24,currentScheduler+4
+ 1168               		lds r25,(currentScheduler+4)+1
+ 1169               		std Z+1,r25
+ 1170 054a 1895      		st Z,r24
+ 1172               	.LM80:
+ 209:kernel.c      **** }
+ 1173               	92,.LM80-.LFBB8
  1174               	.LM80:
- 1175               		lds r18,currentScheduler
- 1176               		lds r19,(currentScheduler)+1
- 1177               		lds r24,currentScheduler+2
- 1178               		mov r24,r24
- 1179               		ldi r25,lo8(0)
- 1180               		lsl r24
- 1181               		rol r25
- 1182               		movw r30,r18
- 1183               		add r30,r24
- 1184               		adc r31,r25
- 1185               		ld r24,Z
- 1186               		ldd r25,Z+1
+ 1175               		ldi r30,lo8(89)
+ 1176               		ldi r31,hi8(89)
+ 1177               		st Z,__zero_reg__
+ 1179               	.LM81:
+ 1180               	/* #APP */
+ 1181               	 ;  193 "kernel.c" 1
+ 1182               		reti
+ 1183               	 ;  0 "" 2
+ 1184               	/* #NOAPP */
+ 1185               	.L37:
 DEFINED SYMBOLS
                             *ABS*:00000000 kernel.c
-/tmp/user/501/ccHx4tAM.s:2      *ABS*:0000003f __SREG__
-/tmp/user/501/ccHx4tAM.s:3      *ABS*:0000003e __SP_H__
-/tmp/user/501/ccHx4tAM.s:4      *ABS*:0000003d __SP_L__
-/tmp/user/501/ccHx4tAM.s:5      *ABS*:00000034 __CCP__
-/tmp/user/501/ccHx4tAM.s:6      *ABS*:00000000 __tmp_reg__
-/tmp/user/501/ccHx4tAM.s:7      *ABS*:00000001 __zero_reg__
-/tmp/user/501/ccHx4tAM.s:124    .bss:00000000 currentTime
-/tmp/user/501/ccHx4tAM.s:131    .text:00000000 initTask
-/tmp/user/501/ccHx4tAM.s:273    .text:000000c2 sleep
+/tmp/user/501/ccLpBqeZ.s:2      *ABS*:0000003f __SREG__
+/tmp/user/501/ccLpBqeZ.s:3      *ABS*:0000003e __SP_H__
+/tmp/user/501/ccLpBqeZ.s:4      *ABS*:0000003d __SP_L__
+/tmp/user/501/ccLpBqeZ.s:5      *ABS*:00000034 __CCP__
+/tmp/user/501/ccLpBqeZ.s:6      *ABS*:00000000 __tmp_reg__
+/tmp/user/501/ccLpBqeZ.s:7      *ABS*:00000001 __zero_reg__
+/tmp/user/501/ccLpBqeZ.s:124    .bss:00000000 currentTime
+/tmp/user/501/ccLpBqeZ.s:131    .text:00000000 initTask
+/tmp/user/501/ccLpBqeZ.s:273    .text:000000c2 sleep
                             *COM*:00000006 currentScheduler
-/tmp/user/501/ccHx4tAM.s:379    .text:00000162 decrementPause
-/tmp/user/501/ccHx4tAM.s:496    .text:00000206 allTasksFinished
-/tmp/user/501/ccHx4tAM.s:581    .text:00000268 startRRScheduler
-/tmp/user/501/ccHx4tAM.s:722    .text:00000340 nextScheduleItem
-/tmp/user/501/ccHx4tAM.s:766    .text:00000376 incrementTime
-/tmp/user/501/ccHx4tAM.s:874    .text:00000438 __vector_11
+/tmp/user/501/ccLpBqeZ.s:379    .text:00000162 decrementPause
+/tmp/user/501/ccLpBqeZ.s:496    .text:00000206 allTasksFinished
+/tmp/user/501/ccLpBqeZ.s:581    .text:00000268 startRRScheduler
+/tmp/user/501/ccLpBqeZ.s:722    .text:00000340 nextScheduleItem
+/tmp/user/501/ccLpBqeZ.s:766    .text:00000376 incrementTime
+/tmp/user/501/ccLpBqeZ.s:874    .text:00000438 __vector_11
 
 UNDEFINED SYMBOLS
 __divmodhi4

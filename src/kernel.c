@@ -33,6 +33,7 @@ TIME currentTime = {0, 0, 0, 0, 0};
 
 SCHEDULER currentScheduler;
 
+
 void initTask(TASK *task)
 {
    u08 i, pc_high, pc_low;
@@ -96,11 +97,11 @@ void decrementPause(void)
 	}
 }
 
-BOOL allTasksFinished(void)
+u08 allTasksFinished(void)
 {
    u08 i;
    TASK *task;
-   BOOL result = 1;
+   u08 result = 1;
 	for(i = 0;	i < currentScheduler.tasks_length; i++)
 	{
 		task = currentScheduler.tasks[i];
@@ -139,18 +140,6 @@ void startRRScheduler(TASK **tasks, u08 tasks_length)
 
 void nextScheduleItem(void)
 {
-/*	TASK *task;
-	u08 i;
-	highest_task = currentScheduler.current_task;
-	// Search for a running Task
-	for(i=currentScheduler.current_task+1; i < currentScheduler.tasks_length -1; i++)
-	{
-	   task = currentScheduler.tasks[i];
-	}
-	for(i=0; i < currentScheduler.current_task; i++)
-	{
-		task = currentScheduler.tasks[i];
-	}           */
 	if (currentScheduler.current_task < (currentScheduler.tasks_length -1))
 	{
 		currentScheduler.current_task++;
@@ -159,7 +148,6 @@ void nextScheduleItem(void)
 	{
 		currentScheduler.current_task = 0;
 	}
-	// (pop) reset task specific registers
 }
 
 void incrementTime(void)
@@ -184,10 +172,11 @@ void incrementTime(void)
 }
 
 SCHEDULER_TIMER()
-{  // Testen ob nicht alle Tasks beendet worden sind
+{
+	// Testen ob nicht alle Tasks beendet worden sind
 	// falls ja:
-	if(!allTasksFinished())
-	{
+	//if(!allTasksFinished())
+	//{
    	save_registers();
 		TASK *task;
 		task = currentScheduler.tasks[currentScheduler.current_task];
@@ -197,21 +186,28 @@ SCHEDULER_TIMER()
 		incrementTime();
 		decrementPause();
 
+		if(allTasksFinished())
+		{
+		 	set_stackpointer(currentScheduler.stackPointer);
+		 	disableTimer();
+		 	return_interrupt();
+		}
 	
 		nextScheduleItem();
   		task = currentScheduler.tasks[currentScheduler.current_task];
 		set_stackpointer(task->stackPointer);
 		load_registers();
-	}
+	/*}
 	else
-	{ /* Kein Task mehr da */
+	{ // Kein Task mehr da
 	 	// Stackpointer setzen
 		set_stackpointer(currentScheduler.stackPointer);
 		// Timer deaktivieren
 		disableTimer();
-	}
+	}  */
    return_interrupt();
 }
+
 
 
 

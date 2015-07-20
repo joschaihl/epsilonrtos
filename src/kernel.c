@@ -14,6 +14,11 @@
 
 #include "kernel.h"
 
+/**
+ * @brief Scheduler Datenstruktur mit der Menge und Anzahl von Tasks,
+ * sowie den aktuellen Task der abgearbeitet werden soll
+ * und der Stackpointer der zuletzt vor dem Scheduling gesetzt war.
+ */
 typedef struct {
 	TASK **tasks;
 	u08 current_task;
@@ -34,31 +39,47 @@ TIME currentTime = {0, 0, 0, 0, 0};
 SCHEDULER currentScheduler;
 
 /**
- * Einen Task initialisieren: Initialisiere den Speicher im Stack auf 0, setze ganz oben
- * auf dem Stack den Programmz�hler der Task-Prozedur und setze den Zustand des Tasks
+ * @brief Einen Task initialisieren: Initialisiere den Speicher im Stack auf 0, setze ganz oben
+ * auf dem Stack den Programmzähler der Task-Prozedur und setze den Zustand des Tasks
  * auf TASK_RUNNING.
  * @param task Der Task der initialisiert werden soll.
  */
 void initTask(TASK *task)
 {
+
    u08 i, pc_high, pc_low;
+   u16 sp;
 	
-	//if(task->taskState == TASK_UNINITIALIZED)
-	//{
-		 // Set Stack Address
-       for(i = 0; i < (task->stackSize -2); i++)
-       {
-          task->stack[i] = 0;
-       }
-       pc_high = (task->programmCounter >> 8);
-       pc_low =  0xff & task->programmCounter;
-       i++;
-       task->stack[i] = pc_high;
-       i++;
-       task->stack[i] = pc_low;
-		 // Set Task Ready
-		 task->taskState = TASK_RUNNING;		
-	//}
+	// Set programm Counter
+	task->programmCounter = (u16) task->taskFunction;
+	
+	// Set Stackpointer
+	sp = task->stackPointer;
+	sp = task->stackSize;
+ 	
+   sp = task->stackSize;
+   sp -= MINIMUM_TASK_STACKSIZE;
+   sp += (u16) task->stack;
+	task->stackPointer = sp;
+	//task->stackPointer = (u16) &task->stack;
+	//task->stackPointer += task->stackSize;
+	
+	// Set pause
+	task->pause_us = 0;
+	
+	// Set Stack Address
+   for(i = 0; i < (task->stackSize -2); i++)
+   {
+     task->stack[i] = 0;
+   }
+   pc_high = (task->programmCounter >> 8);
+	pc_low =  0xff & task->programmCounter;
+	i++;
+   task->stack[i] = pc_high;
+   i++;
+   task->stack[i] = pc_low;
+	// Set Task Ready
+	task->taskState = TASK_RUNNING;	
 }
 
 void sleep(u32 pause_us)
@@ -119,6 +140,12 @@ u08 allTasksFinished(void)
 	return (result);
 }
 
+/**
+ * @brief Starte einen präemptiven Round-Robin-Scheduler mit einer
+ * gegebenen Menge von Tests.
+ * @param tasks Liste der Tasks die abgearbeitet werden sollen.
+ * @param tasks_length Anzahl der Tasks in der Liste.
+ */
 void startRRScheduler(TASK **tasks, u08 tasks_length)
 {
 	currentScheduler.stackPointer = SP + 7;
@@ -176,6 +203,16 @@ void incrementTime(void)
    currentTime.us = (currentTime.us+TIMER_DELAY_US) % 1000;
 }
 
+/**
+ * @brief Timer Funktion für den Round-Robin-Scheduler.
+ * Hier werden zuerst die Register
+ * des vorhergehenden Tasks auf dessen Stack gesichert,
+ * der Stackpointer des Tasks gesichert,
+ * die Systemzeit erhöht und Pausenlängen dekrementiert
+ * und anschließend wird vom nächsten abzuarbeitenden Task
+ * die Register aus dem Stack geladen und der Stackpointer
+ * des Tasks gesetzt.
+ */
 SCHEDULER_TIMER()
 {
 	// Testen ob nicht alle Tasks beendet worden sind
@@ -193,8 +230,8 @@ SCHEDULER_TIMER()
 
 		if(allTasksFinished())
 		{
-		 	set_stackpointer(currentScheduler.stackPointer);
 		 	disableTimer();
+		 	set_stackpointer(currentScheduler.stackPointer);
 		 	return_interrupt();
 		}
 	
@@ -212,6 +249,11 @@ SCHEDULER_TIMER()
 	}  */
    return_interrupt();
 }
+
+
+
+
+
 
 
 

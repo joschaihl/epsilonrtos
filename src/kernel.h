@@ -41,8 +41,11 @@ void sleep(u32 pause_us);
 #define TASK(NAME,SIZE) \
 	void task_ ## NAME(void); \
 	u08 taskstack_ ## NAME[SIZE + MINIMUM_TASK_STACKSIZE] = "STACK"; \
-	TASK taskobj_ ## NAME = {task_ ## NAME, (u16) &task_ ## NAME, taskstack_ ## NAME, \
-	 (u16) taskstack_ ## NAME + SIZE, SIZE + MINIMUM_TASK_STACKSIZE, TASK_UNINITIALIZED}; \
+	TASK taskobj_ ## NAME = { task_ ## NAME, (u16) &task_ ## NAME, taskstack_ ## NAME, \
+	(u16) taskstack_ ## NAME + SIZE, \
+	SIZE + MINIMUM_TASK_STACKSIZE, \
+	0, \
+	TASK_UNINITIALIZED}; \
 	void task_ ## NAME(void)
 	
 #define ENDTASK(NAME) \
@@ -55,6 +58,8 @@ void sleep(u32 pause_us);
 #define DEFINE_TASKSET(TASKSETNAME, TASK, ...)
 
 #endif /* KERNEL_H_ */
+
+
 
 
 

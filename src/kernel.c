@@ -33,13 +33,18 @@ TIME currentTime = {0, 0, 0, 0, 0};
 
 SCHEDULER currentScheduler;
 
-
+/**
+ * Einen Task initialisieren: Initialisiere den Speicher im Stack auf 0, setze ganz oben
+ * auf dem Stack den Programmzähler der Task-Prozedur und setze den Zustand des Tasks
+ * auf TASK_RUNNING.
+ * @param task Der Task der initialisiert werden soll.
+ */
 void initTask(TASK *task)
 {
    u08 i, pc_high, pc_low;
 	
-	if(task->taskState == TASK_UNINITIALIZED)
-	{
+	//if(task->taskState == TASK_UNINITIALIZED)
+	//{
 		 // Set Stack Address
        for(i = 0; i < (task->stackSize -2); i++)
        {
@@ -53,7 +58,7 @@ void initTask(TASK *task)
        task->stack[i] = pc_low;
 		 // Set Task Ready
 		 task->taskState = TASK_RUNNING;		
-	}
+	//}
 }
 
 void sleep(u32 pause_us)
@@ -207,6 +212,7 @@ SCHEDULER_TIMER()
 	}  */
    return_interrupt();
 }
+
 
 
 

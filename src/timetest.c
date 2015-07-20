@@ -159,10 +159,10 @@ int main(void)
    checkTracepoint(2);
 
 	setTracepoint(0);
-	startRRScheduler(taskset, TASK_AMOUNT);
+	startRRScheduler(taskset2, TASK_AMOUNT);
 	assertEquals(a, 100);
    assertEquals(c,100);
-   checkTracepoint(2);
+   checkTracepoint(4);
    	
 	suiteend();	
 	

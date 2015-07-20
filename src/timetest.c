@@ -70,10 +70,22 @@ TASK(B,128)
 }
 
 
+TASK(C,128)
+{
+   u32 i;
+   for(i=0;i<10000;i++)
+   {
+			sbi(DEFAULTPORT, TASKCPIN);
+			cbi(DEFAULTPORT, TASKCPIN);
+	}
+	setTracepoint(4);
+	ENDTASK(C);
+}
 //----- Begin Code ------------------------------------------------------------
 
 #define TASK_AMOUNT 2
 TASK *taskset[] = {&taskobj_A, &taskobj_B};
+TASK *taskset2[] = {&taskobj_A, &taskobj_C};
 
 #ifdef UNITTEST_TESTS
 TEST(assertionsFailure)
@@ -145,6 +157,13 @@ int main(void)
    assertEquals(b,2);
    assertEquals(c,100);
    checkTracepoint(2);
+
+	setTracepoint(0);
+	startRRScheduler(taskset, TASK_AMOUNT);
+	assertEquals(a, 100);
+   assertEquals(c,100);
+   checkTracepoint(2);
+   	
 	suiteend();	
 	
 	do{
@@ -152,6 +171,7 @@ int main(void)
 	} while(1);
 	return 0;
 }
+
 
 
 

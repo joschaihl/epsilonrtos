@@ -5,6 +5,8 @@
 *.lst
 *.lss
 *.eep
+*.out
+*.dat
 *.bak
 *.RX
 /halavr.d

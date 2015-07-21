@@ -43,7 +43,7 @@ DIRINC = .
 DIRLIB = $(DIRAVR)/avr/lib
 
 # MCU name
-MCU = atmega32
+MCU = atmega8
 
 # Output format. (can be srec, ihex, binary)
 FORMAT = ihex
@@ -81,7 +81,7 @@ ASRC =
 
 # List any extra directories to look for include files here.
 #     Each directory must be seperated by a space.
-EXTRAINCDIRS =   
+EXTRAINCDIRS = 
 
 
 # Optional compiler flags.
@@ -106,7 +106,7 @@ EXTRAINCDIRS =
 #CFLAGS += -std=c99
 #CFLAGS += -std=gnu99
 
-CFLAGS = -O0 -gstabs -std=gnu99  -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums  -Wall -Wstrict-prototypes  -Wa,-adhlns=$(<:.c=.lst)  $(patsubst %,-I%,$(EXTRAINCDIRS))
+CFLAGS =  -std=gnu99 -O0 -gstabs -Wa,-adhlns=$(<:.c=.lst) -funsigned-char -funsigned-bitfields -fpack-struct -fshort-enums $(patsubst %,-I%,$(EXTRAINCDIRS)) -Wall -Wstrict-prototypes
 
 # Optional assembler flags.
 #  -Wa,...:   tell GCC to pass this to the assembler.
@@ -117,7 +117,7 @@ CFLAGS = -O0 -gstabs -std=gnu99  -funsigned-char -funsigned-bitfields -fpack-str
 #             files -- see avr-libc docs [FIXME: not yet described there]
 #ASFLAGS = -Wa,-adhlns=$(<:.S=.lst),-gstabs
 
-ASFLAGS = -Wa,-adhlns=$(<:.S=.lst) -Wa,-gstabs
+ASFLAGS =  -Wa,-adhlns=$(<:.S=.lst) -Wa,-gstabs
 
 
 # Optional linker flags.
@@ -139,7 +139,7 @@ ASFLAGS = -Wa,-adhlns=$(<:.S=.lst) -Wa,-gstabs
 # -lm = math library
 #LDFLAGS += -lm
 
-LDFLAGS = -lm -Wl,-Map=$(TARGET).map -Wl,--cref
+LDFLAGS =    -lm -Wl,-Map=$(TARGET).map -Wl,--cref
 
 
 # Programming support using avrdude. Settings and variables.

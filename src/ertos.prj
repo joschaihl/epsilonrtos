@@ -5,7 +5,7 @@
 
 ; Micro + software running
 ; ------------------------------------------------------------
-.MICRO "ATmega32"
+.MICRO "ATmega8"
 .TOOLCHAIN "GCC"
 .GCCPATH   "C:\WinAVR"
 .GCCMAKE   AUTO
@@ -37,6 +37,7 @@ X1 TTY(250000 8) PD0 PD1
 ;R2 PD5 vss 100k
 
 .plot v(PB0) v(PB1) v(PB2) v(PB3) v(PB4)
+
 
 
 

@@ -14,19 +14,6 @@
 
 #include "kernel.h"
 
-/**
- * @brief Scheduler Datenstruktur mit der Menge und Anzahl von Tasks,
- * sowie den aktuellen Task der abgearbeitet werden soll
- * und der Stackpointer der zuletzt vor dem Scheduling gesetzt war.
- */
-typedef struct {
-	TASK **tasks;
-	u08 current_task;
-	u08 tasks_length;
-	u16 stackPointer;
-} SCHEDULER;
-
-
 /* @brief Datenstruktur um Uhrzeit zu speichern, so dass Funktionen wie sleep() möglich sind. */
 typedef struct {
    u08 hours;
@@ -39,7 +26,7 @@ typedef struct {
 /* @brief Aktuelle Uhrzeit */
 TIME currentTime = {0, 0, 0, 0, 0};
 
-SCHEDULER currentScheduler;
+
 
 /**
  * @brief Einen Task initialisieren: Setze den Programmzähler des Tasks auf die Taskfunktion,
@@ -258,6 +245,7 @@ SCHEDULER_TIMER()
 		load_registers();
    return_interrupt();
 }
+
 
 
 

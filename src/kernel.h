@@ -18,6 +18,8 @@
 #include "global.h"		// include our global settings
 #include "hal.h"
 
+
+
 typedef void (*TASK_FUNC)(void);
 
 typedef enum {TASK_UNINITIALIZED = 0, TASK_RUNNING = 1,
@@ -32,6 +34,20 @@ typedef struct {
 	u32 pause_ms;
 	TASK_STATE taskState;
 } TASK;
+
+/**
+ * @brief Scheduler Datenstruktur mit der Menge und Anzahl von Tasks,
+ * sowie den aktuellen Task der abgearbeitet werden soll
+ * und der Stackpointer der zuletzt vor dem Scheduling gesetzt war.
+ */
+typedef struct {
+	TASK **tasks;
+	u08 current_task;
+	u08 tasks_length;
+	u16 stackPointer;
+} SCHEDULER;
+
+SCHEDULER currentScheduler;
 
 
 void initTask(TASK *task);
@@ -55,7 +71,11 @@ void sleep(u32 pause_us);
 		
 #define DEFINE_TASKSET(TASKSETNAME, TASK, ...)
 
+#define SCHEDULER(TASKSET, TASKSET_LENGTH) \
+	startRRScheduler(TASKSET, TASKSET_LENGTH);
+
 #endif /* KERNEL_H_ */
+
 
 
 

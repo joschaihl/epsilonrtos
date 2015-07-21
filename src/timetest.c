@@ -66,17 +66,45 @@ TASK(B,64)
 			sbi(DEFAULTPORT, TASKBPIN);
 			cbi(DEFAULTPORT, TASKBPIN);
 		}
-		sleep(100);
+		sleep(10);
   	}
   	setTracepoint(3);
   	ENDTASK(B);
 }
 
+TASK(C,64)
+{
+	u16 a;
+	for(a=0;a<1000;a++)
+	{
+	   sbi(DEFAULTPORT, TASKCPIN);
+		cbi(DEFAULTPORT, TASKCPIN);
+	}
+	if(a==1000)
+		setTracepoint(5);
+	
+	ENDTASK(C);
+}
+
+TASK(D,64)
+{
+	u08 a, b;
+	for(a=0;a<10;a++)
+	{
+		for(b=0;b<10;b++)
+		{
+	   	sbi(DEFAULTPORT, TASKDPIN);
+			cbi(DEFAULTPORT, TASKDPIN);
+		}
+	}
+	ENDTASK(D);
+}
 
 //----- Begin Code ------------------------------------------------------------
 
 #define TASK_AMOUNT 2
 TASK *taskset[] = {&taskobj_A, &taskobj_B};
+TASK *taskset2[] = {&taskobj_C, &taskobj_D};
 
 #ifdef UNITTEST_TESTS
 TEST(assertionsFailure)
@@ -126,7 +154,12 @@ TEST(taskset1Test)
 	assertEquals(ja, 100);
    assertEquals(jb,2);
    assertEquals(jc,100);
-   checkTracepoint(3);
+   checkTracepoint(2);
+}
+
+TEST(taskset2Test)
+{
+   checkTracepoint(5);
 }
 
 int main(void)
@@ -151,11 +184,12 @@ int main(void)
 	setup();
 	checkTracepoint(1);
 
-   startRRScheduler(taskset, TASK_AMOUNT);
+   SCHEDULER(taskset, TASK_AMOUNT);
    RUN(taskset1Test);
 
-   startRRScheduler(taskset, TASK_AMOUNT);
-   RUN(taskset1Test);
+   SCHEDULER(taskset2, TASK_AMOUNT);
+
+   RUN(taskset2Test);
 	suiteend();	
 	
 	do{
@@ -163,6 +197,7 @@ int main(void)
 	} while(1);
 	return 0;
 }
+
 
 
 

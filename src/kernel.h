@@ -29,7 +29,7 @@ typedef struct {
 	u08 *stack;
 	u16 stackPointer;
 	u08 stackSize;
-	u32 pause_us;
+	u32 pause_ms;
 	TASK_STATE taskState;
 } TASK;
 
@@ -44,20 +44,21 @@ void sleep(u32 pause_us);
 	TASK taskobj_ ## NAME = { task_ ## NAME, (u16) &task_ ## NAME, taskstack_ ## NAME, \
 	(u16) taskstack_ ## NAME + SIZE, \
 	SIZE + MINIMUM_TASK_STACKSIZE, \
-	0, \
-	TASK_UNINITIALIZED}; \
+	0, TASK_UNINITIALIZED}; \
 	void task_ ## NAME(void)
-	
+
 #define ENDTASK(NAME) \
 	taskobj_ ## NAME.taskState = TASK_FINISHED; \
 	while(1) { \
 		nop(); \
-	} \
-	return;
-	
+	}
+		
 #define DEFINE_TASKSET(TASKSETNAME, TASK, ...)
 
 #endif /* KERNEL_H_ */
+
+
+
 
 
 

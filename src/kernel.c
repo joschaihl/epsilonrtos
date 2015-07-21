@@ -26,6 +26,8 @@ typedef struct {
 	u16 stackPointer;
 } SCHEDULER;
 
+
+/* @brief Datenstruktur um Uhrzeit zu speichern, so dass Funktionen wie sleep() möglich sind. */
 typedef struct {
    u08 hours;
    u08 minutes;
@@ -34,12 +36,15 @@ typedef struct {
    u16 us;
 } TIME;
 
+/* @brief Aktuelle Uhrzeit */
 TIME currentTime = {0, 0, 0, 0, 0};
 
 SCHEDULER currentScheduler;
 
 /**
- * @brief Einen Task initialisieren: Initialisiere den Speicher im Stack auf 0, setze ganz oben
+ * @brief Einen Task initialisieren: Setze den Programmzähler des Tasks auf die Taskfunktion,
+ * Setze den Stackpointer des jeweiligen Tasks auf den Anfangswert,
+ * Initialisiere den Speicher im Stack auf 0, speichere ganz oben
  * auf dem Stack den ProgrammzÃ¤hler der Task-Prozedur und setze den Zustand des Tasks
  * auf TASK_RUNNING.
  * @param task Der Task der initialisiert werden soll.
@@ -65,7 +70,7 @@ void initTask(TASK *task)
 	//task->stackPointer += task->stackSize;
 	
 	// Set pause
-	task->pause_us = 0;
+	task->pause_ms = 0;
 	
 	// Set Stack Address
    for(i = 0; i < (task->stackSize -2); i++)
@@ -82,7 +87,7 @@ void initTask(TASK *task)
 	task->taskState = TASK_RUNNING;	
 }
 
-void sleep(u32 pause_us)
+void sleep(u32 pause_ms)
 {
 	TASK *task;
 	BOOL pause = 0;
@@ -90,7 +95,7 @@ void sleep(u32 pause_us)
 	//if(task->taskState == TASK_RUNNING)
 	//{
 	  // cli();
-		task->pause_us = pause_us;
+		task->pause_ms = pause_ms;
 		task->taskState = TASK_PAUSE;
 	//	sei();
 		
@@ -110,14 +115,14 @@ void decrementPause(void)
 		task = currentScheduler.tasks[i];
 		if(task->taskState == TASK_PAUSE)
 		{
-      	if(task->pause_us <= TIMER_DELAY_US)
+      	if(task->pause_ms <= TIMER_DELAY_MS)
       	{
-      		task->pause_us = 0;
+      		task->pause_ms = 0;
       		task->taskState = TASK_RUNNING;
       	}
       	else
       	{
-      		task->pause_us -= TIMER_DELAY_US;
+      		task->pause_ms -= TIMER_DELAY_MS;
       	}
       }
 	}
@@ -184,9 +189,9 @@ void nextScheduleItem(void)
 
 void incrementTime(void)
 {
-   if((currentTime.us+TIMER_DELAY_US)==1000)
-   {
-   	if((currentTime.ms+1)==1000)
+   //if((currentTime.us+TIMER_DELAY_US)==1000)
+   //{
+   	if((currentTime.ms+TIMER_DELAY_MS)==1000)
    	{
    	   if((currentTime.seconds+1)==60)
    	   {
@@ -198,9 +203,9 @@ void incrementTime(void)
    	   }
    	   currentTime.seconds = (currentTime.seconds+1) % 60;
    	}
-   	currentTime.ms = (currentTime.ms+1) % 1000;
-   }
-   currentTime.us = (currentTime.us+TIMER_DELAY_US) % 1000;
+   	currentTime.ms = (currentTime.ms+TIMER_DELAY_MS) % 1000;
+   //}
+   //currentTime.us = (currentTime.us+TIMER_DELAY_US) % 1000;
 }
 
 /**
@@ -220,6 +225,13 @@ SCHEDULER_TIMER()
 	//if(!allTasksFinished())
 	//{
    	save_registers();
+   	if(allTasksFinished())
+		{
+		 	disableTimer();
+		 	set_stackpointer(currentScheduler.stackPointer);
+		 	return_interrupt();
+		}
+	
 		TASK *task;
 		task = currentScheduler.tasks[currentScheduler.current_task];
 
@@ -228,13 +240,7 @@ SCHEDULER_TIMER()
 		incrementTime();
 		decrementPause();
 
-		if(allTasksFinished())
-		{
-		 	disableTimer();
-		 	set_stackpointer(currentScheduler.stackPointer);
-		 	return_interrupt();
-		}
-	
+
 		nextScheduleItem();
   		task = currentScheduler.tasks[currentScheduler.current_task];
 		set_stackpointer(task->stackPointer);
@@ -249,6 +255,9 @@ SCHEDULER_TIMER()
 	}  */
    return_interrupt();
 }
+
+
+
 
 
 

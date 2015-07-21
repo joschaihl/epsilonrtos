@@ -180,7 +180,8 @@
 #define return_interrupt() \
 	asm volatile("reti");
 
-#define TIMER_DELAY_US 250
+//#define TIMER_DELAY_US 250
+#define TIMER_DELAY_MS 2
 
 #ifdef TCCR0A
 #define TCCR TCCR0A
@@ -191,7 +192,7 @@
 #endif
 
 #define initTimer() \
-  TCCR = (1<<CS01); \
+  TCCR = (1<<CS01) | (1<<CS00); \
   TIMSK = (1<<TOIE0); /* TOIE0: Interrupt bei Timer Overflow */ \
   sei();
 
@@ -203,6 +204,7 @@
 
 
 #endif /* HALAVR_H_ */
+
 
 
 

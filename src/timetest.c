@@ -35,13 +35,14 @@ void setup(void)
   setTracepoint(1);
 }
 
-   u08 a = 0, c=0;
+u08 ja = 0, jc=0;
+
 TASK(A,64)
 {
 
-	for(a=0;a < 100;a++)
+	for(ja=0;ja < 100;ja++)
 	{
-      for(c=0;c<100;c++)
+      for(jc=0;jc<100;jc++)
       {
        		sbi(DEFAULTPORT, TASKAPIN);
 				cbi(DEFAULTPORT, TASKAPIN);
@@ -52,18 +53,20 @@ TASK(A,64)
   	ENDTASK(A);
 }
 
-u08 b = 0;
+u08 jb = 0;
+u08 ji;
+
 TASK(B,64)
 {
-   u08 i;
-	for(b=0;b<2;b++)
+
+	for(jb=0;jb<2;jb++)
 	{
-	   for(i=0; i < 100; i++)
+	   for(ji=0; ji < 100; ji++)
 	   {
 			sbi(DEFAULTPORT, TASKBPIN);
 			cbi(DEFAULTPORT, TASKBPIN);
 		}
-		sleep(20000);
+		sleep(100);
   	}
   	setTracepoint(3);
   	ENDTASK(B);
@@ -120,10 +123,10 @@ TEST(tracepointFailure)
 
 TEST(taskset1Test)
 {
-	assertEquals(a, 100);
-   assertEquals(b,2);
-   assertEquals(c,100);
-   checkTracepoint(2);
+	assertEquals(ja, 100);
+   assertEquals(jb,2);
+   assertEquals(jc,100);
+   checkTracepoint(3);
 }
 
 int main(void)
@@ -143,8 +146,8 @@ int main(void)
 #endif
 
    suite();
-   assertEquals(0,a);
-   assertEquals(0,b);
+   assertEquals(0,ja);
+   assertEquals(0,jb);
 	setup();
 	checkTracepoint(1);
 
@@ -160,6 +163,9 @@ int main(void)
 	} while(1);
 	return 0;
 }
+
+
+
 
 
 

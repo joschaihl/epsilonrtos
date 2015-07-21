@@ -193,6 +193,8 @@
 
 #define initTimer() \
   TCCR = (1<<CS01) | (1<<CS00); \
+  TCNT0 = 0x00; \
+  SFIOR |= (1<<PSR10); \
   TIMSK = (1<<TOIE0); /* TOIE0: Interrupt bei Timer Overflow */ \
   sei();
 
@@ -204,6 +206,8 @@
 
 
 #endif /* HALAVR_H_ */
+
+
 
 
 

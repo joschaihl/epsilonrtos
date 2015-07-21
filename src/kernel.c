@@ -56,7 +56,8 @@ void initTask(TASK *task)
    u16 sp;
 	
 	// Set programm Counter
-	task->programmCounter = (u16) task->taskFunction;
+	/* BUG BUG BUG */
+//	task->programmCounter = (u16) task->taskFunction;
 	
 	// Set Stackpointer
  	
@@ -146,12 +147,15 @@ u08 allTasksFinished(void)
  * gegebenen Menge von Tests.
  * @param tasks Liste der Tasks die abgearbeitet werden sollen.
  * @param tasks_length Anzahl der Tasks in der Liste.
- * @todo Review ist bei dieser Funktion notwendig!
- * @todo Geht ein Return um in die Task-Funktion zu springen?
- * @todo Wird der Timer zu früh initialisiert?
- * @todo Geht eine Endlosschleife am Ende?
- * @todo Warum +7?
- *
+ * Review ist bei dieser Funktion notwendig und ergab:
+ * Frage: Geht ein Return um in die Task-Funktion zu springen?
+   Antwort: Ja mittels asm("ret");
+            Oder (unsauberer) indem beim Stackpointer 7 Bytes abgezogen werden und dann die Funktion beendet wird.
+            Die 7 Bytes sind compilerabhängig, der GCC "popt" 7 Bytes bei "}" dieser Funktion mit 2 Parametern weg.
+ * Frage: Kann der Timer zu früh initialisiert oder gar aufgerufen werden?
+ * Antwort: Ja, das Zählregister muss jedes Mal zurückgesetzt werden.
+ * Frage: Geht eine Endlosschleife am Ende?
+ * Antwort: Theoretisch ja, allerdings verschwendet sie ein klein wenig Rechenzeit und es genügt ein Return.
  */
 void startRRScheduler(TASK **tasks, u08 tasks_length)
 {
@@ -171,10 +175,22 @@ void startRRScheduler(TASK **tasks, u08 tasks_length)
 	}
 	currentScheduler.current_task = 0;
    task = currentScheduler.tasks[0];
-	initTimer();
+	
 
 	set_stackpointer(task->stackPointer + WORKING_REGISTERS);
-	task->taskFunction();
+	// initTimer();
+	// Experimental:
+	TCCR = (1<<CS01) | (1<<CS00);
+   TCNT0 = 0x00;
+   SFIOR |= (1<<PSR10);
+   TIFR |= (1<<TOV0);
+   TIMSK = (1<<TOIE0); /* TOIE0: Interrupt bei Timer Overflow */ \
+   sei();
+
+	asm volatile("ret");
+	
+	//task->taskFunction();
+	
 }
 
 void nextScheduleItem(void)
@@ -242,6 +258,8 @@ SCHEDULER_TIMER()
 		load_registers();
    return_interrupt();
 }
+
+
 
 
 

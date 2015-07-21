@@ -59,15 +59,11 @@ void initTask(TASK *task)
 	task->programmCounter = (u16) task->taskFunction;
 	
 	// Set Stackpointer
-	sp = task->stackPointer;
-	sp = task->stackSize;
  	
    sp = task->stackSize;
    sp -= MINIMUM_TASK_STACKSIZE;
    sp += (u16) task->stack;
 	task->stackPointer = sp;
-	//task->stackPointer = (u16) &task->stack;
-	//task->stackPointer += task->stackSize;
 	
 	// Set pause
 	task->pause_ms = 0;
@@ -150,6 +146,12 @@ u08 allTasksFinished(void)
  * gegebenen Menge von Tests.
  * @param tasks Liste der Tasks die abgearbeitet werden sollen.
  * @param tasks_length Anzahl der Tasks in der Liste.
+ * @todo Review ist bei dieser Funktion notwendig!
+ * @todo Geht ein Return um in die Task-Funktion zu springen?
+ * @todo Wird der Timer zu früh initialisiert?
+ * @todo Geht eine Endlosschleife am Ende?
+ * @todo Warum +7?
+ *
  */
 void startRRScheduler(TASK **tasks, u08 tasks_length)
 {
@@ -189,8 +191,6 @@ void nextScheduleItem(void)
 
 void incrementTime(void)
 {
-   //if((currentTime.us+TIMER_DELAY_US)==1000)
-   //{
    	if((currentTime.ms+TIMER_DELAY_MS)==1000)
    	{
    	   if((currentTime.seconds+1)==60)
@@ -204,8 +204,6 @@ void incrementTime(void)
    	   currentTime.seconds = (currentTime.seconds+1) % 60;
    	}
    	currentTime.ms = (currentTime.ms+TIMER_DELAY_MS) % 1000;
-   //}
-   //currentTime.us = (currentTime.us+TIMER_DELAY_US) % 1000;
 }
 
 /**
@@ -220,11 +218,9 @@ void incrementTime(void)
  */
 SCHEDULER_TIMER()
 {
-	// Testen ob nicht alle Tasks beendet worden sind
-	// falls ja:
-	//if(!allTasksFinished())
-	//{
    	save_registers();
+   	// Testen ob nicht alle Tasks beendet worden sind
+		// falls ja:
    	if(allTasksFinished())
 		{
 		 	disableTimer();
@@ -240,21 +236,13 @@ SCHEDULER_TIMER()
 		incrementTime();
 		decrementPause();
 
-
 		nextScheduleItem();
   		task = currentScheduler.tasks[currentScheduler.current_task];
 		set_stackpointer(task->stackPointer);
 		load_registers();
-	/*}
-	else
-	{ // Kein Task mehr da
-	 	// Stackpointer setzen
-		set_stackpointer(currentScheduler.stackPointer);
-		// Timer deaktivieren
-		disableTimer();
-	}  */
    return_interrupt();
 }
+
 
 
 

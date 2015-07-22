@@ -66,7 +66,7 @@ void checkTracepoint(u08 ptracepoint)
 	}
 }
 
-void assertion(const char *file, int line, int expected, int current, COMPARE_OPERATION compare_operator)
+void assertion(const char *file, int line, long int expected, long int current, COMPARE_OPERATION compare_operator)
 {
    BOOL result = 0;
 	expected_runs++;
@@ -123,6 +123,7 @@ void assertion(const char *file, int line, int expected, int current, COMPARE_OP
        }
    }
 }
+
 
 
 

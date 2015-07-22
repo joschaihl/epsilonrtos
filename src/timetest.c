@@ -72,26 +72,29 @@ TASK(B,64)
   	ENDTASK(B);
 }
 
+u32 ua;
 TASK(C,64)
 {
-	u16 a;
-	for(a=0;a<1000;a++)
+
+	for(ua=0;ua<100000;ua+=100)
 	{
 	   sbi(DEFAULTPORT, TASKCPIN);
 		cbi(DEFAULTPORT, TASKCPIN);
 	}
-	if(a==1000)
+	if(ua==100000)
 		setTracepoint(5);
 	
 	ENDTASK(C);
 }
 
+u08 xa;
+u16 xb;
 TASK(D,64)
 {
-	u08 a, b;
-	for(a=0;a<10;a++)
+
+	for(xa=0;xa<10;xa++)
 	{
-		for(b=0;b<10;b++)
+		for(xb=0;xb<1000;xb++)
 		{
 	   	sbi(DEFAULTPORT, TASKDPIN);
 			cbi(DEFAULTPORT, TASKDPIN);
@@ -160,6 +163,9 @@ TEST(taskset1Test)
 TEST(taskset2Test)
 {
    checkTracepoint(5);
+   assertEquals(ua, 100000);
+   assertEquals(xa, 10);
+   assertEquals(xb, 1000);
 }
 
 int main(void)
@@ -197,6 +203,8 @@ int main(void)
 	} while(1);
 	return 0;
 }
+
+
 
 
 

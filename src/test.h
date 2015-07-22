@@ -36,7 +36,7 @@ void checkTracepoint(u08 ptracepoint);
 typedef enum {LOWER_THAN = 0, LOWER_EQUAL_THAN = 1,
 	EQUALS = 2, GREATER_EQUAL_THAN = 3, GREATER_THAN = 4} COMPARE_OPERATION;
 
-void assertion(const char *file, int line, int expected, int current, COMPARE_OPERATION compare_operator);
+void assertion(const char *file, int line, long int expected, long int current, COMPARE_OPERATION compare_operator);
 
 #define assertLower(EXPECTED,CURRENT) \
 		  assertion(PSTR(__FILE__), __LINE__, EXPECTED, CURRENT, LOWER_THAN);
@@ -70,6 +70,7 @@ void assertion(const char *file, int line, int expected, int current, COMPARE_OP
 
 
 #endif /* TEST_H_ */
+
 
 
 

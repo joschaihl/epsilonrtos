@@ -97,11 +97,18 @@
 #define nop() \
    asm volatile ("nop"); \
 
-#define WORKING_REGISTERS 32
+#define WORKING_REGISTERS 33
 #define FUNCTION_WIDTH 2
 #define MINIMUM_TASK_STACKSIZE WORKING_REGISTERS + FUNCTION_WIDTH
 
+/**
+ * @fixme SREG Bit 7 I: Global Interrupt Enable muss gepusht werden
+ */
+
 #define save_registers() \
+  asm volatile ("push	r0"); \
+  asm volatile ("cli"); \
+  asm volatile ("in		r0, __SREG__"); \
   asm volatile ("push    r0"); \
   asm volatile ("push    r1"); \
   asm volatile ("push    r2"); \
@@ -135,6 +142,9 @@
   asm volatile ("push    r30");\
   asm volatile ("push    r31");\
 
+/**
+
+*/
 #define load_registers() \
   asm volatile ("pop    r31");\
   asm volatile ("pop    r30");\
@@ -168,19 +178,12 @@
   asm volatile ("pop     r2");\
   asm volatile ("pop     r1");\
   asm volatile ("pop     r0");\
-
-
-/*
-
-
-
-
-*/
+  asm volatile ("out		__SREG__, r0");\
+  asm volatile ("pop		r0");	
 
 #define return_interrupt() \
 	asm volatile("reti");
 
-//#define TIMER_DELAY_US 250
 #define TIMER_DELAY_MS 2
 
 #ifdef TCCR0A
@@ -192,11 +195,12 @@
 #endif
 
 #define initTimer() \
-  TCCR = (1<<CS01) | (1<<CS00); \
-  TCNT0 = 0x00; \
-  SFIOR |= (1<<PSR10); \
-  TIMSK = (1<<TOIE0); /* TOIE0: Interrupt bei Timer Overflow */ \
-  sei();
+	TCCR = (1<<CS01) | (1<<CS00); \
+   TCNT0 = 0x00; \
+   SFIOR |= (1<<PSR10); \
+   TIFR |= (1<<TOV0); \
+   TIMSK = (1<<TOIE0); /* TOIE0: Interrupt bei Timer Overflow */ \
+   sei();
 
 #define disableTimer() \
 	TIMSK = 0;
@@ -206,6 +210,10 @@
 
 
 #endif /* HALAVR_H_ */
+
+
+
+
 
 
 

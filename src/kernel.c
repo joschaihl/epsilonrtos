@@ -14,7 +14,7 @@
 
 #include "kernel.h"
 
-/* @brief Datenstruktur um Uhrzeit zu speichern, so dass Funktionen wie sleep() möglich sind. */
+/* @brief Datenstruktur um Uhrzeit zu speichern, so dass Funktionen wie sleep() mï¿½glich sind. */
 typedef struct {
    u08 hours;
    u08 minutes;
@@ -29,18 +29,20 @@ TIME currentTime = {0, 0, 0, 0, 0};
 
 
 /**
- * @brief Einen Task initialisieren: Setze den Programmzähler des Tasks auf die Taskfunktion,
+ * @brief Einen Task initialisieren: Setze den ProgrammzÃ¤hler des Tasks auf die Taskfunktion,
  * Setze den Stackpointer des jeweiligen Tasks auf den Anfangswert,
  * Initialisiere den Speicher im Stack auf 0, speichere ganz oben
  * auf dem Stack den ProgrammzÃ¤hler der Task-Prozedur und setze den Zustand des Tasks
  * auf TASK_RUNNING.
  * @param task Der Task der initialisiert werden soll.
+ * @fixme Das Statusregister SREG muss mit 10000000b initialisiert werden.
  */
 void initTask(TASK *task)
 {
 
    u08 i, pc_high, pc_low;
    u16 sp;
+   u08 sregindex;
 	
 	// Set programm Counter
 	/* BUG BUG BUG */
@@ -57,10 +59,16 @@ void initTask(TASK *task)
 	task->pause_ms = 0;
 	
 	// Set Stack Address
-   for(i = 0; i < (task->stackSize -2); i++)
+   for(i = 0; i < (task->stackSize - FUNCTION_WIDTH); i++)
    {
-     task->stack[i] = 0;
+     task->stack[i] = 0x00;//(1 << 7);
    }
+   sregindex = task->stackSize;
+   sregindex -= FUNCTION_WIDTH;
+   sregindex -= WORKING_REGISTERS;
+   sregindex += 1;
+   task->stack[sregindex] = (1 << 7);
+
    pc_high = (task->programmCounter >> 8);
 	pc_low =  0xff & task->programmCounter;
 	i++;
@@ -138,11 +146,11 @@ u08 allTasksFinished(void)
  * Frage: Geht ein Return um in die Task-Funktion zu springen?
    Antwort: Ja mittels asm("ret");
             Oder (unsauberer) indem beim Stackpointer 7 Bytes abgezogen werden und dann die Funktion beendet wird.
-            Die 7 Bytes sind compilerabhängig, der GCC "popt" 7 Bytes bei "}" dieser Funktion mit 2 Parametern weg.
- * Frage: Kann der Timer zu früh initialisiert oder gar aufgerufen werden?
- * Antwort: Ja, das Zählregister muss jedes Mal zurückgesetzt werden.
+            Die 7 Bytes sind compilerabhÃ¤ngig, der GCC "popt" 7 Bytes bei "}" dieser Funktion mit 2 Parametern weg.
+ * Frage: Kann der Timer zu frÃ¼h initialisiert oder gar aufgerufen werden?
+ * Antwort: Ja, das ZÃ¤hlregister muss jedes Mal zurÃ¼ckgesetzt werden.
  * Frage: Geht eine Endlosschleife am Ende?
- * Antwort: Theoretisch ja, allerdings verschwendet sie ein klein wenig Rechenzeit und es genügt ein Return.
+ * Antwort: Theoretisch ja, allerdings verschwendet sie ein klein wenig Rechenzeit und es genÃ¼gt ein Return.
  */
 void startRRScheduler(TASK **tasks, u08 tasks_length)
 {
@@ -165,19 +173,10 @@ void startRRScheduler(TASK **tasks, u08 tasks_length)
 	
 
 	set_stackpointer(task->stackPointer + WORKING_REGISTERS);
-	// initTimer();
-	// Experimental:
-	TCCR = (1<<CS01) | (1<<CS00);
-   TCNT0 = 0x00;
-   SFIOR |= (1<<PSR10);
-   TIFR |= (1<<TOV0);
-   TIMSK = (1<<TOIE0); /* TOIE0: Interrupt bei Timer Overflow */ \
-   sei();
-
+	initTimer();
 	asm volatile("ret");
 	
 	//task->taskFunction();
-	
 }
 
 void nextScheduleItem(void)
@@ -245,6 +244,9 @@ SCHEDULER_TIMER()
 		load_registers();
    return_interrupt();
 }
+
+
+
 
 
 

@@ -48,6 +48,8 @@
   #error Systematischer Fehler der Baudrate grösser 1% und damit zu hoch!
 #endif
 
+#define RINGBUFFER_SIZE 64
+
 #endif
 
 

@@ -57,7 +57,7 @@ OPT = s
 
 
 # List C source files here. (C dependencies are automatically generated.)
-SRC = timetest.c kernel.c halavr.c uartavr.c test.c 
+SRC = timetest.c kernel.c halavr.c uartavr.c test.c ringbuf.c 
 
 # If there is more than one source file, append them above, or modify and
 # uncomment the following:

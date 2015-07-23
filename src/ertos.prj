@@ -10,7 +10,7 @@
 .GCCPATH   "C:\WinAVR"
 .GCCMAKE   AUTO
 .TARGET    "ertos.hex"
-.SOURCE    "timetest.c" "global.h" "libtypes.h" "libdefs.h"  "kernel.c" "kernel.h" "hal.h" "halavr.h" "halavr.c" "uartavr.h" "uartavr.c" "test.h" "test.c"
+.SOURCE    "timetest.c" "global.h" "libtypes.h" "libdefs.h"  "kernel.c" "kernel.h" "hal.h" "halavr.h" "halavr.c" "uartavr.h" "uartavr.c" "test.h" "test.c" "ringbuf.h" "ringbuf.c"
 
 .TRACE              ; Activate micro trace
 

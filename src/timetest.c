@@ -22,6 +22,9 @@
 #define TASKCPIN PB2
 #define TASKDPIN PB3
 #define TASKEPIN PB4
+#define ANALOGPORT PORTC
+#define ANALOGDDR  DDRC
+#define DEFAULTADC PC0
 
 
 
@@ -35,32 +38,40 @@ void setup(void)
   setTracepoint(1);
 }
 
-u08 ja = 0, jc=0;
 
-TASK(A,64)
+u16 jc=0;
+u08 ja = 0;
+void task_a_func(void)
 {
 
-	for(ja=0;ja < 100;ja++)
+	for(ja=0;ja < 5;ja++)
 	{
-      for(jc=0;jc<100;jc++)
+      for(jc=0;jc<1000;jc++)
       {
        		sbi(DEFAULTPORT, TASKAPIN);
 				cbi(DEFAULTPORT, TASKAPIN);
       }
-
+      PUTSP("A ");
   	}
+  	PUTSP("\n");
   	setTracepoint(2);
+}
+
+TASK(A,128)
+{
+   task_a_func();
   	ENDTASK(A);
 }
 
 u08 jb = 0;
 u08 ji;
 
-TASK(B,64)
+TASK(B,128)
 {
 
-	for(jb=0;jb<2;jb++)
+	for(jb=0;jb<3;jb++)
 	{
+		PUTSP("B ");
 	   for(ji=0; ji < 100; ji++)
 	   {
 			sbi(DEFAULTPORT, TASKBPIN);
@@ -87,27 +98,48 @@ TASK(C,64)
 	ENDTASK(C);
 }
 
-u08 xa;
-u16 xb;
+u08 xc;
+u16 xd;
+u08 pwmfreq = 0;
+
 TASK(D,64)
 {
-
-	for(xa=0;xa<10;xa++)
+   enableADC0();
+	for(xc=0;xc<10;xc++)
 	{
-		for(xb=0;xb<1000;xb++)
+		for(xd=0;xd<1000;xd++)
 		{
-	   	sbi(DEFAULTPORT, TASKDPIN);
-			cbi(DEFAULTPORT, TASKDPIN);
+			pwmfreq = readADC();
 		}
 	}
 	ENDTASK(D);
+}
+
+
+u16 i;
+void task_e_func(void)
+{
+	enablePWM();
+	for(i=0;i<10000;i++)
+	{
+		setPWM1val(pwmfreq);
+	}
+	
+	disablePWM();	
+}
+
+TASK(E,64)
+{
+   task_e_func();
+
+	ENDTASK(E);
 }
 
 //----- Begin Code ------------------------------------------------------------
 
 #define TASK_AMOUNT 2
 TASK *taskset[] = {&taskobj_A, &taskobj_B};
-TASK *taskset2[] = {&taskobj_C, &taskobj_D};
+TASK *taskset2[] = {&taskobj_C, &taskobj_D, &taskobj_E};
 
 #ifdef UNITTEST_TESTS
 TEST(assertionsFailure)
@@ -154,9 +186,10 @@ TEST(tracepointFailure)
 
 TEST(taskset1Test)
 {
-	assertEquals(ja, 100);
-   assertEquals(jb,2);
-   assertEquals(jc,100);
+  	assertEquals(ja, 5);
+  	assertEquals(jc, 1000);
+   assertEquals(jb,3);
+   assertEquals(ji,100);
    checkTracepoint(2);
 }
 
@@ -164,8 +197,8 @@ TEST(taskset2Test)
 {
    checkTracepoint(5);
    assertEquals(ua, 100000);
-   assertEquals(xa, 10);
-   assertEquals(xb, 1000);
+   assertEquals(xc, 10);
+   assertEquals(xd, 1000);
 }
 
 int main(void)
@@ -185,16 +218,13 @@ int main(void)
 #endif
 
    suite();
-   assertEquals(0,ja);
-   assertEquals(0,jb);
 	setup();
 	checkTracepoint(1);
 
    SCHEDULER(taskset, TASK_AMOUNT);
    RUN(taskset1Test);
 
-   SCHEDULER(taskset2, TASK_AMOUNT);
-
+   SCHEDULER(taskset2, 3);
    RUN(taskset2Test);
 	suiteend();	
 	
@@ -203,6 +233,15 @@ int main(void)
 	} while(1);
 	return 0;
 }
+
+
+
+
+
+
+
+
+
 
 
 

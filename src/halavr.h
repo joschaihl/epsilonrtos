@@ -25,6 +25,12 @@
 #define INIT_STACK() \
 	SP = RAMEND \
 	
+#define DISABLE_INT() \
+	cli(); \
+	
+#define ENABLE_INT(); \
+	sei(); \
+	
 #ifdef USE_TERMINAL
 #define INIT_TERM() \
 	uart_init(); \
@@ -34,7 +40,10 @@
 
 #define PUTS(C) \
 	uart_puts(C); \
-
+	
+#define PUTD(D) \
+	uart_putd(D); \
+	
 #define PUTSP(CP) \
 	uart_puts_p(PSTR(CP)); \
 		
@@ -205,11 +214,42 @@
 #define disableTimer() \
 	TIMSK = 0;
 	
+#define enablePWM() \
+    DDRB |= (1<<PB1) | (1<<PB2); \
+    TCCR1A = (1<<WGM10)|(1<<COM1A1) \
+            |(1<<COM1B1); \
+    TCCR1B = (1<<WGM12) \
+            |(1<<CS10);
+
+#define setPWM1val(V) \
+        OCR1A = V;
+
+#define setPWM2val(V) \
+        OCR1B = V;
+
+#define disablePWM() \
+	TCCR1A = 0x00; \
+	TCCR1B = 0x00;
+
+#define enableADC0() \
+	ADMUX |= (1<<REFS0) | (1<<ADLAR); \
+	ADCSRA |= (1<<ADEN) | (1<<ADSC) | (1<<ADFR) | (1<<ADPS2) | (1<< ADPS1);
+	
+
+#define readADC() \
+	ADCH	
+	
 /* #define SCHEDULER_TIMER() ISR(TIMER0_OVF0_vect,ISR_NAKED) */
 #define SCHEDULER_TIMER() ISR(TIMER0_OVF_vect,ISR_NAKED)
 
 
 #endif /* HALAVR_H_ */
+
+
+
+
+
+
 
 
 

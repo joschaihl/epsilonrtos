@@ -63,25 +63,33 @@ int uart_putc(unsigned char c)
 /* puts ist unabhaengig vom Controllertyp */
 void uart_puts (char *s)
 {
+	 DISABLE_INT();
     while (*s)
     {   /* so lange *s != '\0' also ungleich dem "String-Endezeichen(Terminator)" */
         uart_putc(*s);
         s++;
     }
+    ENABLE_INT();
 }
 
 void uart_putd(int intvalue)
 {
     char strbuf[11];
+
     itoa(intvalue, strbuf, 10);
-    uart_puts(strbuf);
+    DISABLE_INT();
+	 uart_puts(strbuf);
+	 ENABLE_INT();
 }
 
 void uart_puts_p(const char *str){
+   DISABLE_INT();
 	while(pgm_read_byte(str) != '\0'){
 		uart_putc(pgm_read_byte(str++));
 	}
+	ENABLE_INT();
 }
+
 
 
 

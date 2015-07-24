@@ -79,7 +79,8 @@ void initTask(TASK *task)
 	task->taskState = TASK_RUNNING;	
 }
 
-void sleep(u32 pause_ms)
+
+void __attribute__((optimize("O0"))) sleep(u32 pause_ms)
 {
 	TASK *task;
 	BOOL pause = 0;
@@ -98,7 +99,9 @@ void sleep(u32 pause_ms)
 	//}
 }
 
-void decrementPause(void)
+
+
+void __attribute__((optimize("O0"))) decrementPause(void)
 {
    u08 i;
    TASK *task;
@@ -120,7 +123,7 @@ void decrementPause(void)
 	}
 }
 
-u08 allTasksFinished(void)
+u08 __attribute__((optimize("O0"))) allTasksFinished(void)
 {
    u08 i;
    TASK *task;
@@ -152,7 +155,9 @@ u08 allTasksFinished(void)
  * Frage: Geht eine Endlosschleife am Ende?
  * Antwort: Theoretisch ja, allerdings verschwendet sie ein klein wenig Rechenzeit und es genügt ein Return.
  */
-void startRRScheduler(TASK **tasks, u08 tasks_length)
+
+void __attribute__((optimize("O0")))
+ startRRScheduler(TASK **tasks, u08 tasks_length)
 {
 	currentScheduler.stackPointer = SP + 7;
    TASK *task;
@@ -208,6 +213,7 @@ void incrementTime(void)
    	currentTime.ms = (currentTime.ms+TIMER_DELAY_MS) % 1000;
 }
 
+
 /**
  * @brief Timer Funktion für den Round-Robin-Scheduler.
  * Hier werden zuerst die Register
@@ -244,6 +250,9 @@ SCHEDULER_TIMER()
 		load_registers();
    return_interrupt();
 }
+
+
+
 
 
 

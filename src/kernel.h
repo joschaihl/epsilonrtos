@@ -61,7 +61,7 @@ void sleep(u32 pause_us);
 	(u16) taskstack_ ## NAME + SIZE, \
 	SIZE + MINIMUM_TASK_STACKSIZE, \
 	0, TASK_UNINITIALIZED}; \
-	void task_ ## NAME(void)
+	void __attribute__((OS_task)) task_ ## NAME(void)
 
 #define ENDTASK(NAME) \
 	taskobj_ ## NAME.taskState = TASK_FINISHED; \
@@ -75,6 +75,7 @@ void sleep(u32 pause_us);
 	startRRScheduler(TASKSET, TASKSET_LENGTH);
 
 #endif /* KERNEL_H_ */
+
 
 
 

@@ -44,12 +44,7 @@ void initTask(TASK *task)
    u16 sp;
    u08 sregindex;
 	
-	// Set programm Counter
-	/* BUG BUG BUG */
-//	task->programmCounter = (u16) task->taskFunction;
-	
 	// Set Stackpointer
- 	
    sp = task->stackSize;
    sp -= MINIMUM_TASK_STACKSIZE;
    sp += (u16) task->stack;
@@ -85,18 +80,12 @@ void __attribute__((optimize("O0"))) sleep(u32 pause_ms)
 	TASK *task;
 	BOOL pause = 0;
 	task = currentScheduler.tasks[currentScheduler.current_task];
-	//if(task->taskState == TASK_RUNNING)
-	//{
-	  // cli();
 		task->pause_ms = pause_ms;
 		task->taskState = TASK_PAUSE;
-	//	sei();
-		
 		do
 		{
 			pause = (currentScheduler.tasks[currentScheduler.current_task]->taskState == TASK_PAUSE);
 		} while(pause);
-	//}
 }
 
 
@@ -250,6 +239,7 @@ SCHEDULER_TIMER()
 		load_registers();
    return_interrupt();
 }
+
 
 
 

@@ -61,7 +61,9 @@ void checkTracepoint(u08 ptracepoint)
 		else
 		{
 			errors++;
-			uart_puts_p(PSTR("Failure\n"));
+			uart_puts_p(PSTR("expected tracepoint "));
+			uart_putd(ptracepoint);
+			uart_puts_p(PSTR(" Failure\n"));
 		}
 	}
 }
@@ -123,6 +125,7 @@ void assertion(const char *file, int line, long int expected, long int current, 
        }
    }
 }
+
 
 
 

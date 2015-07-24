@@ -13,6 +13,7 @@
 
 #include "kernel.h"
 #include "test.h"
+#include "ringbuf.h"
 #include <stdlib.h>
 
 #define DEFAULTPORT PORTB
@@ -39,9 +40,9 @@ void setup(void)
 }
 
 
-
+#ifdef RTOS_TESTS
 u08 ja = 0;
-void task_a_func(void)
+TASK(A,128)
 {
    u16 jc=0;
 	for(ja=0;ja < 5;ja++)
@@ -55,11 +56,6 @@ void task_a_func(void)
   	}
   	PUTSP("\n");
   	setTracepoint(2);
-}
-
-TASK(A,128)
-{
-   task_a_func();
   	ENDTASK(A);
 }
 
@@ -111,6 +107,7 @@ TASK(D,64)
 		for(xd=0;xd<1000;xd++)
 		{
 			pwmfreq = readADC();
+			ringbufferWrite(pwmfreq);
 		}
 	}
 	ENDTASK(D);
@@ -142,6 +139,8 @@ TASK(E,64)
 #define TASK_AMOUNT 2
 TASK *taskset[] = {&taskobj_A, &taskobj_B};
 TASK *taskset2[] = {&taskobj_C, &taskobj_D, &taskobj_E};
+
+#endif
 
 #ifdef UNITTEST_TESTS
 TEST(assertionsFailure)
@@ -186,13 +185,15 @@ TEST(tracepointFailure)
 }
 #endif
 
+#ifdef RTOS_TESTS
+
 TEST(taskset1Test)
 {
   	assertEquals(ja, 5);
   //	assertEquals(jc, 1000);
    assertEquals(jb,3);
    assertEquals(ji,100);
-   checkTracepoint(2);
+   checkTracepoint(3);
 }
 
 TEST(taskset2Test)
@@ -202,6 +203,30 @@ TEST(taskset2Test)
  //  assertEquals(xc, 10);
  //  assertEquals(xd, 1000);
 }
+
+TEST(ringbufferTest)
+{
+   u08 i, value, prevvalue;
+   for(i=0;i<11;i++)
+   {
+      ringbufferWrite(i);
+	}
+	i = 0;
+	
+	
+	while(ringbufferRead(&value))
+	{
+	   if((i>1) && (i <9))
+	   {
+	   	assertGreater(value, prevvalue);
+	   }
+		i++;
+	   prevvalue = value;
+	}
+	
+}
+
+#endif
 
 int main(void)
 {
@@ -218,23 +243,30 @@ int main(void)
 	checkTracepoint(7);
 	suiteend();
 #endif
-
+#ifdef RTOS_TESTS
    suite();
 	setup();
 	checkTracepoint(1);
-
+   RUN(ringbufferTest);
    SCHEDULER(taskset, TASK_AMOUNT);
    RUN(taskset1Test);
 
    SCHEDULER(taskset2, 3);
    RUN(taskset2Test);
 	suiteend();	
+#endif
 	
 	do{
 	  nop();
 	} while(1);
 	return 0;
 }
+
+
+
+
+
+
 
 
 

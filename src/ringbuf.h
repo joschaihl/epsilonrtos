@@ -21,12 +21,17 @@
  */
 typedef struct
 {
-  unsigned char buffer[RINGBUFFER_SIZE];
-  volatile unsigned int head;
-  volatile unsigned int tail;
+  u08 buffer[RINGBUFFER_SIZE];
+  volatile u16 head;
+  volatile u16 tail;
 } RINGBUFFER;
 
-// Initialize all elements in one shot
-RINGBUFFER ringbuffer = { {0}, 0, 0 };
+
+
+u08 ringbufferWrite(u08 data);
+u08 ringbufferRead(u08 *byte);
 
 #endif /* RINGBUF_H_ */
+
+
+

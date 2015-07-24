@@ -13,28 +13,39 @@
 
 #include "ringbuf.h"
 
-void ringbufferStore(unsigned char data)
+// Initialize all elements in one shot
+RINGBUFFER ringbuffer = { {0}, 0, 0 };
+
+u08 ringbufferWrite(u08 data)
 {
+  u08 result = 0;
   unsigned int next = (unsigned int)(ringbuffer.head + 1) % RINGBUFFER_SIZE;
   if (next != ringbuffer.tail)
   {
 	  ringbuffer.buffer[ringbuffer.head] = data;
 	  ringbuffer.head = next;
+	  result = 1;
   }
+  return (result);
 }
 
-char ringbufferRead(void)
+u08 ringbufferRead(u08 *byte)
 {
-  char result;
+  u08 result = 0;
   // if the head isn't ahead of the tail, we don't have any characters
   if (ringbuffer.head == ringbuffer.tail) {
-	  result = -1;        // quit with an error
+	  *byte = 0;        // quit with an error
   }
   else {
-    result = ringbuffer.buffer[ringbuffer.tail];
+
+    *byte = ringbuffer.buffer[ringbuffer.tail];
     ringbuffer.tail = (unsigned int)(ringbuffer.tail + 1) % RINGBUFFER_SIZE;
+    result = 1;
   }
 
   return(result);
 }
+
+
+
 

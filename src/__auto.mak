@@ -139,7 +139,7 @@ ASFLAGS =  -Wa,-adhlns=$(<:.S=.lst) -Wa,-gstabs
 # -lm = math library
 #LDFLAGS += -lm
 
-LDFLAGS =    -lm -Wl,-Map=$(TARGET).map -Wl,--cref
+LDFLAGS =    -Wl,-Map=$(TARGET).map -Wl,--cref
 
 
 # Programming support using avrdude. Settings and variables.

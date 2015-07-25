@@ -17,9 +17,10 @@
 #include "global.h"
 
 #ifdef MCU_AVR
-	#include "halavr.h"
+#include "halavr.h"
 #endif
 
 #endif /* HAL_H_ */
+
 
 

@@ -46,6 +46,13 @@ u08 ringbufferRead(u08 *byte)
   return(result);
 }
 
+u08 ringbufferFindPeak(void)
+{
+    u08 i;
+    for(i=0;i<RINGBUFFER_SIZE;i++)
+    {
 
+	 }
+}
 
 

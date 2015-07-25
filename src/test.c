@@ -17,8 +17,8 @@
 u08 errors = 0;
 u08 runs = 0;
 u08 expected_runs = 0;
-u08 gerrors = 0;
-u08 gruns = 0;
+u16 gerrors = 0;
+u16 gruns = 0;
 u08 tracepoint = 0;
 
 
@@ -125,6 +125,7 @@ void assertion(const char *file, int line, long int expected, long int current, 
        }
    }
 }
+
 
 
 

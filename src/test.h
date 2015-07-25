@@ -16,12 +16,14 @@
 #define TEST_H_
 #include "hal.h"
 
+#ifdef TEST_H_
 extern u08 errors;
 extern u08 runs;
 extern u08 expected_runs;
-extern u08 gerrors;
-extern u08 gruns;
+extern u16 gerrors;
+extern u16 gruns;
 extern u08 tracepoint;
+#endif
 
 void suite(void);		
 void suiteend(void);
@@ -70,6 +72,7 @@ void assertion(const char *file, int line, long int expected, long int current, 
 
 
 #endif /* TEST_H_ */
+
 
 
 

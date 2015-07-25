@@ -30,8 +30,10 @@ typedef struct
 
 u08 ringbufferWrite(u08 data);
 u08 ringbufferRead(u08 *byte);
+u08 ringbufferFindPeak(void);
 
 #endif /* RINGBUF_H_ */
+
 
 
 

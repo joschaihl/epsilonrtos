@@ -27,7 +27,7 @@
 #define ANALOGDDR  DDRC
 #define DEFAULTADC PC0
 
-
+void setup(void);
 
 void setup(void)
 {
@@ -216,13 +216,16 @@ TEST(ringbufferTest)
 	
 	while(ringbufferRead(&value))
 	{
-	   if((i>1) && (i <9))
+	   if((i>1) && (i <10))
 	   {
 	   	assertGreater(value, prevvalue);
 	   }
 		i++;
 	   prevvalue = value;
 	}
+	assertEquals((int) ringbufferRead(&value),0);
+	assertEquals(value, 0);
+	assertEquals((int) ringbufferRead(&value),0);	
 	
 }
 
@@ -259,8 +262,8 @@ int main(void)
 	do{
 	  nop();
 	} while(1);
-	return 0;
 }
+
 
 
 

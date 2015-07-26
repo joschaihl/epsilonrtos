@@ -19,22 +19,33 @@
 
 // Es soll ein AVR als Mikrocontroller verwendet werden.
 #define MCU_AVR
+//#define ARDUINO_ESPLORA
 
 // CPU clock speed
 //#define F_CPU        16000000                         // 16MHz processor
 //#define F_CPU        14745000                         // 14.745MHz processor
+#ifndef F_CPU
+#ifndef ARDUINO_ESPLORA
+//#define UNITTEST_TESTS
+// RTOS soll getestet werden
+#define RTOS_TESTS
 #define F_CPU        8000000                            // 8MHz processor
+#else
+#define F_CPU       16000000
+#endif
+#endif
 //#define F_CPU        7372800                          // 7.37MHz processor
 //#define F_CPU        4000000                          // 4MHz processor
 //#define F_CPU        3686400                          // 3.69MHz processor
 
-//#define UNITTEST_TESTS
-// RTOS soll getestet werden
-#define RTOS_TESTS
+
 
 #define CYCLES_PER_US ((F_CPU+500000)/1000000) 	// cpu cycles per microsecond
 
+#ifndef ARDUINO_ESPLORA
 #define USE_TERMINAL
+#endif
+
 // Baudrate
 //#define BAUD 9600
 #define BAUD 250000
@@ -51,6 +62,8 @@
 #define RINGBUFFER_SIZE 64
 
 #endif
+
+
 
 
 

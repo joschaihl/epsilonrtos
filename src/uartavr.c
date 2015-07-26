@@ -41,21 +41,29 @@ void uart_init(void)
 
 void uart_init(void)
 {
+#ifdef ARDUINO_ESPLORA
+
+#else
   UBRRH = UBRR_VAL >> 8;
   UBRRL = UBRR_VAL & 0xFF;
 
   UCSRB |= (1<<TXEN);  // UART TX einschalten
   UCSRC = (1<<URSEL)|(1<<UCSZ1)|(1<<UCSZ0);  // Asynchron 8N1
+#endif
 }
 
 /* ATmega16 */
 int uart_putc(unsigned char c)
 {
+#ifdef ARDUINO_ESPLORA
+
+#else
     while (!(UCSRA & (1<<UDRE)))  /* warten bis Senden moeglich */
     {
     }
 
     UDR = c;                      /* sende Zeichen */
+#endif
     return 0;
 }
 
@@ -63,6 +71,7 @@ int uart_putc(unsigned char c)
 /* puts ist unabhaengig vom Controllertyp */
 void uart_puts (char *s)
 {
+#ifndef ARDUINO_ESPLORA
 	 DISABLE_INT();
     while (*s)
     {   /* so lange *s != '\0' also ungleich dem "String-Endezeichen(Terminator)" */
@@ -70,25 +79,31 @@ void uart_puts (char *s)
         s++;
     }
     ENABLE_INT();
+#endif
 }
 
 void uart_putd(int intvalue)
 {
+#ifndef ARDUINO_ESPLORA
     char strbuf[11];
 
     itoa(intvalue, strbuf, 10);
     DISABLE_INT();
 	 uart_puts(strbuf);
 	 ENABLE_INT();
+#endif
 }
 
 void uart_puts_p(const char *str){
+#ifndef ARDUINO_ESPLORA
    DISABLE_INT();
 	while(pgm_read_byte(str) != '\0'){
 		uart_putc(pgm_read_byte(str++));
 	}
 	ENABLE_INT();
+#endif
 }
+
 
 
 

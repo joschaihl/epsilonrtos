@@ -15,9 +15,50 @@
 #include "test.h"
 #include "ringbuf.h"
 #include <stdlib.h>
+#include <util/delay.h>
+
+
+void setup(void);
 
 #define DEFAULTPORT PORTB
 #define DEFAULTDDR DDRB
+
+
+
+#ifndef RTOS_TESTS
+#define TASKAPIN PB5
+#define TASKBPIN PB6
+
+void setup(void)
+{
+	  sbi(DEFAULTDDR, TASKAPIN);
+	  sbi(DEFAULTDDR, TASKBPIN);
+}
+
+TASK(A,128)
+{
+	do
+	{
+		sleep(1000);
+		sbi(DEFAULTPORT, TASKAPIN);
+		sleep(2000);
+		cbi(DEFAULTPORT, TASKAPIN);
+	} while(1);
+}
+TASK(B,128)
+{
+	do
+	{
+		sleep(500);
+		sbi(DEFAULTPORT, TASKBPIN);
+		sleep(500);
+		cbi(DEFAULTPORT, TASKBPIN);
+	} while(1);
+}
+TASK *taskset[] = {&taskobj_A, &taskobj_B};
+
+#else
+
 #define TASKAPIN PB0
 #define TASKBPIN PB1
 #define TASKCPIN PB2
@@ -26,8 +67,6 @@
 #define ANALOGPORT PORTC
 #define ANALOGDDR  DDRC
 #define DEFAULTADC PC0
-
-void setup(void);
 
 void setup(void)
 {
@@ -40,7 +79,6 @@ void setup(void)
 }
 
 
-#ifdef RTOS_TESTS
 u08 ja = 0;
 TASK(A,128)
 {
@@ -206,7 +244,7 @@ TEST(taskset2Test)
 
 TEST(ringbufferTest)
 {
-   u08 i, value, prevvalue;
+   u08 i, value, prevvalue = 0;
    for(i=0;i<11;i++)
    {
       ringbufferWrite(i);
@@ -233,6 +271,7 @@ TEST(ringbufferTest)
 
 int main(void)
 {
+
    INIT_RTOS();
 
 #ifdef UNITTEST_TESTS	
@@ -257,12 +296,27 @@ int main(void)
    SCHEDULER(taskset2, 3);
    RUN(taskset2Test);
 	suiteend();	
+#else
+	u08 i;
+	setup();
+
+	for(i=0;i<10;i++)
+	{
+		_delay_ms(100);
+		sbi(DEFAULTPORT, TASKAPIN);
+		_delay_ms(100);
+		cbi(DEFAULTPORT, TASKAPIN);
+	}
+	_delay_ms(5000);
+	SCHEDULER(taskset, 2);
 #endif
 	
 	do{
 	  nop();
 	} while(1);
 }
+
+
 
 
 

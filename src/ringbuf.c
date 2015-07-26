@@ -46,6 +46,7 @@ u08 ringbufferRead(u08 *byte)
   return(result);
 }
 
+/*
 u08 ringbufferFindPeak(void)
 {
     u08 i;
@@ -54,5 +55,8 @@ u08 ringbufferFindPeak(void)
 
 	 }
 }
+*/
+
+
 
 

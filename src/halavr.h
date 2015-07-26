@@ -203,10 +203,18 @@
 #define TCCR TCCR0
 #endif
 
+#ifndef TIMSK
+#define TIMSK TIMSK0
+#endif
+
+#ifndef TIFR
+#define TIFR TIFR0
+#endif
+
 #define initTimer() \
 	TCCR = (1<<CS01) | (1<<CS00); \
    TCNT0 = 0x00; \
-   SFIOR |= (1<<PSR10); \
+   /* SFIOR |= (1<<PSR10); */\
    TIFR |= (1<<TOV0); \
    TIMSK = (1<<TOIE0); /* TOIE0: Interrupt bei Timer Overflow */ \
    sei();
@@ -231,10 +239,15 @@
 	TCCR1A = 0x00; \
 	TCCR1B = 0x00;
 
+#ifndef ADFR
+#define enableADC0() \
+	ADMUX |= (1<<REFS0) | (1<<ADLAR); \
+	ADCSRA |= (1<<ADEN) | (1<<ADSC) | (1<<ADPS2) | (1<< ADPS1);
+#else
 #define enableADC0() \
 	ADMUX |= (1<<REFS0) | (1<<ADLAR); \
 	ADCSRA |= (1<<ADEN) | (1<<ADSC) | (1<<ADFR) | (1<<ADPS2) | (1<< ADPS1);
-	
+#endif
 
 #define readADC() \
 	ADCH	
@@ -244,6 +257,7 @@
 
 
 #endif /* HALAVR_H_ */
+
 
 
 
